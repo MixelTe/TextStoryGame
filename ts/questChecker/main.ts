@@ -30,6 +30,11 @@ window.addEventListener("drop", async (e) =>
 				const chapters = await readFolder(el);
 				for (let i = 0; i < chapters.length; i++) {
 					const chapter = chapters[i];
+					if (chapter.isFile && chapter.name == "chapters.json")
+					{
+						questFolder.chapterNames = await readFile(chapter);
+						continue;
+					}
 					const chapterData = {
 						chapterName: chapter.name,
 						parts: <string[]>[],
@@ -45,6 +50,7 @@ window.addEventListener("drop", async (e) =>
 			}
 		}
 		if (questFolder.quest == undefined) throw new Error("Data is empty");
+		if (questFolder.chapterNames == undefined) throw new Error("Data is empty");
 		if (questFolder.characters == undefined) throw new Error("Data is empty");
 		if (questFolder.items == undefined) throw new Error("Data is empty");
 		if (questFolder.player == undefined) throw new Error("Data is empty");
@@ -58,6 +64,7 @@ window.addEventListener("drop", async (e) =>
 - player.json
 - quest.json
 - chapters
+- - chapters.json
 - - chapter1
 - - - part1.json
 `;
@@ -104,6 +111,7 @@ export interface QuestFolder
 	characters: string;
 	items: string;
 	player: string;
+	chapterNames: string;
 	chapters: {
 		chapterName: string;
 		parts: string[];

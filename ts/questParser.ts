@@ -54,6 +54,16 @@ export function parsePlayer(content: string)
 	});
 }
 
+export function parseChapters(content: string)
+{
+	const chapters = <string[]>JSON.parse(content);
+	if (typeof chapters != "object") throw new Error('chapters must be object');
+	chapters.forEach((chapter, i) => {
+		if (typeof chapter != "string") throw new Error(`chapters[${i}] must be string`);
+	});
+	return chapters;
+}
+
 export function parseChapterPart(content: string)
 {
 	const part = <ChapterPart>JSON.parse(content);

@@ -12,6 +12,8 @@
 
 - chapters
 
+- - chapters.json
+
 - - chapter№
 
 - - - part№.json
@@ -115,6 +117,15 @@ loseIfBelowZero - необязательно указывать, false по ум
 loseText - необязательно указывать
 
 hasLoseImg - необязательно указывать, false по умолчанию
+
+## chapters.json
+Содержимое:
+``` json
+[
+	"Название главы №1",
+	"Название главы №2"
+]
+```
 
 ## part.json
 Содержимое:

@@ -5,6 +5,7 @@
 // - items.json // Item[]
 // - player.json // Player
 // - chapters
+// - - chapters.json // string[]
 // - - chapter№
 // - - - part№.json // ChapterPart
 // - images

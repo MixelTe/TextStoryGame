@@ -18,7 +18,9 @@ export function checkData(questFolder: QuestFolder)
 	run(checkItems, questFolder.items);
 	addText("Игрок:", true);
 	run(checkPlayer, questFolder.player);
-	addText("Главы:");
+	addText("Названия глав:", true);
+	run(checkChaptersNames, questFolder.chapterNames);
+	addText("Главы:", true);
 	run(checkChapters, questFolder.chapters);
 	addText("");
 	if (errors > 0) addText(`Ошибок: ${errors}`, true, true);
@@ -146,6 +148,15 @@ function checkPlayer(content: string)
 		printVar(el.loseText, "Нет специального текста при проигрыше");
 		printVar(el.hasLoseImg, "false", "Есть картинка при проигрыше: ");
 		addText("");
+	});
+}
+
+export function checkChaptersNames(content: string)
+{
+	const chapters = <string[]>parseJSON(content);
+	if (chapters == null) return;
+	chapters.forEach((chapter, i) => {
+		checkVar(chapter, "Название главы", "string");
 	});
 }
 
