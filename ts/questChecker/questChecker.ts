@@ -209,7 +209,7 @@ function checkContent_speech(content: ChapterContent_speech | ChapterContent_que
 {
 	addText(`Элемент ${content.type}:`);
 	checkVar(content.text, "text", "string");
-	checkVar(content.characterId, "characterId", "string", "id: ");
+	printVar(content.characterId, "author", "id: ");
 	if (content.characterImg != "normal" && content.characterImg != "sad" &&
 		content.characterImg != "angry" && content.characterImg != "happy")
 	{
