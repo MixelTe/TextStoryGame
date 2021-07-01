@@ -17,13 +17,17 @@
 				{
 					"text": "Действие",
 					"result": {
-						"changeCharacteristics": [
+						"content": [
 							{
-								"id": "id характеристики",
-								"by": 1
+								"type": "change",
+								"characteristics": [
+									{
+										"id": "id характеристики",
+										"by": 1
+									}
+								]
 							}
-						],
-						"content": []
+						]
 					}
 				}
 			]
