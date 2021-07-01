@@ -14,7 +14,9 @@ export function checkData(questFolder) {
     run(checkItems, questFolder.items);
     addText("Игрок:", true);
     run(checkPlayer, questFolder.player);
-    addText("Главы:");
+    addText("Названия глав:", true);
+    run(checkChaptersNames, questFolder);
+    addText("Главы:", true);
     run(checkChapters, questFolder.chapters);
     addText("");
     if (errors > 0)
@@ -31,7 +33,7 @@ function addText(text, big = false, error = false) {
     if (error)
         classes.push("text-error");
     const div = Div(classes, [], text);
-    div.style.marginLeft = `${marginLeft}em`;
+    div.style.marginLeft = `${marginLeft * 1.2}em`;
     document.body.appendChild(div);
 }
 function checkVar(v, name, type, prefix = "") {
@@ -112,30 +114,37 @@ function checkPlayer(content) {
     const player = parseJSON(content);
     if (player == null)
         return;
-    checkVar(player.items, "player.items", "object", false);
     addText("Предметы игрока:");
-    player.items.forEach((el, i) => {
-        checkVar(el, `player.items[${i}]`, "string", "id: ");
-    });
-    addText("");
-    checkVar(player.characteristics, "player.characteristics", "object", false);
+    if (typeof player.items == "object") {
+        player.items.forEach((el, i) => {
+            checkVar(el, `player.items[${i}]`, "string", "id: ");
+        });
+        addText("");
+    }
     addText("Характеристики игрока:");
+    if (typeof player.items != "object")
+        return;
     player.characteristics.forEach((el, i) => {
         addText(`Характеристика №${i + 1}:`);
         checkVar(el.id, "el.id", "string", "id: ");
         checkVar(el.name, "el.name", "string");
         printVar(el.description, "Нет описания");
         checkVar(el.value, "el.value", "number", "Значение: ");
-        checkVar(el.namesForNums, "el.namesForNums", "object", false);
-        marginLeft++;
-        checkVar(el.namesForNums[0], "el.namesForNums[0]", "string", "Один ");
-        checkVar(el.namesForNums[1], "el.namesForNums[1]", "string", "Два ");
-        checkVar(el.namesForNums[2], "el.namesForNums[2]", "string", "Много ");
-        marginLeft--;
         printVar(el.loseIfBelowZero, "false", "Проигрыш если закончитсья: ");
         printVar(el.loseText, "Нет специального текста при проигрыше");
         printVar(el.hasLoseImg, "false", "Есть картинка при проигрыше: ");
         addText("");
+    });
+}
+export function checkChaptersNames(questFolder) {
+    const chapters = parseJSON(questFolder.chapterNames);
+    if (chapters == null)
+        return;
+    chapters.forEach((chapter, i) => {
+        checkVar(chapter, "Название главы", "string");
+        if (typeof chapter == "string" && questFolder.chapters[i] != undefined) {
+            questFolder.chapters[i].chapterName = chapter;
+        }
     });
 }
 function checkChapters(chapters) {
@@ -180,7 +189,10 @@ function checkContent(content) {
             case "effect":
                 checkContent_effect(el);
                 break;
-            default: addText(`type элемента должен быть "speech", "question" или "effect"`, false, true);
+            case "change":
+                checkContent_change(el);
+                break;
+            default: addText(`type элемента должен быть "speech", "question", "change" или "effect"`, false, true);
         }
         addText("");
     }
@@ -189,7 +201,7 @@ function checkContent(content) {
 function checkContent_speech(content) {
     addText(`Элемент ${content.type}:`);
     checkVar(content.text, "text", "string");
-    checkVar(content.characterId, "characterId", "string", "id: ");
+    printVar(content.characterId, "author", "id: ");
     if (content.characterImg != "normal" && content.characterImg != "sad" &&
         content.characterImg != "angry" && content.characterImg != "happy") {
         addText(`Иконка персонажа: normal`);
@@ -210,13 +222,55 @@ function checkContent_question(content) {
 }
 function checkContent_effect(content) {
     addText(`Элемент effect:`);
-    checkVar(content.duraction, "duraction", "number", "продолжительность: ");
     if (content.effectName != "darkScreen" && content.effectName != "whiteScreen" && content.effectName != "shake") {
         errors++;
         addText(`effectName должно быть "darkScreen", "whiteScreen" или "shake"`, false, true);
     }
     else {
         addText(`Название эффека: ${content.effectName}`);
+    }
+    checkVar(content.duraction, "duraction", "number", "продолжительность: ");
+}
+function checkContent_change(content) {
+    addText(`Элемент effect:`);
+    if (typeof content.characteristics == "object") {
+        addText("Изменение характеристик:");
+        marginLeft++;
+        for (let j = 0; j < content.characteristics.length; j++) {
+            const el = content.characteristics[j];
+            checkVar(el, "Элемент", "object", false);
+            if (typeof el != "object")
+                continue;
+            checkVar(el.id, "id", "string", "id: ");
+            if (typeof el.by != "number" && typeof el.to != "number") {
+                errors++;
+                addText("by или to должно быть числом", false, true);
+            }
+            else if (typeof el.by == "number" && typeof el.to == "number") {
+                errors++;
+                addText("by и to не могут быть указанны одновременно", false, true);
+            }
+            else if (typeof el.by == "number") {
+                addText(`Характеристика изменится на ${el.by}`);
+            }
+            else {
+                addText(`Характеристика установиьтся в ${el.to}`);
+            }
+        }
+        ;
+        marginLeft--;
+    }
+    if (typeof content.addItems == "object") {
+        addText("Добавление предметов:");
+        marginLeft++;
+        content.addItems.forEach(el => checkVar(el, "id предмета", "string", "id: "));
+        marginLeft--;
+    }
+    if (typeof content.removeItems == "object") {
+        addText("Удаление предметов:");
+        marginLeft++;
+        content.addItems.forEach(el => checkVar(el, "id предмета", "string", "id: "));
+        marginLeft--;
     }
 }
 function checkActions(content) {
@@ -237,10 +291,10 @@ function checkActions(content) {
         else {
             cond.partsNotDone = [];
         }
-        if (typeof cond.characteristic == "object") {
+        if (typeof cond.characteristics == "object") {
             addText(`Характеристики:`);
-            for (let i = 0; i < cond.characteristic.length; i++) {
-                const el = cond.characteristic[i];
+            for (let i = 0; i < cond.characteristics.length; i++) {
+                const el = cond.characteristics[i];
                 checkVar(el, "Элемент", "object", false);
                 if (typeof el != "object")
                     continue;
@@ -262,7 +316,7 @@ function checkActions(content) {
             ;
         }
         else {
-            cond.characteristic = [];
+            cond.characteristics = [];
         }
         if (typeof cond.items == "object") {
             addText(`Предметы:`);
@@ -284,46 +338,13 @@ function checkActions(content) {
         if (typeof el.showConditions == "object")
             checkCondition(el.showConditions, "showConditions");
         if (typeof el.result == "object") {
-            if (typeof el.result.changeCharacteristics == "object") {
-                addText("Изменение характеристик:");
-                marginLeft++;
-                for (let j = 0; j < el.result.changeCharacteristics.length; j++) {
-                    const el2 = el.result.changeCharacteristics[j];
-                    checkVar(el2, "Элемент", "object", false);
-                    if (typeof el2 != "object")
-                        continue;
-                    checkVar(el2.id, "id", "string", "id: ");
-                    if (typeof el2.by != "number" && typeof el2.to != "number") {
-                        errors++;
-                        addText("by или to должно быть числом", false, true);
-                    }
-                    else if (typeof el2.by == "number" && typeof el2.to == "number") {
-                        errors++;
-                        addText("by и to не могут быть указанны одновременно", false, true);
-                    }
-                    else if (typeof el2.by == "number") {
-                        addText(`Характеристика изменится на ${el2.by}`);
-                    }
-                    else {
-                        addText(`Характеристика установиьтся в ${el2.to}`);
-                    }
-                }
-                ;
-                marginLeft--;
-            }
-            if (typeof el.result.addItems == "object") {
-                addText("Добавление предметов:");
-                marginLeft++;
-                el.result.addItems.forEach((el, j) => {
-                    checkVar(el, "id предмета", "string");
-                });
-                marginLeft--;
-            }
+            if (el.result.goToPart != undefined)
+                addText(`Перейти к части: ${el.result.goToPart}`);
             if (typeof el.result.content == "object") {
-                addText("Содержимое после выбора этого действия:");
-                marginLeft++;
+                addText("События при выборе этого действия:");
+                marginLeft += 2;
                 checkContent(el.result.content);
-                marginLeft--;
+                marginLeft -= 2;
             }
         }
     }

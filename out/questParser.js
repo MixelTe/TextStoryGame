@@ -35,13 +35,13 @@ export function parseItems(content) {
 export function parsePlayer(content) {
     const player = JSON.parse(content);
     if (typeof player.items != "object")
-        throw new Error('player.items must be list');
+        player.items = [];
     player.items.forEach((el, i) => {
         if (typeof el != "string")
             throw new Error(`player.items[${i}] element must be string`);
     });
     if (typeof player.characteristics != "object")
-        throw new Error('player.characteristics must be list');
+        player.characteristics = [];
     player.characteristics.forEach((el, i) => {
         if (typeof el.id != "string")
             throw new Error(`player.characteristics[${i}].id must be string`);
@@ -51,14 +51,6 @@ export function parsePlayer(content) {
             el.description = "";
         if (typeof el.value != "number")
             throw new Error(`player.characteristics[${i}].name must be number`);
-        if (typeof el.namesForNums != "object")
-            throw new Error(`player.characteristics[${i}].namesForNums must be list`);
-        if (typeof el.namesForNums[0] != "string")
-            throw new Error(`player.characteristics[${i}].namesForNums[0] must be string`);
-        if (typeof el.namesForNums[1] != "string")
-            throw new Error(`player.characteristics[${i}].namesForNums[1] must be string`);
-        if (typeof el.namesForNums[2] != "string")
-            throw new Error(`player.characteristics[${i}].namesForNums[2] must be string`);
         if (typeof el.loseIfBelowZero != "boolean")
             el.loseIfBelowZero = false;
         if (typeof el.loseText != "string")
@@ -66,6 +58,16 @@ export function parsePlayer(content) {
         if (typeof el.hasLoseImg != "boolean")
             el.hasLoseImg = false;
     });
+}
+export function parseChapters(content) {
+    const chapters = JSON.parse(content);
+    if (typeof chapters != "object")
+        throw new Error('chapters must be object');
+    chapters.forEach((chapter, i) => {
+        if (typeof chapter != "string")
+            throw new Error(`chapters[${i}] must be string`);
+    });
+    return chapters;
 }
 export function parseChapterPart(content) {
     const part = JSON.parse(content);
@@ -80,7 +82,7 @@ export function parseChapterPart(content) {
 }
 function checkContent(content) {
     content.forEach(el => {
-        const errorText = `part.content[].type must be "speech", "question" or "effect"`;
+        const errorText = `part.content[].type must be "speech", "question", "change" or "effect"`;
         if (typeof el.type != "string")
             throw new Error(errorText);
         switch (el.type) {
@@ -92,6 +94,9 @@ function checkContent(content) {
                 break;
             case "effect":
                 checkContent_effect(el);
+                break;
+            case "change":
+                checkContent_change(el);
                 break;
             default: throw new Error(errorText);
         }
@@ -105,7 +110,7 @@ function checkContent_speech(content) {
     if (typeof content.text != "string")
         error(`text must be string`);
     if (typeof content.characterId != "string")
-        error(`characterId must be string`);
+        content.characterId = "author";
     if (typeof content.characterImg != "string")
         content.characterImg = "normal";
     if (content.characterImg != "normal" && content.characterImg != "sad" &&
@@ -135,6 +140,34 @@ function checkContent_effect(content) {
         error(errorText);
     }
 }
+function checkContent_change(content) {
+    const error = (text) => {
+        throw new Error(`part.content[].${text}`);
+    };
+    if (typeof content.characteristics == "object") {
+        content.characteristics.forEach((el2, j) => {
+            if (typeof el2 != "object")
+                error(`characteristics[${j}] must be object`);
+            if (typeof el2.id != "string")
+                error(`characteristics[${j}].id must be string`);
+            if (typeof el2.by != "number" && typeof el2.to != "number") {
+                error(`characteristics[${j}].by or .to must be number`);
+            }
+        });
+    }
+    if (typeof content.addItems == "object") {
+        content.addItems.forEach((el, j) => {
+            if (typeof el != "string")
+                error(`addItems[${j}] must be string`);
+        });
+    }
+    if (typeof content.removeItems == "object") {
+        content.removeItems.forEach((el, j) => {
+            if (typeof el != "string")
+                error(`addItems[${j}] must be string`);
+        });
+    }
+}
 function checkActions(content) {
     const error = (text) => {
         throw new Error(`part.content[].actions[].${text}`);
@@ -158,19 +191,19 @@ function checkActions(content) {
         else {
             cond.partsNotDone = [];
         }
-        if (typeof cond.characteristic == "object") {
-            cond.characteristic.forEach((el, j) => {
+        if (typeof cond.characteristics == "object") {
+            cond.characteristics.forEach((el, j) => {
                 if (typeof el != "object")
-                    error(`${n}.characteristic[${j}] must be object`);
+                    error(`${n}.characteristics[${j}] must be object`);
                 if (typeof el.id != "string")
-                    error(`${n}.characteristic[${j}].id must be string`);
+                    error(`${n}.characteristics[${j}].id must be string`);
                 if (typeof el.lessThen != "number" && typeof el.moreThen != "number") {
-                    error(`${n}.characteristic[${j}].lessThen or .moreThen must be number`);
+                    error(`${n}.characteristics[${j}].lessThen or .moreThen must be number`);
                 }
             });
         }
         else {
-            cond.characteristic = [];
+            cond.characteristics = [];
         }
         if (typeof cond.items == "object") {
             cond.items.forEach((el, j) => {
@@ -190,23 +223,6 @@ function checkActions(content) {
         if (typeof el.showConditions == "object")
             checkCondition(el.showConditions, "showConditions");
         if (typeof el.result == "object") {
-            if (typeof el.result.changeCharacteristics == "object") {
-                el.result.changeCharacteristics.forEach((el2, j) => {
-                    if (typeof el2 != "object")
-                        error(`result.changeCharacteristics[${j}] must be object`);
-                    if (typeof el2.id != "string")
-                        error(`result.changeCharacteristics[${j}].id must be string`);
-                    if (typeof el2.by != "number" && typeof el2.to != "number") {
-                        error(`result.changeCharacteristics[${j}].by or .to must be number`);
-                    }
-                });
-            }
-            if (typeof el.result.addItems == "object") {
-                el.result.addItems.forEach((el, j) => {
-                    if (typeof el != "string")
-                        error(`result.addItems[${j}] must be string`);
-                });
-            }
             if (typeof el.result.content == "object") {
                 checkContent(el.result.content);
             }
