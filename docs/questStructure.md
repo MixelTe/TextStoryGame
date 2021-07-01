@@ -120,6 +120,8 @@ loseText - необязательно указывать
 
 hasLoseImg - необязательно указывать, false по умолчанию
 
+items и characteristics - указывать необязательно
+
 ## chapters.json
 Содержимое:
 ``` json
@@ -222,7 +224,7 @@ goToPart, content, conditions и showConditions - необязательно у�
 	"partsDone": [],
 	"partsNotDone": [],
 	"items": [],
-	"characteristic": [
+	"characteristics": [
 		{
 			"id": "id характеристики",
 			"lessThen": 0,
@@ -231,7 +233,7 @@ goToPart, content, conditions и showConditions - необязательно у�
 	]
 }
 ```
-partsDone, partsNotDone, items, characteristic - необязательно указывать
+partsDone, partsNotDone, items, characteristics - необязательно указывать
 
 partsDone - необходимые пройденые части
 

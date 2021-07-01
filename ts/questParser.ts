@@ -36,12 +36,12 @@ export function parseItems(content: string)
 export function parsePlayer(content: string)
 {
 	const player = <Player>JSON.parse(content);
-	if (typeof player.items != "object") throw new Error('player.items must be list');
+	if (typeof player.items != "object") player.items = [];
 	player.items.forEach((el, i) =>
 	{
 		if (typeof el != "string") throw new Error(`player.items[${i}] element must be string`);
 	});
-	if (typeof player.characteristics != "object") throw new Error('player.characteristics must be list');
+	if (typeof player.characteristics != "object") player.characteristics = [];
 	player.characteristics.forEach((el, i) =>
 	{
 		if (typeof el.id != "string") throw new Error(`player.characteristics[${i}].id must be string`);
@@ -195,21 +195,21 @@ function checkActions(content: Action[])
 			cond.partsNotDone = [];
 		}
 
-		if (typeof cond.characteristic == "object")
+		if (typeof cond.characteristics == "object")
 		{
-			cond.characteristic.forEach((el, j) =>
+			cond.characteristics.forEach((el, j) =>
 			{
-				if (typeof el != "object") error(`${n}.characteristic[${j}] must be object`);
-				if (typeof el.id != "string") error(`${n}.characteristic[${j}].id must be string`);
+				if (typeof el != "object") error(`${n}.characteristics[${j}] must be object`);
+				if (typeof el.id != "string") error(`${n}.characteristics[${j}].id must be string`);
 				if (typeof el.lessThen != "number" && typeof el.moreThen != "number")
 				{
-					error(`${n}.characteristic[${j}].lessThen or .moreThen must be number`);
+					error(`${n}.characteristics[${j}].lessThen or .moreThen must be number`);
 				}
 			});
 		}
 		else
 		{
-			cond.characteristic = [];
+			cond.characteristics = [];
 		}
 
 		if (typeof cond.items == "object")

@@ -111,7 +111,7 @@ export interface Condition
 {
 	partsDone: string[]; // parts id
 	partsNotDone: string[];
-	characteristic: ConditionCharacteristic[];
+	characteristics: ConditionCharacteristic[];
 	items: string[]; // items id
 }
 

@@ -128,15 +128,17 @@ function checkPlayer(content: string)
 {
 	const player = <Player>parseJSON(content);
 	if (player == null) return;
-	checkVar(player.items, "player.items", "object", false);
 	addText("Предметы игрока:")
-	player.items.forEach((el, i) =>
+	if (typeof player.items == "object")
 	{
-		checkVar(el, `player.items[${i}]`, "string", "id: ");
-	});
-	addText("");
-	checkVar(player.characteristics, "player.characteristics", "object", false);
+		player.items.forEach((el, i) =>
+		{
+			checkVar(el, `player.items[${i}]`, "string", "id: ");
+		});
+		addText("");
+	}
 	addText("Характеристики игрока:")
+	if (typeof player.items != "object") return;
 	player.characteristics.forEach((el, i) =>
 	{
 		addText(`Характеристика №${i + 1}:`)
@@ -320,11 +322,11 @@ function checkActions(content: Action[])
 			cond.partsNotDone = [];
 		}
 
-		if (typeof cond.characteristic == "object")
+		if (typeof cond.characteristics == "object")
 		{
 			addText(`Характеристики:`);
-			for (let i = 0; i < cond.characteristic.length; i++) {
-				const el = cond.characteristic[i];
+			for (let i = 0; i < cond.characteristics.length; i++) {
+				const el = cond.characteristics[i];
 				checkVar(el, "Элемент", "object", false);
 				if (typeof el != "object") continue;
 				checkVar(el.id, "id", "string", "id: ");
@@ -349,7 +351,7 @@ function checkActions(content: Action[])
 		}
 		else
 		{
-			cond.characteristic = [];
+			cond.characteristics = [];
 		}
 
 		if (typeof cond.items == "object")
