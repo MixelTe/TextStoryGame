@@ -24,7 +24,7 @@
 // - - - - happy.png
 // - - - - normal.png
 // - - - - sad.png
-export type ChapterPartContent = (ChapterContent_speech | ChapterContent_question | ChapterContent_effect)[];
+export type ChapterPartContent = (ChapterContent_speech | ChapterContent_question | ChapterContent_effect | ChapterContent_change)[];
 export interface Quest
 {
 	name: string;
@@ -91,6 +91,13 @@ export interface ChapterContent_effect
 	effectName: "darkScreen" | "whiteScreen" | "shake";
 	duraction: number;
 }
+export interface ChapterContent_change
+{
+	type: "change";
+	addItems: string[]; // items id
+	removeItems: string[]; // items id
+	characteristics: ChangeCharacteristics[];
+}
 
 export interface Action
 {
@@ -118,8 +125,6 @@ export interface ConditionCharacteristic
 export interface ActionResult
 {
 	goToPart?: string; // part id
-	addItems: string[]; // items id
-	changeCharacteristics: ChangeCharacteristics[];
 	content: ChapterPartContent;
 }
 

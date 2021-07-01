@@ -1,4 +1,4 @@
-import { Action, ChapterContent_effect, ChapterContent_question, ChapterContent_speech, ChapterPart, ChapterPartContent, Character, Condition, Item, Player, Quest } from "../questStructure.js";
+import { Action, ChapterContent_change, ChapterContent_effect, ChapterContent_question, ChapterContent_speech, ChapterPart, ChapterPartContent, Character, Condition, Item, Player, Quest } from "../questStructure.js";
 import { Div } from "../functions.js";
 import { QuestFolder } from "./main.js";
 
@@ -200,7 +200,8 @@ function checkContent(content: ChapterPartContent)
 			case "speech": checkContent_speech(el); break;
 			case "question": checkContent_question(el); break;
 			case "effect": checkContent_effect(el); break;
-			default: addText(`type элемента должен быть "speech", "question" или "effect"`, false, true);
+			case "change": checkContent_change(el); break;
+			default: addText(`type элемента должен быть "speech", "question", "change" или "effect"`, false, true);
 		}
 		addText("");
 	};
@@ -242,6 +243,54 @@ function checkContent_effect(content: ChapterContent_effect)
 	else
 	{
 		addText(`Название эффека: ${content.effectName}`);
+	}
+}
+function checkContent_change(content: ChapterContent_change)
+{
+	addText(`Элемент effect:`);
+	if (typeof content.characteristics == "object")
+	{
+		addText("Изменение характеристик:")
+		marginLeft++;
+		for (let j = 0; j < content.characteristics.length; j++) {
+			const el = content.characteristics[j];
+			checkVar(el, "Элемент", "object", false);
+			if (typeof el != "object") continue;
+			checkVar(el.id, "id", "string", "id: ");
+			if (typeof el.by != "number" && typeof el.to != "number")
+			{
+				errors++;
+				addText("by или to должно быть числом", false, true);
+			}
+			else if (typeof el.by == "number" && typeof el.to == "number")
+			{
+				errors++;
+				addText("by и to не могут быть указанны одновременно", false, true);
+			}
+			else if (typeof el.by == "number")
+			{
+				addText(`Характеристика изменится на ${el.by}`);
+			}
+			else
+			{
+				addText(`Характеристика установиьтся в ${el.to}`);
+			}
+		};
+		marginLeft--;
+	}
+	if (typeof content.addItems == "object")
+	{
+		addText("Добавление предметов:")
+		marginLeft++;
+		content.addItems.forEach(el => checkVar(el, "id предмета", "string", "id: "));
+		marginLeft--;
+	}
+	if (typeof content.removeItems == "object")
+	{
+		addText("Удаление предметов:")
+		marginLeft++;
+		content.addItems.forEach(el => checkVar(el, "id предмета", "string", "id: "));
+		marginLeft--;
 	}
 }
 
@@ -323,46 +372,7 @@ function checkActions(content: Action[])
 		if (typeof el.showConditions == "object") checkCondition(el.showConditions, "showConditions");
 		if (typeof el.result == "object")
 		{
-			if (typeof el.result.changeCharacteristics == "object")
-			{
-				addText("Изменение характеристик:")
-				marginLeft++;
-				for (let j = 0; j < el.result.changeCharacteristics.length; j++) {
-					const el2 = el.result.changeCharacteristics[j];
-					checkVar(el2, "Элемент", "object", false);
-					if (typeof el2 != "object") continue;
-					checkVar(el2.id, "id", "string", "id: ");
-					if (typeof el2.by != "number" && typeof el2.to != "number")
-					{
-						errors++;
-						addText("by или to должно быть числом", false, true);
-					}
-					else if (typeof el2.by == "number" && typeof el2.to == "number")
-					{
-						errors++;
-						addText("by и to не могут быть указанны одновременно", false, true);
-					}
-					else if (typeof el2.by == "number")
-					{
-						addText(`Характеристика изменится на ${el2.by}`);
-					}
-					else
-					{
-						addText(`Характеристика установиьтся в ${el2.to}`);
-					}
-				};
-				marginLeft--;
-			}
-			if (typeof el.result.addItems == "object")
-			{
-				addText("Добавление предметов:")
-				marginLeft++;
-				el.result.addItems.forEach((el, j) =>
-				{
-					checkVar(el, "id предмета", "string");
-				});
-				marginLeft--;
-			}
+			printVar(el.result.goToPart, "Не переходить", "Перейти к части: ");
 			if (typeof el.result.content == "object")
 			{
 				addText("Содержимое после выбора этого действия:")

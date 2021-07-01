@@ -1,4 +1,4 @@
-import { Action, ChapterContent_effect, ChapterContent_question, ChapterContent_speech, ChapterPart, ChapterPartContent, Character, Condition, Item, Player, Quest } from "./questStructure.js";
+import { Action, ChapterContent_change, ChapterContent_effect, ChapterContent_question, ChapterContent_speech, ChapterPart, ChapterPartContent, Character, Condition, Item, Player, Quest } from "./questStructure.js";
 
 export function parseQuest(content: string)
 {
@@ -78,12 +78,13 @@ function checkContent(content: ChapterPartContent)
 {
 	content.forEach(el =>
 	{
-		const errorText = `part.content[].type must be "speech", "question" or "effect"`;
+		const errorText = `part.content[].type must be "speech", "question", "change" or "effect"`;
 		if (typeof el.type != "string") throw new Error(errorText);
 		switch (el.type) {
 			case "speech": checkContent_speech(el); break;
 			case "question": checkContent_question(el); break;
 			case "effect": checkContent_effect(el); break;
+			case "change": checkContent_change(el); break;
 			default: throw new Error(errorText);
 		}
 	});
@@ -126,6 +127,39 @@ function checkContent_effect(content: ChapterContent_effect)
 	if (content.effectName != "darkScreen" && content.effectName != "whiteScreen" && content.effectName != "shake")
 	{
 		error(errorText);
+	}
+}
+function checkContent_change(content: ChapterContent_change)
+{
+	const error = (text: string) =>
+	{
+		throw new Error(`part.content[].${text}`);
+	}
+	if (typeof content.characteristics == "object")
+	{
+		content.characteristics.forEach((el2, j) =>
+		{
+			if (typeof el2 != "object") error(`characteristics[${j}] must be object`);
+			if (typeof el2.id != "string") error(`characteristics[${j}].id must be string`);
+			if (typeof el2.by != "number" && typeof el2.to != "number")
+			{
+				error(`characteristics[${j}].by or .to must be number`);
+			}
+		});
+	}
+	if (typeof content.addItems == "object")
+	{
+		content.addItems.forEach((el, j) =>
+		{
+			if (typeof el != "string") error(`addItems[${j}] must be string`);
+		});
+	}
+	if (typeof content.removeItems == "object")
+	{
+		content.removeItems.forEach((el, j) =>
+		{
+			if (typeof el != "string") error(`addItems[${j}] must be string`);
+		});
 	}
 }
 
@@ -197,25 +231,6 @@ function checkActions(content: Action[])
 		if (typeof el.showConditions == "object") checkCondition(el.showConditions, "showConditions");
 		if (typeof el.result == "object")
 		{
-			if (typeof el.result.changeCharacteristics == "object")
-			{
-				el.result.changeCharacteristics.forEach((el2, j) =>
-				{
-					if (typeof el2 != "object") error(`result.changeCharacteristics[${j}] must be object`);
-					if (typeof el2.id != "string") error(`result.changeCharacteristics[${j}].id must be string`);
-					if (typeof el2.by != "number" && typeof el2.to != "number")
-					{
-						error(`result.changeCharacteristics[${j}].by or .to must be number`);
-					}
-				});
-			}
-			if (typeof el.result.addItems == "object")
-			{
-				el.result.addItems.forEach((el, j) =>
-				{
-					if (typeof el != "string") error(`result.addItems[${j}] must be string`);
-				});
-			}
 			if (typeof el.result.content == "object")
 			{
 				checkContent(el.result.content);
