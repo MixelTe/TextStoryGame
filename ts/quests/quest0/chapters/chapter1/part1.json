@@ -1,32 +1,60 @@
 {
-	"id": "id части",
-	"backImg": "Фоновая картинка (img.png)",
+	"id": "1",
 	"content": [
 		{
 			"type": "speech",
-			"characterId": "id персонажа, который говорит",
-			"characterImg": "Иконка персонажа: normal или sad или angry или happy",
-			"text": "Речь персонажа"
+			"text": "Вы проснулись рано утром и посмотрели в окно."
 		},
 		{
 			"type": "question",
-			"characterId": "id персонажа, который говорит",
-			"characterImg": "Иконка персонажа: normal или sad или angry или happy",
-			"text": "Вопрос персонажа",
+			"text": "За окном не было ничего интересного, вы думаете, что делать дальше:",
 			"actions": [
 				{
-					"text": "Действие",
+					"text": "Пойти на кухню и позавтракать",
 					"result": {
-						"changeCharacteristics": [
+						"content": [
 							{
-								"id": "id характеристики",
-								"by": 1
+								"type": "change",
+								"characteristics": [
+									{ "id": "mind", "by": 1 },
+									{ "id": "happy", "by": 2 }
+								]
+							},
+							{
+								"type": "speech",
+								"text": "Сегодня на завтрак было ваше любимое: хлеб с молоком, теперь вы сыты и довольны."
 							}
-						],
-						"content": []
+						]
+					}
+				},
+				{
+					"text": "Пойти в погреб и поискать приключения.",
+					"result": {
+						"content": [
+							{
+								"type": "change",
+								"characteristics": [
+									{ "id": "mind", "by": -3 },
+									{ "id": "happy", "by": -1 }
+								]
+							},
+							{
+								"type": "effect",
+								"effectName": "darkScreen",
+								"duraction": 0.3
+							},
+							{
+								"type": "speech",
+								"text": "В погребе было очень темно, вы испугались и решили туда не заходить."
+							}
+						]
 					}
 				}
 			]
+		},
+		{
+			"type": "speech",
+			"text": "Походив по комнате какое-то время, вы решили отправиться в путешествие!"
 		}
 	]
 }
