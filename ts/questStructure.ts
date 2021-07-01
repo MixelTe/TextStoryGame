@@ -56,7 +56,6 @@ export interface Characteristic
 	name: string;
 	description: string;
 	value: number;
-	namesForNums: string[]; // [(один)"чайник", (два)"чайника", (много)"чайников"]
 	loseIfBelowZero: boolean;
 	loseText: string;
 	hasLoseImg: boolean;

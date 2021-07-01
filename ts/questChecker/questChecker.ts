@@ -142,12 +142,6 @@ function checkPlayer(content: string)
 		checkVar(el.name, "el.name", "string");
 		printVar(el.description, "Нет описания");
 		checkVar(el.value, "el.value", "number", "Значение: ");
-		checkVar(el.namesForNums, "el.namesForNums", "object", false);
-		marginLeft++;
-		checkVar(el.namesForNums[0], "el.namesForNums[0]", "string", "Один ");
-		checkVar(el.namesForNums[1], "el.namesForNums[1]", "string", "Два ");
-		checkVar(el.namesForNums[2], "el.namesForNums[2]", "string", "Много ");
-		marginLeft--;
 		printVar(el.loseIfBelowZero, "false", "Проигрыш если закончитсья: ");
 		printVar(el.loseText, "Нет специального текста при проигрыше");
 		printVar(el.hasLoseImg, "false", "Есть картинка при проигрыше: ");

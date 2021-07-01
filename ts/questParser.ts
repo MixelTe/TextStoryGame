@@ -48,10 +48,6 @@ export function parsePlayer(content: string)
 		if (typeof el.name != "string") throw new Error(`player.characteristics[${i}].name must be string`);
 		if (typeof el.description != "string") el.description = "";
 		if (typeof el.value != "number") throw new Error(`player.characteristics[${i}].name must be number`);
-		if (typeof el.namesForNums != "object") throw new Error(`player.characteristics[${i}].namesForNums must be list`);
-		if (typeof el.namesForNums[0] != "string") throw new Error(`player.characteristics[${i}].namesForNums[0] must be string`);
-		if (typeof el.namesForNums[1] != "string") throw new Error(`player.characteristics[${i}].namesForNums[1] must be string`);
-		if (typeof el.namesForNums[2] != "string") throw new Error(`player.characteristics[${i}].namesForNums[2] must be string`);
 		if (typeof el.loseIfBelowZero != "boolean") el.loseIfBelowZero = false;
 		if (typeof el.loseText != "string") el.loseText = "";
 		if (typeof el.hasLoseImg != "boolean") el.hasLoseImg = false;
