@@ -19,7 +19,7 @@ export function checkData(questFolder: QuestFolder)
 	addText("Игрок:", true);
 	run(checkPlayer, questFolder.player);
 	addText("Названия глав:", true);
-	run(checkChaptersNames, questFolder.chapterNames);
+	run(checkChaptersNames, questFolder);
 	addText("Главы:", true);
 	run(checkChapters, questFolder.chapters);
 	addText("");
@@ -33,7 +33,7 @@ function addText(text: string, big = false, error = false)
 	else classes.push("text-medium");
 	if (error) classes.push("text-error");
 	const div = Div(classes, [], text);
-	div.style.marginLeft = `${marginLeft}em`;
+	div.style.marginLeft = `${marginLeft * 1.2}em`;
 	document.body.appendChild(div);
 }
 function checkVar(v: any, name: string, type: "string" | "number" | "object", prefix: string | false = "")
@@ -153,12 +153,16 @@ function checkPlayer(content: string)
 	});
 }
 
-export function checkChaptersNames(content: string)
+export function checkChaptersNames(questFolder: QuestFolder)
 {
-	const chapters = <string[]>parseJSON(content);
+	const chapters = <string[]>parseJSON(questFolder.chapterNames);
 	if (chapters == null) return;
 	chapters.forEach((chapter, i) => {
 		checkVar(chapter, "Название главы", "string");
+		if (typeof chapter == "string" && questFolder.chapters[i] != undefined)
+		{
+			questFolder.chapters[i].chapterName = chapter;
+		}
 	});
 }
 
@@ -236,7 +240,6 @@ function checkContent_question(content: ChapterContent_question)
 function checkContent_effect(content: ChapterContent_effect)
 {
 	addText(`Элемент effect:`);
-	checkVar(content.duraction, "duraction", "number", "продолжительность: ");
 	if (content.effectName != "darkScreen" && content.effectName != "whiteScreen" && content.effectName != "shake")
 	{
 		errors++;
@@ -246,6 +249,7 @@ function checkContent_effect(content: ChapterContent_effect)
 	{
 		addText(`Название эффека: ${content.effectName}`);
 	}
+	checkVar(content.duraction, "duraction", "number", "продолжительность: ");
 }
 function checkContent_change(content: ChapterContent_change)
 {
@@ -374,13 +378,13 @@ function checkActions(content: Action[])
 		if (typeof el.showConditions == "object") checkCondition(el.showConditions, "showConditions");
 		if (typeof el.result == "object")
 		{
-			printVar(el.result.goToPart, "Не переходить", "Перейти к части: ");
+			if (el.result.goToPart != undefined) addText(`Перейти к части: ${el.result.goToPart}`);
 			if (typeof el.result.content == "object")
 			{
-				addText("Содержимое после выбора этого действия:")
-				marginLeft++;
+				addText("События при выборе этого действия:")
+				marginLeft += 2;
 				checkContent(el.result.content);
-				marginLeft--;
+				marginLeft -= 2;
 			}
 		}
 	};
