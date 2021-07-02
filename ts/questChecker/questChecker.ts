@@ -1,4 +1,4 @@
-import { Action, ChapterContent_change, ChapterContent_effect, ChapterContent_question, ChapterContent_speech, ChapterPart, ChapterPartContent, Character, Condition, Item, Player, Quest } from "../questStructure.js";
+import { Action, Chapter, ChapterContent_change, ChapterContent_effect, ChapterContent_question, ChapterContent_speech, ChapterPart, ChapterPartContent, Character, Condition, Item, Player, Quest } from "../questStructure.js";
 import { Div } from "../functions.js";
 import { QuestFolder } from "./main.js";
 
@@ -171,15 +171,20 @@ function checkAchievements(content: string)
 	});
 }
 
-export function checkChaptersNames(questFolder: QuestFolder)
+function checkChaptersNames(questFolder: QuestFolder)
 {
-	const chapters = <string[]>parseJSON(questFolder.chapterNames);
+	const chapters = <Chapter[]>parseJSON(questFolder.chapterNames);
 	if (chapters == null) return;
 	chapters.forEach((chapter, i) => {
-		checkVar(chapter, "Название главы", "string");
-		if (typeof chapter == "string" && questFolder.chapters[i] != undefined)
+		checkVar(chapter, "Глава", "object", false);
+		if (typeof chapter == "object")
 		{
-			questFolder.chapters[i].chapterName = chapter;
+			checkVar(chapter.name, "name", "string");
+			checkVar(chapter.partsCount, "partsCount", "number", "Кол-во частей: ");
+		}
+		if (typeof chapter.name == "string" && questFolder.chapters[i] != undefined)
+		{
+			questFolder.chapters[i].chapterName = chapter.name;
 		}
 	});
 }

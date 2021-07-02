@@ -6,7 +6,7 @@
 // - player.json // Player
 // - achievements.json // Achievement[]
 // - chapters
-// - - chapters.json // string[]
+// - - chapters.json // Chapter[]
 // - - chapter№
 // - - - part№.json // ChapterPart
 // - images
@@ -69,6 +69,12 @@ export interface Characteristic
 	loseIfBelowZero: boolean;
 	loseText: string;
 	hasLoseImg: boolean;
+}
+
+export interface Chapter
+{
+	name: string;
+	partsCount: number;
 }
 
 export interface ChapterPart

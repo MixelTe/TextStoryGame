@@ -1,4 +1,4 @@
-import { Achievement, Action, ChapterContent_change, ChapterContent_effect, ChapterContent_question, ChapterContent_speech, ChapterPart, ChapterPartContent, Character, Condition, Item, Player, Quest } from "./questStructure.js";
+import { Achievement, Action, Chapter, ChapterContent_change, ChapterContent_effect, ChapterContent_question, ChapterContent_speech, ChapterPart, ChapterPartContent, Character, Condition, Item, Player, Quest } from "./questStructure.js";
 
 export function parseQuest(content: string)
 {
@@ -68,10 +68,12 @@ export function parseAchievements(content: string)
 
 export function parseChapters(content: string)
 {
-	const chapters = <string[]>JSON.parse(content);
+	const chapters = <Chapter[]>JSON.parse(content);
 	if (typeof chapters != "object") throw new Error('chapters must be object');
 	chapters.forEach((chapter, i) => {
-		if (typeof chapter != "string") throw new Error(`chapters[${i}] must be string`);
+		if (typeof chapter != "object") throw new Error(`chapters[${i}] must be object`);
+		if (typeof chapter.name != "string") throw new Error(`chapters[${i}].name must be string`);
+		if (typeof chapter.partsCount != "number") throw new Error(`chapters[${i}].partsCount must be number`);
 	});
 	return chapters;
 }
