@@ -5,56 +5,62 @@
 			"type": "speech",
 			"text": "Вы проснулись рано утром и посмотрели в окно."
 		},
+		{ "type": "change", "achievements": ["good morning"] },
 		{
 			"type": "question",
 			"text": "За окном не было ничего интересного, вы думаете, что делать дальше:",
 			"actions": [
 				{
 					"text": "Пойти на кухню и позавтракать",
-					"result": {
-						"content": [
-							{
-								"type": "change",
-								"characteristics": [
-									{ "id": "mind", "by": 1 },
-									{ "id": "happy", "by": 2 }
-								]
-							},
-							{
-								"type": "speech",
-								"text": "Сегодня на завтрак было ваше любимое: хлеб с молоком, теперь вы сыты и довольны."
-							}
-						]
-					}
+					"content": [
+						{
+							"type": "change",
+							"characteristics": [
+								{ "id": "mind", "by": 1 },
+								{ "id": "happy", "by": 2 }
+							]
+						},
+						{
+							"type": "speech",
+							"text": "Сегодня на завтрак было ваше любимое: хлеб с молоком, теперь вы сыты и довольны."
+						}
+					]
 				},
 				{
 					"text": "Пойти в погреб и поискать приключения.",
-					"result": {
-						"content": [
-							{
-								"type": "change",
-								"characteristics": [
-									{ "id": "mind", "by": -3 },
-									{ "id": "happy", "by": -1 }
-								]
-							},
-							{
-								"type": "effect",
-								"effectName": "darkScreen",
-								"duraction": 0.3
-							},
-							{
-								"type": "speech",
-								"text": "В погребе было очень темно, вы испугались и решили туда не заходить."
-							}
-						]
-					}
+					"content": [
+						{
+							"type": "change",
+							"achievements": ["fear of dark"],
+							"characteristics": [
+								{ "id": "mind", "by": -3 },
+								{ "id": "happy", "by": -1 }
+							]
+						},
+						{
+							"type": "effect",
+							"effectName": "darkScreen",
+							"duraction": 0.3
+						},
+						{
+							"type": "speech",
+							"text": "В погребе было очень темно, вы испугались и решили туда не заходить."
+						}
+					]
 				}
 			]
 		},
 		{
 			"type": "speech",
 			"text": "Походив по комнате какое-то время, вы решили отправиться в путешествие!"
+		},
+		{
+			"type": "speech",
+			"text": "Вы одели свою шляпу и вышли на улицу"
+		},
+		{
+			"type": "change",
+			"goToPart": "choose farmer or lake"
 		}
 	]
 }
