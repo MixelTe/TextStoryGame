@@ -35,6 +35,8 @@ cover.png - обложка квеста, для меню с квестами
 
 в папке background название картинки, это название фона.
 
+### Пустой квест со всеми файлами можно скачать по [этой ссылке](https://github.com/MixelTe/TextStoryGame/blob/master/quests/questEmpty.zip).
+
 #
 
 ## 2. Формат json
