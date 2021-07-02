@@ -1,5 +1,5 @@
 {
-	"id": "1",
+	"id": "beginning",
 	"content": [
 		{
 			"type": "speech",
@@ -60,7 +60,7 @@
 		},
 		{
 			"type": "change",
-			"goToPart": "choose farmer or lake"
+			"goToPart": "choose farm or lake"
 		}
 	]
 }

@@ -1,0 +1,44 @@
+{
+	"id": "lake",
+	"content": [
+		{
+			"type": "speech",
+			"text": "Вы пришли к реке, тут очень тихо и спокойно"
+		},
+		{
+			"type": "question",
+			"text": "Вам стало скучно, что вы будете делать?",
+			"actions": [
+				{
+					"text": "Поймать бабочку",
+					"content": [
+						{ "type": "change", "characteristics": [ { "id": "happy", "by": -1 } ] },
+						{ "type": "speech", "text": "Вы побежали за бабочкой, споткнулись и упали" }
+					]
+				},
+				{
+					"text": "Поймать рыбу",
+					"showConditions": { "itemsNot": ["fishing-rod"] },
+					"content": [
+						{ "type": "speech", "text": "У вас нет удочки, без неё не получиться." }
+					]
+				},
+				{
+					"text": "Поймать рыбу",
+					"showConditions": { "items": ["fishing-rod"] },
+					"content": [
+						{ "type": "speech", "text": "Вы закинули удочку и стали ждать." },
+						{
+							"type": "change",
+							"addItems": ["fish", "fish", "fish", "fish", "fish"],
+							"removeItems": ["fishing-rod"]
+						},
+						{ "type": "speech", "text": "Вы сломали удочку, но смогли выловить 5 рыб!" }
+					]
+				}
+			]
+		},
+		{ "type": "speech", "text": "Вам надоело на озере, и вы пошли обратно" },
+		{ "type": "change", "goToPart": "choose farm or lake" }
+	]
+}

@@ -1,0 +1,66 @@
+{
+	"id": "farm2",
+	"content": [
+		{
+			"type": "speech",
+			"text": "Вы пришли на ферму своего знакомого."
+		},
+		{
+			"type": "speech",
+			"character": "vasya",
+			"text": "Ты вернулся!"
+		},
+		{
+			"type": "question",
+			"character": "vasya",
+			"text": "Ну как, наловил рыб?",
+			"actions": [
+				{
+					"text": "\"Да, держи\"",
+					"conditions": { "items": ["fish"] },
+					"content": [
+						{
+							"type": "change",
+							"removeItems": ["fish", "fish", "fish"]
+						},
+						{
+							"type": "speech",
+							"character": "vasya",
+							"characterImg": "happy",
+							"text": "Большое спасибо!"
+						}
+					]
+				},
+				{
+					"text": "\"Ещё нет\"",
+					"showConditions": { "itemsNot": ["fish"] },
+					"content": [
+						{
+							"type": "speech",
+							"character": "vasya",
+							"text": "Ладно, жду"
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "question",
+			"text": "Вернутся и наловить рыб или пойти дальше?",
+			"actions": [
+				{
+					"text": "Вернуться",
+					"content": [
+						{ "type": "speech", "text": "Вы пошли к озеру" },
+						{ "type": "change", "goToPart": "choose farm or lake" }
+					]
+				},
+				{ "text": "Идти дальше" }
+			]
+		},
+		{
+			"type": "speech",
+			"text": "Вы отправились дальше на поиски приключений."
+		}
+	]
+}

@@ -1,0 +1,52 @@
+{
+	"id": "choose farm or lake",
+	"content": [
+		{
+			"type": "question",
+			"text": "Вы остановились у развилки: направо - озеро, налево - ферма.",
+			"actions": [
+				{
+					"text": "Пойти направо",
+					"content": [
+						{
+							"type": "speech",
+							"text": "Вы пошли к озеру."
+						},
+						{
+							"type": "change",
+							"goToPart": "lake"
+						}
+					]
+				},
+				{
+					"text": "Пойти налево",
+					"showConditions": { "partsNotDone": ["farm"] },
+					"content": [
+						{
+							"type": "speech",
+							"text": "Вы пошли на ферму."
+						},
+						{
+							"type": "change",
+							"goToPart": "farm"
+						}
+					]
+				},
+				{
+					"text": "Пойти налево",
+					"showConditions": { "partsDone": ["farm"] },
+					"content": [
+						{
+							"type": "speech",
+							"text": "Вы пошли на ферму."
+						},
+						{
+							"type": "change",
+							"goToPart": "farm2"
+						}
+					]
+				}
+			]
+		}
+	]
+}

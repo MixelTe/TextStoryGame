@@ -1,0 +1,55 @@
+{
+	"id": "farm",
+	"content": [
+		{
+			"type": "speech",
+			"text": "Вы пришли на ферму и встретили своего знакомого."
+		},
+		{
+			"type": "speech",
+			"character": "vasya",
+			"text": "Доброе утро! Рад встрече."
+		},
+		{
+			"type": "question",
+			"character": "vasya",
+			"text": "Я сегодня очень занят, может наловишь мне пару рыбёх к обеду?",
+			"actions": [
+				{
+					"text": "Согласиться",
+					"content": [
+						{ "type": "change", "addItems": ["fishing-rod"] },
+						{
+							"type": "speech",
+							"character": "vasya",
+							"text": "Спасибо большое, возьми эту удочку"
+						},
+						{
+							"type": "speech",
+							"text": "Вы отправились к озеру"
+						},
+						{
+							"type": "change",
+							"goToPart": "choose farm or lake"
+						}
+					]
+				},
+				{
+					"text": "Отказаться",
+					"content": [
+						{
+							"type": "speech",
+							"character": "vasya",
+							"characterImg": "sad",
+							"text": "Жаль, тогда до встречи"
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "speech",
+			"text": "Вы отправились дальше на поиски приключений"
+		}
+	]
+}
