@@ -270,7 +270,7 @@ function checkContent_effect(content: ChapterContent_effect)
 }
 function checkContent_change(content: ChapterContent_change)
 {
-	addText(`Элемент effect:`);
+	addText(`Элемент change:`);
 	if (typeof content.characteristics == "object")
 	{
 		addText("Изменение характеристик:")
