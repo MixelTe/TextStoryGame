@@ -36,6 +36,7 @@ function addText(text: string, big = false, error = false)
 	if (error) classes.push("text-error");
 	const div = Div(classes, [], text);
 	div.style.marginLeft = `${marginLeft * 1.2}em`;
+	if (marginLeft > 0) div.style.borderLeft = `1px solid black`;
 	document.body.appendChild(div);
 }
 function checkVar(v: any, name: string, type: "string" | "number" | "object", prefix: string | false = "")
