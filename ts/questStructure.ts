@@ -106,6 +106,7 @@ export interface ChapterContent_change
 	achievements: string[]; // achievements id
 	addItems: string[]; // items id
 	removeItems: string[]; // items id
+	goToPart?: string; // part id
 	characteristics: ChangeCharacteristics[];
 }
 
@@ -114,7 +115,7 @@ export interface Action
 	text: string;
 	conditions?: Condition;
 	showConditions?: Condition;
-	result: ActionResult;
+	content: ChapterPartContent;
 }
 
 export interface Condition
@@ -130,12 +131,6 @@ export interface ConditionCharacteristic
 	id: string;
 	lessThen?: number;
 	moreThen?: number;
-}
-
-export interface ActionResult
-{
-	goToPart?: string; // part id
-	content: ChapterPartContent;
 }
 
 export interface ChangeCharacteristics

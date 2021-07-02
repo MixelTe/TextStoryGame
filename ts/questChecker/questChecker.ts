@@ -322,6 +322,7 @@ function checkContent_change(content: ChapterContent_change)
 		content.addItems.forEach(el => checkVar(el, "id предмета", "string", "id: "));
 		marginLeft--;
 	}
+	if (content.goToPart != undefined) addText(`Перейти к части: ${content.goToPart}`);
 }
 
 function checkActions(content: Action[])
@@ -400,16 +401,12 @@ function checkActions(content: Action[])
 		checkVar(el.text, "text", "string");
 		if (typeof el.conditions == "object") checkCondition(el.conditions, "conditions");
 		if (typeof el.showConditions == "object") checkCondition(el.showConditions, "showConditions");
-		if (typeof el.result == "object")
+		if (typeof el.content == "object")
 		{
-			if (el.result.goToPart != undefined) addText(`Перейти к части: ${el.result.goToPart}`);
-			if (typeof el.result.content == "object")
-			{
-				addText("События при выборе этого действия:")
-				marginLeft += 2;
-				checkContent(el.result.content);
-				marginLeft -= 2;
-			}
+			addText("События при выборе этого действия:")
+			marginLeft += 2;
+			checkContent(el.content);
+			marginLeft -= 2;
 		}
 	};
 }

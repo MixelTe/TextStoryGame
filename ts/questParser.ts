@@ -248,12 +248,9 @@ function checkActions(content: Action[])
 		if (typeof el.text != "string") error(`text must be string`);
 		if (typeof el.conditions == "object") checkCondition(el.conditions, "conditions");
 		if (typeof el.showConditions == "object") checkCondition(el.showConditions, "showConditions");
-		if (typeof el.result == "object")
+		if (typeof el.content == "object")
 		{
-			if (typeof el.result.content == "object")
-			{
-				checkContent(el.result.content);
-			}
+			checkContent(el.content);
 		}
 	});
 }
