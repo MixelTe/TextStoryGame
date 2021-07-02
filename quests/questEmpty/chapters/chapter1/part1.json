@@ -9,6 +9,11 @@
 			"text": "Речь персонажа"
 		},
 		{
+			"type": "effect",
+			"effectName": "darkScreen, whiteScreen или shake",
+			"duraction": 1
+		},
+		{
 			"type": "question",
 			"characterId": "id персонажа, который говорит",
 			"characterImg": "Иконка персонажа: normal или sad или angry или happy",
