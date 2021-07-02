@@ -29,6 +29,12 @@ body {
 .text-error {
 	color: tomato;
 }
+.text-goTo {
+	color: blue;
+}
+.text-el {
+	color: darkviolet;
+}
 .disabled {
 	user-select: none;
 }

@@ -28,12 +28,13 @@ export function checkData(questFolder: QuestFolder)
 	if (errors > 0) addText(`Ошибок: ${errors}`, true, true);
 	else addText("Нет ошибок!", true);
 }
-function addText(text: string, big = false, error = false)
+function addText(text: string, big = false, error = false, styles: string[] = [])
 {
 	const classes = []
 	if (big) classes.push("text-big");
 	else classes.push("text-medium");
 	if (error) classes.push("text-error");
+	styles.forEach(style => classes.push(style));
 	const div = Div(classes, [], text);
 	div.style.marginLeft = `${marginLeft * 1.2}em`;
 	if (marginLeft > 0) div.style.borderLeft = `1px solid black`;
@@ -237,7 +238,7 @@ function checkContent(content: ChapterPartContent)
 }
 function checkContent_speech(content: ChapterContent_speech | ChapterContent_question)
 {
-	addText(`Элемент ${content.type}:`);
+	addText(`Элемент ${content.type}:`, false, false, ["text-el"]);
 	checkVar(content.text, "text", "string");
 	printVar(content.character, "author", "id: ");
 	if (content.characterImg != "normal" && content.characterImg != "sad" &&
@@ -262,7 +263,7 @@ function checkContent_question(content: ChapterContent_question)
 }
 function checkContent_effect(content: ChapterContent_effect)
 {
-	addText(`Элемент effect:`);
+	addText(`Элемент effect:`, false, false, ["text-el"]);
 	if (content.effectName != "darkScreen" && content.effectName != "whiteScreen" && content.effectName != "shake")
 	{
 		errors++;
@@ -276,7 +277,7 @@ function checkContent_effect(content: ChapterContent_effect)
 }
 function checkContent_change(content: ChapterContent_change)
 {
-	addText(`Элемент change:`);
+	addText(`Элемент change:`, false, false, ["text-el"]);
 	if (typeof content.characteristics == "object")
 	{
 		addText("Изменение характеристик:")
@@ -328,7 +329,7 @@ function checkContent_change(content: ChapterContent_change)
 		content.removeItems.forEach(el => checkVar(el, "id предмета", "string", "id: "));
 		marginLeft--;
 	}
-	if (content.goToPart != undefined) addText(`Перейти к части: ${content.goToPart}`);
+	if (content.goToPart != undefined) addText(`Перейти к части: ${content.goToPart}`, false, false, ["text-goTo"]);
 }
 
 function checkActions(content: Action[])
