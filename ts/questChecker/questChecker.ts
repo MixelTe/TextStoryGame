@@ -18,6 +18,8 @@ export function checkData(questFolder: QuestFolder)
 	run(checkItems, questFolder.items);
 	addText("Игрок:", true);
 	run(checkPlayer, questFolder.player);
+	addText("Достижения:", true);
+	run(checkAchievements, questFolder.achievements);
 	addText("Названия глав:", true);
 	run(checkChaptersNames, questFolder);
 	addText("Главы:", true);
@@ -153,6 +155,21 @@ function checkPlayer(content: string)
 	});
 }
 
+function checkAchievements(content: string)
+{
+	const achievements = <Item[]>parseJSON(content);
+	if (achievements == null) return;
+	checkVar(achievements, "achievements", "object", false);
+	achievements.forEach((el, i) =>
+	{
+		addText(`Достижение №${i + 1}:`)
+		checkVar(el.id, "achievement.id", "string", "id: ");
+		checkVar(el.name, "achievement.name", "string");
+		printVar(el.description, "Нет описания");
+		addText("");
+	});
+}
+
 export function checkChaptersNames(questFolder: QuestFolder)
 {
 	const chapters = <string[]>parseJSON(questFolder.chapterNames);
@@ -282,6 +299,13 @@ function checkContent_change(content: ChapterContent_change)
 				addText(`Характеристика установиьтся в ${el.to}`);
 			}
 		};
+		marginLeft--;
+	}
+	if (typeof content.achievements == "object")
+	{
+		addText("Добавление достижений:")
+		marginLeft++;
+		content.achievements.forEach(el => checkVar(el, "id достижения", "string", "id: "));
 		marginLeft--;
 	}
 	if (typeof content.addItems == "object")

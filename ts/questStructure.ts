@@ -4,6 +4,7 @@
 // - characters.json // Character[]
 // - items.json // Item[]
 // - player.json // Player
+// - achievements.json // Achievement[]
 // - chapters
 // - - chapters.json // string[]
 // - - chapter№
@@ -51,6 +52,14 @@ export interface Player
 	items: string[]; // Items id
 	characteristics: Characteristic[];
 }
+
+export interface Achievement
+{
+	id: string;
+	name: string;
+	description: string;
+}
+
 export interface Characteristic
 {
 	id: string;
@@ -94,6 +103,7 @@ export interface ChapterContent_effect
 export interface ChapterContent_change
 {
 	type: "change";
+	achievements: string[]; // achievements id
 	addItems: string[]; // items id
 	removeItems: string[]; // items id
 	characteristics: ChangeCharacteristics[];

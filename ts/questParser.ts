@@ -1,4 +1,4 @@
-import { Action, ChapterContent_change, ChapterContent_effect, ChapterContent_question, ChapterContent_speech, ChapterPart, ChapterPartContent, Character, Condition, Item, Player, Quest } from "./questStructure.js";
+import { Achievement, Action, ChapterContent_change, ChapterContent_effect, ChapterContent_question, ChapterContent_speech, ChapterPart, ChapterPartContent, Character, Condition, Item, Player, Quest } from "./questStructure.js";
 
 export function parseQuest(content: string)
 {
@@ -52,6 +52,18 @@ export function parsePlayer(content: string)
 		if (typeof el.loseText != "string") el.loseText = "";
 		if (typeof el.hasLoseImg != "boolean") el.hasLoseImg = false;
 	});
+}
+
+export function parseAchievements(content: string)
+{
+	const achievements = <Achievement[]>JSON.parse(content);
+	achievements.forEach((el, i) =>
+	{
+		if (typeof el.id != "string") throw new Error(`achievements[${i}].id must be string`);
+		if (typeof el.name != "string") throw new Error(`achievements[${i}].name must be string`);
+		if (typeof el.description != "string") el.description = "";
+	});
+	return achievements;
 }
 
 export function parseChapters(content: string)
@@ -145,6 +157,13 @@ function checkContent_change(content: ChapterContent_change)
 			{
 				error(`characteristics[${j}].by or .to must be number`);
 			}
+		});
+	}
+	if (typeof content.achievements == "object")
+	{
+		content.achievements.forEach((el, j) =>
+		{
+			if (typeof el != "string") error(`achievements[${j}] must be string`);
 		});
 	}
 	if (typeof content.addItems == "object")
