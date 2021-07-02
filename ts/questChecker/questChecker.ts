@@ -239,7 +239,7 @@ function checkContent_speech(content: ChapterContent_speech | ChapterContent_que
 {
 	addText(`Элемент ${content.type}:`);
 	checkVar(content.text, "text", "string");
-	printVar(content.characterId, "author", "id: ");
+	printVar(content.character, "author", "id: ");
 	if (content.characterImg != "normal" && content.characterImg != "sad" &&
 		content.characterImg != "angry" && content.characterImg != "happy")
 	{
@@ -325,7 +325,7 @@ function checkContent_change(content: ChapterContent_change)
 	{
 		addText("Удаление предметов:")
 		marginLeft++;
-		content.addItems.forEach(el => checkVar(el, "id предмета", "string", "id: "));
+		content.removeItems.forEach(el => checkVar(el, "id предмета", "string", "id: "));
 		marginLeft--;
 	}
 	if (content.goToPart != undefined) addText(`Перейти к части: ${content.goToPart}`);

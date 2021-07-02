@@ -111,7 +111,7 @@ function checkContent_speech(content: ChapterContent_speech | ChapterContent_que
 	}
 	const errorText = `characterImg must be "normal", "sad", "angry" or "happy"`
 	if (typeof content.text != "string") error(`text must be string`);
-	if (typeof content.characterId != "string") content.characterId = "author";
+	if (typeof content.character != "string") content.character = "author";
 	if (typeof content.characterImg != "string") content.characterImg = "normal";
 	if (content.characterImg != "normal" && content.characterImg != "sad" &&
 		content.characterImg != "angry" && content.characterImg != "happy")

@@ -4,7 +4,7 @@
 	"content": [
 		{
 			"type": "speech",
-			"characterId": "id персонажа, который говорит",
+			"character": "id персонажа, который говорит",
 			"characterImg": "Иконка персонажа: normal или sad или angry или happy",
 			"text": "Речь персонажа"
 		},
@@ -15,7 +15,7 @@
 		},
 		{
 			"type": "question",
-			"characterId": "id персонажа, который говорит",
+			"character": "id персонажа, который говорит",
 			"characterImg": "Иконка персонажа: normal или sad или angry или happy",
 			"text": "Вопрос персонажа",
 			"actions": [

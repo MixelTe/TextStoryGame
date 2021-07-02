@@ -87,7 +87,7 @@ export interface ChapterPart
 export interface ChapterContent_speech
 {
 	type: "speech";
-	characterId: string;
+	character: string;
 	characterImg: "normal" | "sad" | "angry" | "happy";
 	text: string;
 }
@@ -95,7 +95,7 @@ export interface ChapterContent_speech
 export interface ChapterContent_question
 {
 	type: "question";
-	characterId: string;
+	character: string;
 	characterImg: "normal" | "sad" | "angry" | "happy";
 	text: string;
 	actions: Action[];
