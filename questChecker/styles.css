@@ -21,12 +21,19 @@ body {
 .text-medium {
 	font-size: 1.5em;
 	min-height: 1em;
+	padding-left: 0.4em;
 }
 .text-center {
 	text-align: center;
 }
 .text-error {
 	color: tomato;
+}
+.text-goTo {
+	color: blue;
+}
+.text-el {
+	color: darkviolet;
 }
 .disabled {
 	user-select: none;

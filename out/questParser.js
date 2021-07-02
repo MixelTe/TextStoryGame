@@ -59,13 +59,29 @@ export function parsePlayer(content) {
             el.hasLoseImg = false;
     });
 }
+export function parseAchievements(content) {
+    const achievements = JSON.parse(content);
+    achievements.forEach((el, i) => {
+        if (typeof el.id != "string")
+            throw new Error(`achievements[${i}].id must be string`);
+        if (typeof el.name != "string")
+            throw new Error(`achievements[${i}].name must be string`);
+        if (typeof el.description != "string")
+            el.description = "";
+    });
+    return achievements;
+}
 export function parseChapters(content) {
     const chapters = JSON.parse(content);
     if (typeof chapters != "object")
         throw new Error('chapters must be object');
     chapters.forEach((chapter, i) => {
-        if (typeof chapter != "string")
-            throw new Error(`chapters[${i}] must be string`);
+        if (typeof chapter != "object")
+            throw new Error(`chapters[${i}] must be object`);
+        if (typeof chapter.name != "string")
+            throw new Error(`chapters[${i}].name must be string`);
+        if (typeof chapter.partsCount != "number")
+            throw new Error(`chapters[${i}].partsCount must be number`);
     });
     return chapters;
 }
@@ -109,8 +125,8 @@ function checkContent_speech(content) {
     const errorText = `characterImg must be "normal", "sad", "angry" or "happy"`;
     if (typeof content.text != "string")
         error(`text must be string`);
-    if (typeof content.characterId != "string")
-        content.characterId = "author";
+    if (typeof content.character != "string")
+        content.character = "author";
     if (typeof content.characterImg != "string")
         content.characterImg = "normal";
     if (content.characterImg != "normal" && content.characterImg != "sad" &&
@@ -153,6 +169,12 @@ function checkContent_change(content) {
             if (typeof el2.by != "number" && typeof el2.to != "number") {
                 error(`characteristics[${j}].by or .to must be number`);
             }
+        });
+    }
+    if (typeof content.achievements == "object") {
+        content.achievements.forEach((el, j) => {
+            if (typeof el != "string")
+                error(`achievements[${j}] must be string`);
         });
     }
     if (typeof content.addItems == "object") {
@@ -214,6 +236,15 @@ function checkActions(content) {
         else {
             cond.items = [];
         }
+        if (typeof cond.itemsNot == "object") {
+            cond.itemsNot.forEach((el, j) => {
+                if (typeof el != "string")
+                    error(`${n}.itemsNot[${j}] must be string`);
+            });
+        }
+        else {
+            cond.itemsNot = [];
+        }
     };
     content.forEach(el => {
         if (typeof el.text != "string")
@@ -222,10 +253,8 @@ function checkActions(content) {
             checkCondition(el.conditions, "conditions");
         if (typeof el.showConditions == "object")
             checkCondition(el.showConditions, "showConditions");
-        if (typeof el.result == "object") {
-            if (typeof el.result.content == "object") {
-                checkContent(el.result.content);
-            }
+        if (typeof el.content == "object") {
+            checkContent(el.content);
         }
     });
 }

@@ -14,6 +14,8 @@ export function checkData(questFolder) {
     run(checkItems, questFolder.items);
     addText("Игрок:", true);
     run(checkPlayer, questFolder.player);
+    addText("Достижения:", true);
+    run(checkAchievements, questFolder.achievements);
     addText("Названия глав:", true);
     run(checkChaptersNames, questFolder);
     addText("Главы:", true);
@@ -24,7 +26,7 @@ export function checkData(questFolder) {
     else
         addText("Нет ошибок!", true);
 }
-function addText(text, big = false, error = false) {
+function addText(text, big = false, error = false, styles = []) {
     const classes = [];
     if (big)
         classes.push("text-big");
@@ -32,8 +34,11 @@ function addText(text, big = false, error = false) {
         classes.push("text-medium");
     if (error)
         classes.push("text-error");
+    styles.forEach(style => classes.push(style));
     const div = Div(classes, [], text);
     div.style.marginLeft = `${marginLeft * 1.2}em`;
+    if (marginLeft > 0)
+        div.style.borderLeft = `1px solid black`;
     document.body.appendChild(div);
 }
 function checkVar(v, name, type, prefix = "") {
@@ -136,14 +141,31 @@ function checkPlayer(content) {
         addText("");
     });
 }
-export function checkChaptersNames(questFolder) {
+function checkAchievements(content) {
+    const achievements = parseJSON(content);
+    if (achievements == null)
+        return;
+    checkVar(achievements, "achievements", "object", false);
+    achievements.forEach((el, i) => {
+        addText(`Достижение №${i + 1}:`);
+        checkVar(el.id, "achievement.id", "string", "id: ");
+        checkVar(el.name, "achievement.name", "string");
+        printVar(el.description, "Нет описания");
+        addText("");
+    });
+}
+function checkChaptersNames(questFolder) {
     const chapters = parseJSON(questFolder.chapterNames);
     if (chapters == null)
         return;
     chapters.forEach((chapter, i) => {
-        checkVar(chapter, "Название главы", "string");
-        if (typeof chapter == "string" && questFolder.chapters[i] != undefined) {
-            questFolder.chapters[i].chapterName = chapter;
+        checkVar(chapter, "Глава", "object", false);
+        if (typeof chapter == "object") {
+            checkVar(chapter.name, "name", "string");
+            checkVar(chapter.partsCount, "partsCount", "number", "Кол-во частей: ");
+        }
+        if (typeof chapter.name == "string" && questFolder.chapters[i] != undefined) {
+            questFolder.chapters[i].chapterName = chapter.name;
         }
     });
 }
@@ -199,9 +221,9 @@ function checkContent(content) {
     ;
 }
 function checkContent_speech(content) {
-    addText(`Элемент ${content.type}:`);
+    addText(`Элемент ${content.type}:`, false, false, ["text-el"]);
     checkVar(content.text, "text", "string");
-    printVar(content.characterId, "author", "id: ");
+    printVar(content.character, "author", "id: ");
     if (content.characterImg != "normal" && content.characterImg != "sad" &&
         content.characterImg != "angry" && content.characterImg != "happy") {
         addText(`Иконка персонажа: normal`);
@@ -221,7 +243,7 @@ function checkContent_question(content) {
     marginLeft--;
 }
 function checkContent_effect(content) {
-    addText(`Элемент effect:`);
+    addText(`Элемент effect:`, false, false, ["text-el"]);
     if (content.effectName != "darkScreen" && content.effectName != "whiteScreen" && content.effectName != "shake") {
         errors++;
         addText(`effectName должно быть "darkScreen", "whiteScreen" или "shake"`, false, true);
@@ -232,7 +254,7 @@ function checkContent_effect(content) {
     checkVar(content.duraction, "duraction", "number", "продолжительность: ");
 }
 function checkContent_change(content) {
-    addText(`Элемент effect:`);
+    addText(`Элемент change:`, false, false, ["text-el"]);
     if (typeof content.characteristics == "object") {
         addText("Изменение характеристик:");
         marginLeft++;
@@ -260,6 +282,12 @@ function checkContent_change(content) {
         ;
         marginLeft--;
     }
+    if (typeof content.achievements == "object") {
+        addText("Добавление достижений:");
+        marginLeft++;
+        content.achievements.forEach(el => checkVar(el, "id достижения", "string", "id: "));
+        marginLeft--;
+    }
     if (typeof content.addItems == "object") {
         addText("Добавление предметов:");
         marginLeft++;
@@ -269,9 +297,11 @@ function checkContent_change(content) {
     if (typeof content.removeItems == "object") {
         addText("Удаление предметов:");
         marginLeft++;
-        content.addItems.forEach(el => checkVar(el, "id предмета", "string", "id: "));
+        content.removeItems.forEach(el => checkVar(el, "id предмета", "string", "id: "));
         marginLeft--;
     }
+    if (content.goToPart != undefined)
+        addText(`Перейти к части: ${content.goToPart}`, false, false, ["text-goTo"]);
 }
 function checkActions(content) {
     const checkCondition = (cond, n) => {
@@ -281,15 +311,9 @@ function checkActions(content) {
             addText(`Законченые части:`);
             cond.partsDone.forEach(el => checkVar(el, "id части", "string", "id: "));
         }
-        else {
-            cond.partsDone = [];
-        }
         if (typeof cond.partsNotDone == "object") {
             addText(`Не законченые части:`);
             cond.partsNotDone.forEach(el => checkVar(el, "id части", "string", "id: "));
-        }
-        else {
-            cond.partsNotDone = [];
         }
         if (typeof cond.characteristics == "object") {
             addText(`Характеристики:`);
@@ -315,15 +339,13 @@ function checkActions(content) {
             }
             ;
         }
-        else {
-            cond.characteristics = [];
-        }
         if (typeof cond.items == "object") {
             addText(`Предметы:`);
             cond.items.forEach(el => checkVar(el, "id предмета", "string", "id: "));
         }
-        else {
-            cond.items = [];
+        if (typeof cond.itemsNot == "object") {
+            addText(`Нет предметов:`);
+            cond.itemsNot.forEach(el => checkVar(el, "id предмета", "string", "id: "));
         }
         marginLeft--;
     };
@@ -337,15 +359,11 @@ function checkActions(content) {
             checkCondition(el.conditions, "conditions");
         if (typeof el.showConditions == "object")
             checkCondition(el.showConditions, "showConditions");
-        if (typeof el.result == "object") {
-            if (el.result.goToPart != undefined)
-                addText(`Перейти к части: ${el.result.goToPart}`);
-            if (typeof el.result.content == "object") {
-                addText("События при выборе этого действия:");
-                marginLeft += 2;
-                checkContent(el.result.content);
-                marginLeft -= 2;
-            }
+        if (typeof el.content == "object") {
+            addText("События при выборе этого действия:");
+            marginLeft += 2;
+            checkContent(el.content);
+            marginLeft -= 2;
         }
     }
     ;

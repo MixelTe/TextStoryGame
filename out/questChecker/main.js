@@ -29,6 +29,9 @@ window.addEventListener("drop", async (e) => {
                     case "quest.json":
                         questFolder.quest = await readFile(el);
                         break;
+                    case "achievements.json":
+                        questFolder.achievements = await readFile(el);
+                        break;
                 }
             }
             if (el.isDirectory && el.name == "chapters") {
@@ -63,10 +66,13 @@ window.addEventListener("drop", async (e) => {
             throw new Error("Data is empty");
         if (questFolder.player == undefined)
             throw new Error("Data is empty");
+        if (questFolder.achievements == undefined)
+            throw new Error("Data is empty");
     }
     catch (e) {
         const text = "Не удалось открыть файлы, проверьте правильность их расположения:";
         const text2 = `Папка с квестом:
+- achievements.json
 - characters.json
 - items.json
 - player.json
