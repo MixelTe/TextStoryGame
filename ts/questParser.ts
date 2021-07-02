@@ -244,6 +244,17 @@ function checkActions(content: Action[])
 		{
 			cond.items = [];
 		}
+		if (typeof cond.itemsNot == "object")
+		{
+			cond.itemsNot.forEach((el, j) =>
+			{
+				if (typeof el != "string") error(`${n}.itemsNot[${j}] must be string`);
+			});
+		}
+		else
+		{
+			cond.itemsNot = [];
+		}
 	}
 	content.forEach(el =>
 	{

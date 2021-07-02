@@ -130,6 +130,7 @@ export interface Condition
 	partsNotDone: string[];
 	characteristics: ConditionCharacteristic[];
 	items: string[]; // items id
+	itemsNot: string[]; // items id
 }
 
 export interface ConditionCharacteristic

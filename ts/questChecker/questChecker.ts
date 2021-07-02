@@ -342,19 +342,11 @@ function checkActions(content: Action[])
 			addText(`Законченые части:`);
 			cond.partsDone.forEach(el => checkVar(el, "id части", "string", "id: "));
 		}
-		else
-		{
-			cond.partsDone = [];
-		}
 
 		if (typeof cond.partsNotDone == "object")
 		{
 			addText(`Не законченые части:`);
 			cond.partsNotDone.forEach(el => checkVar(el, "id части", "string", "id: "));
-		}
-		else
-		{
-			cond.partsNotDone = [];
 		}
 
 		if (typeof cond.characteristics == "object")
@@ -384,20 +376,19 @@ function checkActions(content: Action[])
 				}
 			};
 		}
-		else
-		{
-			cond.characteristics = [];
-		}
 
 		if (typeof cond.items == "object")
 		{
 			addText(`Предметы:`);
 			cond.items.forEach(el => checkVar(el, "id предмета", "string", "id: "));
 		}
-		else
+
+		if (typeof cond.itemsNot == "object")
 		{
-			cond.items = [];
+			addText(`Нет предметов:`);
+			cond.itemsNot.forEach(el => checkVar(el, "id предмета", "string", "id: "));
 		}
+
 		marginLeft--;
 	}
 	for (let i = 0; i < content.length; i++) {
