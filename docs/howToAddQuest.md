@@ -93,7 +93,10 @@ cover.png - обложка квеста, для меню с квестами
 #
 
 ## 3. Заполнение файлов
-Как заполнять все файлы написанно [здесь](https://github.com/MixelTe/TextStoryGame/blob/master/docs/questStructure.md)
+Как заполнять все файлы написанно [здесь](https://github.com/MixelTe/TextStoryGame/blob/master/docs/questStructure.md).
+
+Пример квеста можно скачать [здесь](https://github.com/MixelTe/TextStoryGame/blob/master/quests/quest0.zip).
+В нём использованы все возможности написания квестов. 
 
 ## 4. Проверка файлов
 После того, как вы заполнили файл(ы), проверьте правильность заполнения на [этой странице](https://mixelte.github.io/TextStoryGame/questChecker/).
