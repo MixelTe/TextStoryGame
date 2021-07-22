@@ -1,5 +1,6 @@
 {
 	"id": "lake",
+	"backImg": "lake.png",
 	"content": [
 		{
 			"type": "speech",

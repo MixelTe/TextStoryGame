@@ -1,5 +1,6 @@
 {
 	"id": "farm2",
+	"backImg": "farm.png",
 	"content": [
 		{
 			"type": "speech",

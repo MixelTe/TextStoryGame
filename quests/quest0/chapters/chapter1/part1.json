@@ -1,5 +1,6 @@
 {
 	"id": "beginning",
+	"backImg": "home.png",
 	"content": [
 		{
 			"type": "speech",

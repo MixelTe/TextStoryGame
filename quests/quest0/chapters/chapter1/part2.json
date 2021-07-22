@@ -1,5 +1,6 @@
 {
 	"id": "choose farm or lake",
+	"backImg": "road.png",
 	"content": [
 		{
 			"type": "question",
