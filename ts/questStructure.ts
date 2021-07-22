@@ -69,6 +69,7 @@ export interface Characteristic
 	loseIfBelowZero: boolean;
 	loseText: string;
 	hasLoseImg: boolean;
+	hidden: boolean;
 }
 
 export interface Chapter

@@ -51,6 +51,7 @@ export function parsePlayer(content: string)
 		if (typeof el.loseIfBelowZero != "boolean") el.loseIfBelowZero = false;
 		if (typeof el.loseText != "string") el.loseText = "";
 		if (typeof el.hasLoseImg != "boolean") el.hasLoseImg = false;
+		if (typeof el.hidden != "boolean") el.hidden = false;
 	});
 }
 
