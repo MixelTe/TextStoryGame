@@ -16,7 +16,11 @@ export function removeQuest(key: string)
 	let quests = getQuests();
 	quests = quests.filter(q => q.key != key);
 	const quest = localStorage.getItem(P(key));
-	if (quest) localStorage.setItem(P("deleted." + key), quest);
+	if (quest)
+	{
+		localStorage.removeItem(P(key));
+		localStorage.setItem(P("deleted." + key), quest);
+	}
 	localStorage.setItem(P(KEY), JSON.stringify(quests));
 }
 

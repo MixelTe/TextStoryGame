@@ -5,8 +5,7 @@
 	flex: 1 0 auto;
 	background-color: limegreen;
 	border: 1px solid green;
-	margin: 0.3em 0.3em;
-	font-size: 1.1rem;
+	margin: 0.2em;
 	border-radius: 1em;
 	outline: none;
 }
@@ -16,9 +15,6 @@
 }
 .header.pg2 button:active {
 	background-color: hsl(120, 61%, 60%);
-}
-input.pg2, textarea.pg2 {
-	font-size: 1.1rem;
 }
 input.pg2 {
 	width: 100%;

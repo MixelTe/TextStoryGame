@@ -17,12 +17,15 @@ body {
 	height: 100%;
 	max-width: 700px;
 }
+.body, button, input, textarea {
+	font-size: 1.1rem;
+}
 .header {
 	display: flex;
 	align-items: center;
 	background-color: lightgreen;
 	padding: 1rem 1.5rem;
-	font-size: 1.3rem;
+	font-size: 1.4rem;
 	position: sticky;
 	top: 0px;
 }
