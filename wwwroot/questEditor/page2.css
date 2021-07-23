@@ -1,0 +1,23 @@
+.header.pg2 {
+	flex-wrap: wrap;
+}
+.header.pg2 button {
+	flex: 1 0 auto;
+	background-color: limegreen;
+	border: 1px solid green;
+	margin: 0.3em 0.3em;
+	font-size: 1.1rem;
+	border-radius: 1em;
+	outline: none;
+}
+.header.pg2 button:hover,
+.header.pg2 button:focus {
+	background-color: hsl(120, 61%, 40%);
+}
+.header.pg2 button:active {
+	background-color: hsl(120, 61%, 60%);
+}
+
+/* .pg2-editor-body {
+
+} */
