@@ -29,3 +29,9 @@ body {
 	position: sticky;
 	top: 0px;
 }
+.ta-center {
+	text-align: center;
+}
+.ta-end {
+	text-align: end;
+}

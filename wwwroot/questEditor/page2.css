@@ -73,3 +73,10 @@ textarea.pg2 {
 .pg2-inputDiv textarea:disabled ~ div svg:nth-child(3) {
 	display: none;
 }
+
+.pg2-block {
+	padding: 1rem;
+	margin: 1rem 0rem;
+	border: 2px solid lime;
+	border-radius: 1em;
+}
