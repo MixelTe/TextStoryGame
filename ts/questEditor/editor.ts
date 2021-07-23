@@ -1,11 +1,11 @@
 import { Button, Div } from "../functions.js";
 import { getQuest, QuestFull, saveQuest } from "./functions.js";
-import { Editor_Achievements } from "./editors/achievements";
-import { Editor_Chapters } from "./editors/chapters";
-import { Editor_Characters } from "./editors/characters";
-import { Editor_Items } from "./editors/items";
-import { Editor_Player } from "./editors/player";
-import { Editor_Quest } from "./editors/quest";
+import { Editor_Achievements } from "./editors/achievements.js";
+import { Editor_Chapters } from "./editors/chapters.js";
+import { Editor_Characters } from "./editors/characters.js";
+import { Editor_Items } from "./editors/items.js";
+import { Editor_Player } from "./editors/player.js";
+import { Editor_Quest } from "./editors/quest.js";
 
 export class Editor
 {
@@ -24,12 +24,12 @@ export class Editor
 		this.callback = callback;
 		this.key = key;
 		const quest = getQuest(key);
-		this.quest = new Editor_Quest(quest.quest, this.save);
-		this.characters = new Editor_Characters(quest.characters, this.save);
-		this.items = new Editor_Items(quest.items, this.save);
-		this.player = new Editor_Player(quest.player, this.save);
-		this.achievements = new Editor_Achievements(quest.achievements, this.save);
-		this.chapters = new Editor_Chapters(quest.chapters, this.save);
+		this.quest = new Editor_Quest(quest.quest, this.save.bind(this));
+		this.characters = new Editor_Characters(quest.characters, this.save.bind(this));
+		this.items = new Editor_Items(quest.items, this.save.bind(this));
+		this.player = new Editor_Player(quest.player, this.save.bind(this));
+		this.achievements = new Editor_Achievements(quest.achievements, this.save.bind(this));
+		this.chapters = new Editor_Chapters(quest.chapters, this.save.bind(this));
 		this.questFull = quest;
 	}
 	public render()
