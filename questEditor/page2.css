@@ -1,0 +1,103 @@
+.header.pg2 {
+	flex-wrap: wrap;
+}
+.header.pg2 button {
+	flex: 1 0 auto;
+	background-color: limegreen;
+	border: 1px solid green;
+	margin: 0.2em;
+	border-radius: 1em;
+	outline: none;
+}
+.header.pg2 button:hover,
+.header.pg2 button:focus {
+	background-color: hsl(120, 61%, 40%);
+}
+.header.pg2 button:active {
+	background-color: hsl(120, 61%, 60%);
+}
+input.pg2 {
+	width: 100%;
+}
+textarea.pg2 {
+	resize: vertical;
+	width: 100%;
+	min-height: 1.8em;
+	height: 1.8em;
+}
+.pg2-editor-body {
+	padding: 1rem
+}
+.pg2-line {
+	margin: 1rem 0rem;
+}
+.pg2-inputDiv {
+	display: flex;
+	justify-content: space-between;
+}
+.pg2-inputDiv div {
+	display: inline;
+}
+.pg2-inputDiv svg {
+	width: 1.15rem;
+	margin-left: 0.5rem;
+	cursor: pointer;
+}
+.pg2-inputDiv svg:first-child {
+	display: none;
+}
+.pg2-inputDiv input,
+.pg2-inputDiv textarea {
+	width: calc(100% - 3.5rem);
+	background-color: white;
+	color: black;
+	border: 1px solid gray;
+	border-radius: 0.2em;
+}
+.pg2-inputDiv input:disabled,
+.pg2-inputDiv textarea:disabled {
+	background-color: transparent;
+	border: 1px solid transparent;
+	color: black;
+	cursor: text;
+}
+.pg2-inputDiv textarea:disabled {
+	resize: none;
+}
+.pg2-inputDiv textarea:disabled ~ div svg:first-child ,
+.pg2-inputDiv input:disabled ~ div svg:first-child {
+	display: inline;
+}
+.pg2-inputDiv input:disabled ~ div svg:nth-child(2),
+.pg2-inputDiv input:disabled ~ div svg:nth-child(3),
+.pg2-inputDiv textarea:disabled ~ div svg:nth-child(2),
+.pg2-inputDiv textarea:disabled ~ div svg:nth-child(3) {
+	display: none;
+}
+
+.pg2-block {
+	padding: 1rem;
+	margin: 1rem 0rem;
+	border: 2px solid lime;
+	border-radius: 1em;
+}
+.pg2-line select {
+	margin-right: 1rem;
+}
+.pg2-itemline {
+	display: flex;
+}
+.pg2-itemline button {
+	margin-left: auto;
+}
+.pg2-checkboxDiv * {
+	cursor: pointer;
+}
+.pg2-checkboxDiv input:hover + label,
+.pg2-checkboxDiv label:hover {
+	text-shadow: 0px 0px 0.3em rgba(0, 0, 255, 0.3);
+}
+.pg2-checkboxDiv input:hover,
+.pg2-checkboxDiv label:hover ~ input {
+	box-shadow: 0px 0px 0.3em rgba(0, 0, 255, 0.3);
+}

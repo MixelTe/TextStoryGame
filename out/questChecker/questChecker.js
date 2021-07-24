@@ -135,9 +135,14 @@ function checkPlayer(content) {
         checkVar(el.name, "el.name", "string");
         printVar(el.description, "Нет описания");
         checkVar(el.value, "el.value", "number", "Значение: ");
-        printVar(el.loseIfBelowZero, "false", "Проигрыш если закончитсья: ");
-        printVar(el.loseText, "Нет специального текста при проигрыше");
-        printVar(el.hasLoseImg, "false", "Есть картинка при проигрыше: ");
+        if (el.loseIfBelowZero) {
+            addText("Проигрыш если закончитсья");
+            printVar(el.loseText, "Нет специального текста при проигрыше");
+        }
+        if (el.hasLoseImg)
+            addText("Есть картинка при проигрыше");
+        if (el.hidden)
+            addText("Скрытая характеристика");
         addText("");
     });
 }
