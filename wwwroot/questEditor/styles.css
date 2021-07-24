@@ -17,8 +17,11 @@ body {
 	height: 100%;
 	max-width: 700px;
 }
-.body, button, input, textarea {
+.body, button, input, textarea, select, option {
 	font-size: 1.1rem;
+}
+button {
+	cursor: pointer;
 }
 .header {
 	display: flex;

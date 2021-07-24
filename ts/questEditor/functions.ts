@@ -161,6 +161,40 @@ function toPlus<T extends InPlus>(input: T)
 	return get;
 }
 
+export function CheckBox(classes: string[] | string = [], text = "")
+{
+	const name = "checkbox" + Math.random().toString().slice(2);
+	const checkBox = document.createElement("input");
+	if (typeof classes == "string") checkBox.classList.add(classes);
+	else classes.forEach(cs => checkBox.classList.add(cs));
+	checkBox.type = "checkbox";
+	checkBox.id = name;
+
+	const label = document.createElement("label");
+	label.innerText = text;
+	label.htmlFor = name;
+
+	const div = document.createElement("div");
+	div.classList.add("pg2-checkboxDiv");
+	div.appendChild(checkBox);
+	div.appendChild(label);
+
+	let onChange = (checkBox: HTMLInputElement) => { };
+	checkBox.addEventListener("change", () =>
+	{
+		onChange(checkBox);
+	});
+
+	const get = (onChangeF: (checkBox: HTMLInputElement) => void, get?: (checkBox: HTMLInputElement) => void) =>
+	{
+		if (get) get(checkBox);
+		onChange = onChangeF;
+		return hmtl;
+	}
+	const hmtl = () => div;
+	return get;
+}
+
 interface QuestItem
 {
 	name: string,

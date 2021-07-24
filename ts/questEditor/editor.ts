@@ -27,7 +27,7 @@ export class Editor
 		this.quest = new Editor_Quest(quest.quest, this.save.bind(this));
 		this.characters = new Editor_Characters(quest.characters, this.save.bind(this));
 		this.items = new Editor_Items(quest.items, this.save.bind(this));
-		this.player = new Editor_Player(quest.player, this.save.bind(this));
+		this.player = new Editor_Player(quest, this.save.bind(this));
 		this.achievements = new Editor_Achievements(quest.achievements, this.save.bind(this));
 		this.chapters = new Editor_Chapters(quest.chapters, this.save.bind(this));
 		this.questFull = quest;

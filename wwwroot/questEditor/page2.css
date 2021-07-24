@@ -41,6 +41,7 @@ textarea.pg2 {
 .pg2-inputDiv svg {
 	width: 1.15rem;
 	margin-left: 0.5rem;
+	cursor: pointer;
 }
 .pg2-inputDiv svg:first-child {
 	display: none;
@@ -79,4 +80,24 @@ textarea.pg2 {
 	margin: 1rem 0rem;
 	border: 2px solid lime;
 	border-radius: 1em;
+}
+.pg2-line select {
+	margin-right: 1rem;
+}
+.pg2-itemline {
+	display: flex;
+}
+.pg2-itemline button {
+	margin-left: auto;
+}
+.pg2-checkboxDiv * {
+	cursor: pointer;
+}
+.pg2-checkboxDiv input:hover + label,
+.pg2-checkboxDiv label:hover {
+	text-shadow: 0px 0px 0.3em rgba(0, 0, 255, 0.3);
+}
+.pg2-checkboxDiv input:hover,
+.pg2-checkboxDiv label:hover ~ input {
+	box-shadow: 0px 0px 0.3em rgba(0, 0, 255, 0.3);
 }

@@ -19,7 +19,6 @@
 }
 .pg1-quest-list button {
 	margin-left: auto;
-	cursor: pointer;
 }
 .pg1-quest-list > div:hover {
 	background-color: rgba(0, 0, 0, 0.2);
