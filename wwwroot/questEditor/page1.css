@@ -29,3 +29,7 @@
 .pg1-quest-add input {
 	margin-right: 1rem;
 }
+.pg1-form {
+	margin: 0;
+	padding: 0;
+}

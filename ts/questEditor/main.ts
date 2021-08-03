@@ -1,6 +1,6 @@
 import { Button, Div, Input } from "../functions.js";
 import { Editor } from "./editor.js";
-import { addQuest, getQuests, removeQuest } from "./functions.js";
+import { addQuest, Form, getQuests, removeQuest } from "./functions.js";
 
 let input = render();
 
@@ -15,8 +15,7 @@ function render()
 		]),
 		Div("pg1-quest-list", renderQuests()),
 		Div("pg1-quest-add", [
-			input,
-			Button([], "Добавить квест", createQuest),
+			Form(input, Button([], "Добавить квест"), createQuest),
 		]),
 	]));
 	return input;

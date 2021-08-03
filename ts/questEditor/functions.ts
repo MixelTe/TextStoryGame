@@ -136,6 +136,7 @@ function toPlus<T extends InPlus>(input: T)
 	{
 		input.disabled = false;
 		value = input.value;
+		input.focus();
 	});
 	close.addEventListener("click", () =>
 	{
@@ -198,6 +199,23 @@ export function CheckBox(classes: string[] | string = [], text = "")
 	}
 	const hmtl = () => div;
 	return get;
+}
+
+export function Form(input: HTMLInputElement, submitButton: HTMLElement, onSubmit: (input: HTMLInputElement, btn: HTMLElement) => void)
+{
+	const form = document.createElement("form");
+	form.classList.add("pg1-form");
+	form.appendChild(input);
+	const submit = document.createElement("input");
+	submit.type = "submit";
+	submit.appendChild(submitButton);
+	form.appendChild(submit);
+	form.addEventListener("submit", e =>
+	{
+		e.preventDefault();
+		onSubmit(input, submitButton);
+	});
+	return form;
 }
 
 interface QuestItem
