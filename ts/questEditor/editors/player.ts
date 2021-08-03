@@ -113,10 +113,10 @@ export class Editor_Player
 	}
 	private nextId()
 	{
-		if (this.quest.player.characteristics.length <= 0) return "0";
-		const num = parseInt(this.quest.player.characteristics[this.quest.player.characteristics.length - 1].id);
-		if (isNaN(num)) return Date.now().toString();
-		return `${num + 1}`;
+		if (this.quest.player.characteristics.length <= 0) return "cc0";
+		const num = parseInt(this.quest.player.characteristics[this.quest.player.characteristics.length - 1].id.slice(2));
+		if (isNaN(num)) return "cc" + Date.now().toString();
+		return `cc${num + 1}`;
 	}
 }
 

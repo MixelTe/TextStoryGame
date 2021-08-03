@@ -45,10 +45,10 @@ export class Editor_Characters
 	}
 	private nextId()
 	{
-		if (this.characters.length <= 0) return "0";
-		const num = parseInt(this.characters[this.characters.length - 1].id);
-		if (isNaN(num)) return Date.now().toString();
-		return `${num + 1}`;
+		if (this.characters.length <= 0) return "cr0";
+		const num = parseInt(this.characters[this.characters.length - 1].id.slice(2));
+		if (isNaN(num)) return "cr" + Date.now().toString();
+		return `cr${num + 1}`;
 	}
 }
 
