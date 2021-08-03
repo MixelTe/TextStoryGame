@@ -1,4 +1,4 @@
-import { Achievement, Action, Chapter, ChapterContent_change, ChapterContent_effect, ChapterContent_question, ChapterContent_speech, ChapterPart, ChapterPartContent, Character, Condition, Item, Player, Quest } from "./questStructure.js";
+import { Achievement, Action, Chapter, ChapterContent_change, ChapterContent_effect, ChapterContent_question, ChapterContent_speech, ChapterContent_splitter, ChapterPart, ChapterPartContent, Character, Condition, Item, Player, Quest } from "./questStructure.js";
 
 export function parseQuest(content: string)
 {
@@ -96,13 +96,14 @@ function checkContent(content: ChapterPartContent)
 {
 	content.forEach(el =>
 	{
-		const errorText = `part.content[].type must be "speech", "question", "change" or "effect"`;
+		const errorText = `part.content[].type must be "speech", "question", "effect", "change" or "splitter"`;
 		if (typeof el.type != "string") throw new Error(errorText);
 		switch (el.type) {
 			case "speech": checkContent_speech(el); break;
 			case "question": checkContent_question(el); break;
 			case "effect": checkContent_effect(el); break;
 			case "change": checkContent_change(el); break;
+			case "splitter": checkContent_splitter(el); break;
 			default: throw new Error(errorText);
 		}
 	});
@@ -187,6 +188,17 @@ function checkContent_change(content: ChapterContent_change)
 		});
 	}
 }
+function checkContent_splitter(content: ChapterContent_splitter)
+{
+	const error = (text: string) =>
+	{
+		throw new Error(`part.content[].${text}`);
+	}
+	if (typeof content.conditions != "object") error(`conditions must be object`);
+	checkCondition(content.conditions, "conditions", error);
+	checkContent(content.contentIfTrue);
+	checkContent(content.contentIfFalse);
+}
 
 function checkActions(content: Action[])
 {
@@ -194,80 +206,80 @@ function checkActions(content: Action[])
 	{
 		throw new Error(`part.content[].actions[].${text}`);
 	}
-	const checkCondition = (cond: Condition, n: string) =>
-	{
-		if (typeof cond.partsDone == "object")
-		{
-			cond.partsDone.forEach((el, j) =>
-			{
-				if (typeof el != "string") error(`${n}.partsDone[${j}] must be string`);
-			});
-		}
-		else
-		{
-			cond.partsDone = [];
-		}
-
-		if (typeof cond.partsNotDone == "object")
-		{
-			cond.partsDone.forEach((el, j) =>
-			{
-				if (typeof el != "string") error(`${n}.partsNotDone[${j}] must be string`);
-			});
-		}
-		else
-		{
-			cond.partsNotDone = [];
-		}
-
-		if (typeof cond.characteristics == "object")
-		{
-			cond.characteristics.forEach((el, j) =>
-			{
-				if (typeof el != "object") error(`${n}.characteristics[${j}] must be object`);
-				if (typeof el.id != "string") error(`${n}.characteristics[${j}].id must be string`);
-				if (typeof el.lessThen != "number" && typeof el.moreThen != "number")
-				{
-					error(`${n}.characteristics[${j}].lessThen or .moreThen must be number`);
-				}
-			});
-		}
-		else
-		{
-			cond.characteristics = [];
-		}
-
-		if (typeof cond.items == "object")
-		{
-			cond.items.forEach((el, j) =>
-			{
-				if (typeof el != "string") error(`${n}.items[${j}] must be string`);
-			});
-		}
-		else
-		{
-			cond.items = [];
-		}
-		if (typeof cond.itemsNot == "object")
-		{
-			cond.itemsNot.forEach((el, j) =>
-			{
-				if (typeof el != "string") error(`${n}.itemsNot[${j}] must be string`);
-			});
-		}
-		else
-		{
-			cond.itemsNot = [];
-		}
-	}
 	content.forEach(el =>
 	{
 		if (typeof el.text != "string") error(`text must be string`);
-		if (typeof el.conditions == "object") checkCondition(el.conditions, "conditions");
-		if (typeof el.showConditions == "object") checkCondition(el.showConditions, "showConditions");
+		if (typeof el.conditions == "object") checkCondition(el.conditions, "conditions", error);
+		if (typeof el.showConditions == "object") checkCondition(el.showConditions, "showConditions", error);
 		if (typeof el.content == "object")
 		{
 			checkContent(el.content);
 		}
 	});
+}
+function checkCondition(cond: Condition, n: string, error: (text: string) => void)
+{
+	if (typeof cond.partsDone == "object")
+	{
+		cond.partsDone.forEach((el, j) =>
+		{
+			if (typeof el != "string") error(`${n}.partsDone[${j}] must be string`);
+		});
+	}
+	else
+	{
+		cond.partsDone = [];
+	}
+
+	if (typeof cond.partsNotDone == "object")
+	{
+		cond.partsDone.forEach((el, j) =>
+		{
+			if (typeof el != "string") error(`${n}.partsNotDone[${j}] must be string`);
+		});
+	}
+	else
+	{
+		cond.partsNotDone = [];
+	}
+
+	if (typeof cond.characteristics == "object")
+	{
+		cond.characteristics.forEach((el, j) =>
+		{
+			if (typeof el != "object") error(`${n}.characteristics[${j}] must be object`);
+			if (typeof el.id != "string") error(`${n}.characteristics[${j}].id must be string`);
+			if (typeof el.lessThen != "number" && typeof el.moreThen != "number")
+			{
+				error(`${n}.characteristics[${j}].lessThen or .moreThen must be number`);
+			}
+		});
+	}
+	else
+	{
+		cond.characteristics = [];
+	}
+
+	if (typeof cond.items == "object")
+	{
+		cond.items.forEach((el, j) =>
+		{
+			if (typeof el != "string") error(`${n}.items[${j}] must be string`);
+		});
+	}
+	else
+	{
+		cond.items = [];
+	}
+	if (typeof cond.itemsNot == "object")
+	{
+		cond.itemsNot.forEach((el, j) =>
+		{
+			if (typeof el != "string") error(`${n}.itemsNot[${j}] must be string`);
+		});
+	}
+	else
+	{
+		cond.itemsNot = [];
+	}
 }

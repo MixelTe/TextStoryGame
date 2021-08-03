@@ -1,4 +1,4 @@
-import { Action, Chapter, ChapterContent_change, ChapterContent_effect, ChapterContent_question, ChapterContent_speech, ChapterPart, ChapterPartContent, Character, Condition, Item, Player, Quest } from "../questStructure.js";
+import { Action, Chapter, ChapterContent_change, ChapterContent_effect, ChapterContent_question, ChapterContent_speech, ChapterContent_splitter, ChapterPart, ChapterPartContent, Character, Condition, Item, Player, Quest } from "../questStructure.js";
 import { Div } from "../functions.js";
 import { QuestFolder } from "./main.js";
 
@@ -238,7 +238,8 @@ function checkContent(content: ChapterPartContent)
 			case "question": checkContent_question(el); break;
 			case "effect": checkContent_effect(el); break;
 			case "change": checkContent_change(el); break;
-			default: addText(`type элемента должен быть "speech", "question", "change" или "effect"`, false, true);
+			case "splitter": checkContent_splitter(el); break;
+			default: addText(`type элемента должен быть "speech", "question", "effect", "change" или "splitter"`, false, true);
 		}
 		addText("");
 	};
@@ -338,67 +339,22 @@ function checkContent_change(content: ChapterContent_change)
 	}
 	if (content.goToPart != undefined) addText(`Перейти к части: ${content.goToPart}`, false, false, ["text-goTo"]);
 }
+function checkContent_splitter(content: ChapterContent_splitter)
+{
+	checkVar(content.conditions, "conditions", "object", false);
+	if (typeof content.conditions == "object") checkCondition(content.conditions, "Условие");
+	addText("Если условие верно:");
+	marginLeft += 2;
+	checkContent(content.contentIfTrue);
+	marginLeft -= 2;
+	addText("Если условие ложно:");
+	marginLeft += 2;
+	checkContent(content.contentIfFalse);
+	marginLeft -= 2;
+}
 
 function checkActions(content: Action[])
 {
-	const checkCondition = (cond: Condition, n: string) =>
-	{
-		addText(`${n}`);
-		marginLeft++;
-		if (typeof cond.partsDone == "object")
-		{
-			addText(`Законченые части:`);
-			cond.partsDone.forEach(el => checkVar(el, "id части", "string", "id: "));
-		}
-
-		if (typeof cond.partsNotDone == "object")
-		{
-			addText(`Не законченые части:`);
-			cond.partsNotDone.forEach(el => checkVar(el, "id части", "string", "id: "));
-		}
-
-		if (typeof cond.characteristics == "object")
-		{
-			addText(`Характеристики:`);
-			for (let i = 0; i < cond.characteristics.length; i++) {
-				const el = cond.characteristics[i];
-				checkVar(el, "Элемент", "object", false);
-				if (typeof el != "object") continue;
-				checkVar(el.id, "id", "string", "id: ");
-				if (typeof el.lessThen != "number" && typeof el.moreThen != "number")
-				{
-					errors++;
-					addText("lessThen или moreThen должно быть числом", false, true);
-				}
-				else if (typeof el.lessThen == "number" && typeof el.moreThen == "number")
-				{
-					addText(`Необходимое значение: ${el.moreThen} < x < ${el.lessThen}`);
-				}
-				else if (typeof el.lessThen == "number")
-				{
-					addText(`Необходимое значение: x < ${el.lessThen}`);
-				}
-				else
-				{
-					addText(`Необходимое значение: ${el.moreThen} < x`);
-				}
-			};
-		}
-
-		if (typeof cond.items == "object")
-		{
-			addText(`Предметы:`);
-			cond.items.forEach(el => checkVar(el, "id предмета", "string", "id: "));
-		}
-
-		if (typeof cond.itemsNot == "object")
-		{
-			addText(`Нет предметов:`);
-			cond.itemsNot.forEach(el => checkVar(el, "id предмета", "string", "id: "));
-		}
-
-		marginLeft--;
-	}
 	for (let i = 0; i < content.length; i++) {
 		const el = content[i];
 		checkVar(el, "Действие", "object", false);
@@ -414,4 +370,63 @@ function checkActions(content: Action[])
 			marginLeft -= 2;
 		}
 	};
+}
+
+function checkCondition(cond: Condition, n: string)
+{
+	addText(`${n}`);
+	marginLeft++;
+	if (typeof cond.partsDone == "object")
+	{
+		addText(`Законченые части:`);
+		cond.partsDone.forEach(el => checkVar(el, "id части", "string", "id: "));
+	}
+
+	if (typeof cond.partsNotDone == "object")
+	{
+		addText(`Не законченые части:`);
+		cond.partsNotDone.forEach(el => checkVar(el, "id части", "string", "id: "));
+	}
+
+	if (typeof cond.characteristics == "object")
+	{
+		addText(`Характеристики:`);
+		for (let i = 0; i < cond.characteristics.length; i++) {
+			const el = cond.characteristics[i];
+			checkVar(el, "Элемент", "object", false);
+			if (typeof el != "object") continue;
+			checkVar(el.id, "id", "string", "id: ");
+			if (typeof el.lessThen != "number" && typeof el.moreThen != "number")
+			{
+				errors++;
+				addText("lessThen или moreThen должно быть числом", false, true);
+			}
+			else if (typeof el.lessThen == "number" && typeof el.moreThen == "number")
+			{
+				addText(`Необходимое значение: ${el.moreThen} < x < ${el.lessThen}`);
+			}
+			else if (typeof el.lessThen == "number")
+			{
+				addText(`Необходимое значение: x < ${el.lessThen}`);
+			}
+			else
+			{
+				addText(`Необходимое значение: ${el.moreThen} < x`);
+			}
+		};
+	}
+
+	if (typeof cond.items == "object")
+	{
+		addText(`Предметы:`);
+		cond.items.forEach(el => checkVar(el, "id предмета", "string", "id: "));
+	}
+
+	if (typeof cond.itemsNot == "object")
+	{
+		addText(`Нет предметов:`);
+		cond.itemsNot.forEach(el => checkVar(el, "id предмета", "string", "id: "));
+	}
+
+	marginLeft--;
 }

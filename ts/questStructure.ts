@@ -25,7 +25,7 @@
 // - - - - happy.png
 // - - - - normal.png
 // - - - - sad.png
-export type ChapterPartContent = (ChapterContent_speech | ChapterContent_question | ChapterContent_effect | ChapterContent_change)[];
+export type ChapterPartContent = (ChapterContent_speech | ChapterContent_question | ChapterContent_effect | ChapterContent_change | ChapterContent_splitter)[];
 export interface Quest
 {
 	name: string;
@@ -118,6 +118,13 @@ export interface ChapterContent_change
 	removeItems: string[]; // items id
 	goToPart?: string; // part id
 	characteristics: ChangeCharacteristics[];
+}
+export interface ChapterContent_splitter
+{
+	type: "splitter";
+	conditions: Condition;
+	contentIfTrue: ChapterPartContent;
+	contentIfFalse: ChapterPartContent;
 }
 
 export interface Action
