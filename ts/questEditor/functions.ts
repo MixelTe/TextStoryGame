@@ -8,6 +8,10 @@ const P = (key: string) => PREFIX + key;
 export function addQuest(quest: QuestItem)
 {
 	const quests = getQuests();
+	while (quests.find(el => el.key == quest.key))
+	{
+		quest.key = `${Math.random()}`.slice(2);
+	}
 	quests.push(quest);
 	localStorage.setItem(P(KEY), JSON.stringify(quests));
 }
