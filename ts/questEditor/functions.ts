@@ -23,7 +23,7 @@ export function removeQuest(key: string)
 	if (quest)
 	{
 		localStorage.removeItem(P(key));
-		localStorage.setItem(P("deleted." + key), quest);
+		// localStorage.setItem(P("deleted." + key), quest);
 	}
 	localStorage.setItem(P(KEY), JSON.stringify(quests));
 }
