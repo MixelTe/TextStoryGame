@@ -33,9 +33,11 @@
 ``` json
 {
 	"name": "Название квеста",
-	"description": "Описание квеста"
+	"description": "Описание квеста",
+	"hasImg": false
 }
 ```
+description, hasImg - необязательно указывать
 
 ## characters.json
 Содержимое:
@@ -45,13 +47,14 @@
 		"id": "id персонажа",
 		"name": "Имя персонажа",
 		"description": "Описание персонажа",
-		"friendLevel": 0
+		"friendLevel": 0,
+		"hasImg": false
 	}
 ]
 ```
 Для слов повествования (без картинки и имени), существует персонаж с id author - не используйте это id для своего персонажа.
 
-description - необязательно указывать
+description, hasImg - необязательно указывать
 
 ## items.json
 Содержимое:
@@ -60,11 +63,12 @@ description - необязательно указывать
 	{
 		"id": "id предмета",
 		"name": "Название предмета",
-		"description": "Описание предмета"
+		"description": "Описание предмета",
+		"hasImg": false
 	}
 ]
 ```
-description - необязательно указывать
+description, hasImg - необязательно указывать
 
 ## player.json
 Содержимое:

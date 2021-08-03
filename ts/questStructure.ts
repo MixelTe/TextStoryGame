@@ -30,6 +30,7 @@ export interface Quest
 {
 	name: string;
 	description: string;
+	hasImg: boolean;
 }
 
 export interface Character
@@ -38,6 +39,7 @@ export interface Character
 	name: string;
 	description: string;
 	friendLevel: number;
+	hasImg: boolean;
 }
 
 export interface Item
@@ -45,6 +47,7 @@ export interface Item
 	id: string;
 	name: string;
 	description: string;
+	hasImg: boolean;
 }
 
 export interface Player

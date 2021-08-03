@@ -66,6 +66,7 @@ function createEmptyQuest()
 		quest: {
 			name: "",
 			description: "",
+			hasImg: false,
 		},
 		characters: [],
 		items: [],

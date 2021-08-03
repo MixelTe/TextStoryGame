@@ -40,6 +40,7 @@ export class Editor_Characters
 			name: "",
 			description: "",
 			friendLevel: 0,
+			hasImg: false,
 		}
 	}
 	private nextId()

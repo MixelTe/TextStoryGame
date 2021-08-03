@@ -95,6 +95,7 @@ function checkQuest(content: string)
 	checkVar(quest, "quest", "object", false);
 	checkVar(quest.name, "quest.name", "string");
 	checkVar(quest.description, "quest.description", "string");
+	if (quest.hasImg) addText("Есть обложка");
 }
 
 function checkCharacters(content: string)
@@ -109,6 +110,7 @@ function checkCharacters(content: string)
 		checkVar(ch.name, "character.name", "string");
 		printVar(ch.description, "Нет описания");
 		checkVar(ch.friendLevel, "character.friendLevel", "number", "Уровень дружбы: ");
+		if (ch.hasImg) addText("Есть картинки");
 		addText("");
 	});
 }
@@ -124,6 +126,7 @@ function checkItems(content: string)
 		checkVar(item.id, "item.id", "string", "id: ");
 		checkVar(item.name, "item.name", "string");
 		printVar(item.description, "Нет описания");
+		if (item.hasImg) addText("Есть картинка");
 		addText("");
 	});
 }

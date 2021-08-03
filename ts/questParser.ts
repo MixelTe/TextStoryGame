@@ -5,6 +5,7 @@ export function parseQuest(content: string)
 	const quest = <Quest>JSON.parse(content);
 	if (typeof quest.name != "string") throw new Error('quest.name must be string');
 	if (typeof quest.description != "string") quest.description = "";
+	if (typeof quest.hasImg != "boolean") quest.hasImg = false;
 	return quest;
 }
 
@@ -17,6 +18,7 @@ export function parseCharacters(content: string)
 		if (typeof ch.name != "string") throw new Error(`characters[${i}].name must be string`);
 		if (typeof ch.description != "string") ch.description = "";
 		if (typeof ch.friendLevel != "number") throw new Error(`characters[${i}].name must be number`);
+		if (typeof ch.hasImg != "boolean") ch.hasImg = false;
 	});
 	return characters;
 }
@@ -29,6 +31,7 @@ export function parseItems(content: string)
 		if (typeof item.id != "string") throw new Error(`items[${i}].id must be string`);
 		if (typeof item.name != "string") throw new Error(`items[${i}].name must be string`);
 		if (typeof item.description != "string") item.description = "";
+		if (typeof item.hasImg != "boolean") item.hasImg = false;
 	});
 	return items;
 }
