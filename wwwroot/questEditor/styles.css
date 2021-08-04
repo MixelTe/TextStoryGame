@@ -27,7 +27,7 @@ button {
 	display: flex;
 	align-items: center;
 	background-color: lightgreen;
-	padding: 1rem 1.5rem;
+	padding: 0.5rem 0.8rem;
 	font-size: 1.4rem;
 	position: sticky;
 	top: 0px;
