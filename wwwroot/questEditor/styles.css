@@ -38,3 +38,37 @@ button {
 .ta-end {
 	text-align: end;
 }
+
+.list {
+	padding: 1rem 1.5rem;
+}
+.list > div {
+	display: flex;
+	padding: 1rem 1.5rem;
+	margin: 1rem 0rem;
+	border: 1px solid gray;
+	border-radius: 0.2em;
+	transition: background-color 250ms;
+	cursor: pointer;
+}
+.list > div > div {
+	display: flex;
+    align-items: center;
+}
+.list button {
+	margin-left: auto;
+}
+.list > div:hover {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+.add-item {
+	padding: 1rem 1.5rem;
+}
+.add-item input {
+	margin-right: 1rem;
+}
+
+.form {
+	margin: 0;
+	padding: 0;
+}

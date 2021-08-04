@@ -13,8 +13,8 @@ function render()
 			// Button([], "Назад"),
 			Div([], [], "Выберете квест")
 		]),
-		Div("pg1-quest-list", renderQuests()),
-		Div("pg1-quest-add", [
+		Div("list", renderQuests()),
+		Div("add-item", [
 			Form(input, Button([], "Добавить квест"), createQuest),
 		]),
 	]));

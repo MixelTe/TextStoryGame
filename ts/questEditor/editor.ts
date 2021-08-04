@@ -29,7 +29,7 @@ export class Editor
 		this.items = new Editor_Items(quest.items, this.save.bind(this));
 		this.player = new Editor_Player(quest, this.save.bind(this));
 		this.achievements = new Editor_Achievements(quest.achievements, this.save.bind(this));
-		this.chapters = new Editor_Chapters(quest.chapters, this.save.bind(this));
+		this.chapters = new Editor_Chapters(quest, this.save.bind(this));
 		this.questFull = quest;
 	}
 	public render()
@@ -50,10 +50,12 @@ export class Editor
 	}
 	private saveAndBack()
 	{
-		this.callback();
+		if (this.chapters.opened) this.open(this.chapters);
+		else this.callback();
 	}
 	private open(editor: { render: (body: HTMLDivElement) => void })
 	{
+		this.chapters.opened = false;
 		editor.render(this.body);
 	}
 	private save()

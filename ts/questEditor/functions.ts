@@ -201,19 +201,16 @@ export function CheckBox(classes: string[] | string = [], text = "")
 	return get;
 }
 
-export function Form(input: HTMLInputElement, submitButton: HTMLElement, onSubmit: (input: HTMLInputElement, btn: HTMLElement) => void)
+export function Form(input: HTMLInputElement, button: HTMLButtonElement, onSubmit: (input: HTMLInputElement, btn: HTMLButtonElement) => void)
 {
 	const form = document.createElement("form");
-	form.classList.add("pg1-form");
+	form.classList.add("form");
 	form.appendChild(input);
-	const submit = document.createElement("input");
-	submit.type = "submit";
-	submit.appendChild(submitButton);
-	form.appendChild(submit);
+	form.appendChild(button);
 	form.addEventListener("submit", e =>
 	{
 		e.preventDefault();
-		onSubmit(input, submitButton);
+		onSubmit(input, button);
 	});
 	return form;
 }

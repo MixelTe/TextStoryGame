@@ -1,12 +1,67 @@
-import { Div } from "../../functions.js";
-import { ChapterItem } from "../functions.js";
+import { Button, Div, Input } from "../../functions.js";
+import { Form, QuestFull } from "../functions.js";
+import { Editor_Chapter } from "./chapter.js";
 
 export class Editor_Chapters
 {
-	constructor(private chapters: ChapterItem, private save: () => void) { }
+	public opened = false;
+	constructor(private quest: QuestFull, private save: () => void) { }
 	public render(body: HTMLElement)
 	{
+		const input = Input([], "text", "Название главы");
+		this.opened = false;
 		body.innerHTML = "";
-		body.appendChild(Div([], []));
+		body.appendChild(Div([], [
+			Div("list", this.renderQuests(body)),
+			Div("add-item", [
+				Form(input, Button([], "Добавить главу"), this.addChapter.bind(this, body, input)),
+			]),
+		]));
+	}
+	private renderQuests(body: HTMLElement)
+	{
+		const chapters = this.quest.chapters.chaptersList;
+		const rendered = [];
+		for (let i = 0; i < chapters.length; i++)
+		{
+			const chapter = chapters[i];
+			const button = Button([], "Удалить", () =>
+			{
+				this.removeChapter(i);
+				this.render(body);
+			});
+			const div = Div([], [
+				Div([], [], chapter.name),
+				button,
+			]);
+			rendered.push(div);
+			div.addEventListener("click", e =>
+			{
+				if (e.target != button)
+				{
+					new Editor_Chapter(this.quest, i, this.save).render(body);
+					this.opened = true;
+				}
+			});
+		}
+		return rendered;
+	}
+	private addChapter(body: HTMLElement, input: HTMLInputElement)
+	{
+		if (typeof input.value != 'string' || input.value == "") return;
+		const chapter = { name: input.value, partsCount: 0 };
+		input.value = "";
+
+		this.quest.chapters.chaptersList.push(chapter);
+		this.quest.chapters.chapters.push([]);
+		this.save();
+
+		this.render(body);
+	}
+	private removeChapter(index: number)
+	{
+		this.quest.chapters.chaptersList.splice(index, 1);
+		this.quest.chapters.chapters.splice(index, 1);
+		this.save();
 	}
 }
