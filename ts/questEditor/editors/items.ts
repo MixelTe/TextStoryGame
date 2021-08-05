@@ -1,4 +1,4 @@
-import { Button, Div } from "../../functions.js";
+import { Button, confirm_Popup, Div } from "../../functions.js";
 import { Item } from "../../questStructure.js";
 import { InputPlus, TextAreaPlus } from "../functions.js";
 
@@ -60,7 +60,7 @@ class Editor_Item
 	{
 		this.div = Div("pg2-block", [
 			Div("pg2-line", [
-				InputPlus(["pg2", "ta-center"], "text", "Имя предмета")(
+				InputPlus(["pg2", "ta-center"], "text", "Название предмета")(
 					inp => { this.character.name = inp.value; this.save(); },
 					inp => inp.value = this.character.name)(),
 			]),
@@ -76,8 +76,9 @@ class Editor_Item
 		]);
 		body.appendChild(this.div);
 	}
-	private deleteThis(body: HTMLElement)
+	private async deleteThis(body: HTMLElement)
 	{
+		if (!await confirm_Popup(`предмет ${this.character.name}?`)) return;
 		const i = this.characters.indexOf(this.character);
 		if (i >= 0) this.characters.splice(i, 1);
 		body.removeChild(this.div);

@@ -1,4 +1,4 @@
-import { Button, Div } from "../../functions.js";
+import { Button, confirm_Popup, Div } from "../../functions.js";
 import { Character } from "../../questStructure.js";
 import { InputPlus, TextAreaPlus } from "../functions.js";
 
@@ -82,8 +82,9 @@ class Editor_Character
 		]);
 		body.appendChild(this.div);
 	}
-	private deleteThis(body: HTMLElement)
+	private async deleteThis(body: HTMLElement)
 	{
+		if (!await confirm_Popup(`персонажа ${this.character.name}?`)) return;
 		const i = this.characters.indexOf(this.character);
 		if (i >= 0) this.characters.splice(i, 1);
 		body.removeChild(this.div);

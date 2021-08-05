@@ -1,4 +1,4 @@
-import { Button, Div, Option, Select } from "../../functions.js";
+import { Button, confirm_Popup, Div, Option, Select } from "../../functions.js";
 import { ChapterPart, ChapterPartNode } from "../../questStructure.js";
 import { InputPlus, QuestFull } from "../functions.js";
 import { Editor_Node_change } from "./nodes/change.js";
@@ -80,8 +80,9 @@ export class Editor_Chapter
 		this.quest.chapters.chapters[this.index][index].content.push(node);
 		this.renderNode(node);
 	}
-	private removeLast(index: number)
+	private async removeLast(index: number)
 	{
+		if (!await confirm_Popup(`последний элемент?`)) return;
 		if (this.nodeContainer.lastChild) this.nodeContainer.removeChild(this.nodeContainer.lastChild);
 		this.quest.chapters.chapters[this.index][index].content.pop();
 	}

@@ -1,4 +1,4 @@
-import { Button, Div } from "../../functions.js";
+import { Button, confirm_Popup, Div } from "../../functions.js";
 import { Characteristic } from "../../questStructure.js";
 import { CheckBox, InputPlus, QuestFull, TextAreaPlus } from "../functions.js";
 
@@ -184,8 +184,9 @@ class Editor_Charac
 		]);
 		body.appendChild(this.div);
 	}
-	private deleteThis(body: HTMLElement)
+	private async deleteThis(body: HTMLElement)
 	{
+		if (!await confirm_Popup(`предмет ${this.charac.name}?`)) return;
 		const i = this.charas.indexOf(this.charac);
 		if (i >= 0) this.charas.splice(i, 1);
 		body.removeChild(this.div);

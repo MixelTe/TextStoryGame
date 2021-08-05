@@ -1,4 +1,4 @@
-import { Button, Div, Input } from "../functions.js";
+import { Button, confirm_Popup, Div, Input } from "../functions.js";
 import { Editor } from "./editor.js";
 import { addQuest, Form, getQuests, removeQuest } from "./functions.js";
 
@@ -26,10 +26,13 @@ function renderQuests()
 	const rendered = [];
 	for (let i = 0; i < quests.length; i++) {
 		const quest = quests[i];
-		const button = Button([], "Удалить", () =>
+		const button = Button([], "Удалить", async () =>
 		{
-			removeQuest(quest.key);
-			input = render();
+			if (await confirm_Popup(`квест ${quest.name}?`))
+			{
+				removeQuest(quest.key);
+				input = render();
+			}
 		});
 		const div = Div([], [
 			Div([], [], quest.name),

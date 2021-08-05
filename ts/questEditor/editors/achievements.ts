@@ -1,4 +1,4 @@
-import { Button, Div } from "../../functions.js";
+import { Button, confirm_Popup, Div } from "../../functions.js";
 import { Achievement } from "../../questStructure.js";
 import { InputPlus, TextAreaPlus } from "../functions.js";
 
@@ -74,8 +74,9 @@ class Editor_Achievement
 		]);
 		body.appendChild(this.div);
 	}
-	private deleteThis(body: HTMLElement)
+	private async deleteThis(body: HTMLElement)
 	{
+		if (!await confirm_Popup(`предмет ${this.achievement.name}?`)) return;
 		const i = this.achievements.indexOf(this.achievement);
 		if (i >= 0) this.achievements.splice(i, 1);
 		body.removeChild(this.div);

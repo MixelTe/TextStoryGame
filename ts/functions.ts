@@ -1,3 +1,5 @@
+import { Popup } from "./popup.js";
+
 export function Div(classes?: string[] | string, children?: HTMLElement[], innerText?: string)
 {
 	return initEl("div", classes, children, innerText);
@@ -112,6 +114,14 @@ export function copyText(text: string)
 	document.execCommand('copy');
 	document.body.removeChild(el);
 }
+export async function confirm_Popup(text: string, prefix = "Вы уверенны, что хотите удалить ")
+{
+	const popup = new Popup();
+	popup.title = "Удаление";
+	popup.content.innerText = prefix + text;
+	return popup.openAsync();
+}
+
 
 declare global
 {

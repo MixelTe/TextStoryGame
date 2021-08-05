@@ -1,4 +1,4 @@
-import { Button, Div, Input } from "../../functions.js";
+import { Button, confirm_Popup, Div, Input } from "../../functions.js";
 import { Form, QuestFull } from "../functions.js";
 import { Editor_Chapter } from "./chapter.js";
 
@@ -25,10 +25,12 @@ export class Editor_Chapters
 		for (let i = 0; i < chapters.length; i++)
 		{
 			const chapter = chapters[i];
-			const button = Button([], "Удалить", () =>
+			const button = Button([], "Удалить", async () =>
 			{
-				this.removeChapter(i);
-				this.render(body);
+				if (await this.removeChapter(i))
+				{
+					this.render(body);
+				}
 			});
 			const div = Div([], [
 				Div([], [], chapter.name),
@@ -58,10 +60,12 @@ export class Editor_Chapters
 
 		this.render(body);
 	}
-	private removeChapter(index: number)
+	private async removeChapter(index: number)
 	{
+		if (!await confirm_Popup(`главу ${this.quest.chapters.chaptersList[index].name}?`)) return false;
 		this.quest.chapters.chaptersList.splice(index, 1);
 		this.quest.chapters.chapters.splice(index, 1);
 		this.save();
+		return true;
 	}
 }
