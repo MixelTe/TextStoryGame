@@ -41,7 +41,8 @@ export class Popup
 	private close(confirmed: boolean)
 	{
 		document.body.removeChild(this.body);
-		this.fireEvent("close");
+		this.fireEvent(confirmed ? "ok" : "cancel");
+		this.fireEvent("close", confirmed);
 		if (this.resolve) this.resolve(confirmed);
 	}
 	private fireEvent(type: keyof PopupEvenListener, v = false)
