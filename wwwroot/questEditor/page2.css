@@ -28,11 +28,23 @@ textarea.pg2 {
 .pg2-editor-body {
 	padding: 1rem
 }
+.pg2-editor-body .list {
+	padding: 1rem 0.5rem;
+}
+.pg2-editor-body .add-item {
+	padding: 0.5rem 0.5rem 1rem;
+}
 .pg2-line {
 	margin: 1rem 0rem;
 }
 .pg2-line-small {
 	margin: 0.4rem 0rem;
+}
+.pg2-line-wrap {
+	margin: 1rem 0rem;
+}
+.pg2-line-wrap * {
+	margin-top: 0.5rem;
 }
 .pg2-inputDiv {
 	display: flex;

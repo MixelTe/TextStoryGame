@@ -50,7 +50,7 @@ export class Editor_Chapter
 			Option("Именение", "change"),
 			Option("Разделитель", "splitter"),
 		]);
-		this.partContent.appendChild(Div("pg2-line", [
+		this.partContent.appendChild(Div("pg2-line-wrap", [
 			this.select,
 			Button("margin-right", "Добавить элемент", this.addNode.bind(this, index)),
 			Button([], "Удалить последний", this.removeLast.bind(this, index)),

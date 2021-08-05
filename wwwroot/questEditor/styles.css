@@ -68,10 +68,13 @@ button {
 	background-color: rgba(0, 0, 0, 0.2);
 }
 .add-item {
-	padding: 1rem 1.5rem;
+	padding: 0.5rem 1.5rem 1rem;
 }
 .add-item input {
 	margin-right: 1rem;
+}
+.add-item * {
+	margin-top: 0.5em;
 }
 
 .form {
