@@ -1,7 +1,11 @@
 import { Button, Div, Option, Select } from "../../functions.js";
 import { ChapterPart } from "../../questStructure.js";
 import { InputPlus, QuestFull } from "../functions.js";
+import { Editor_Node_change } from "./nodes/change.js";
+import { Editor_Node_effect } from "./nodes/effect.js";
+import { Editor_Node_question } from "./nodes/question.js";
 import { Editor_Node_speech } from "./nodes/speech.js";
+import { Editor_Node_splitter } from "./nodes/splitter.js";
 
 export class Editor_Chapter
 {
@@ -76,10 +80,10 @@ export class Editor_Chapter
 	{
 		switch (type) {
 			case "speech": new Editor_Node_speech(this.quest, [this.index, index, i], this.save, createNode).render(this.nodeContainer); break;
-			case "question": new Editor_Node_speech(this.quest, [this.index, index, i], this.save, createNode).render(this.nodeContainer); break;
-			case "effect": new Editor_Node_speech(this.quest, [this.index, index, i], this.save, createNode).render(this.nodeContainer); break;
-			case "change": new Editor_Node_speech(this.quest, [this.index, index, i], this.save, createNode).render(this.nodeContainer); break;
-			case "splitter": new Editor_Node_speech(this.quest, [this.index, index, i], this.save, createNode).render(this.nodeContainer); break;
+			case "question": new Editor_Node_question(this.quest, [this.index, index, i], this.save, createNode).render(this.nodeContainer); break;
+			case "effect": new Editor_Node_effect(this.quest, [this.index, index, i], this.save, createNode).render(this.nodeContainer); break;
+			case "change": new Editor_Node_change(this.quest, [this.index, index, i], this.save, createNode).render(this.nodeContainer); break;
+			case "splitter": new Editor_Node_splitter(this.quest, [this.index, index, i], this.save, createNode).render(this.nodeContainer); break;
 			default: throw new Error(`Unexpected value: ${this.select.value}`);
 		}
 	}
