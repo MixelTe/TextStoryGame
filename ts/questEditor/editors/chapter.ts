@@ -1,5 +1,5 @@
 import { Button, Div, Option, Select } from "../../functions.js";
-import { ChapterPart } from "../../questStructure.js";
+import { ChapterPart, ChapterPartNode } from "../../questStructure.js";
 import { InputPlus, QuestFull } from "../functions.js";
 import { Editor_Node_change } from "./nodes/change.js";
 import { Editor_Node_effect } from "./nodes/effect.js";
@@ -60,30 +60,39 @@ export class Editor_Chapter
 	{
 		const content = this.quest.chapters.chapters[this.index][index].content;
 		this.nodeContainer = Div("pg2-line");
-		for (let i = 0; i < content.length; i++) {
-			const node = content[i];
-			this.renderNode(node.type, index, i, false);
+		for (let i = 0; i < content.length; i++)
+		{
+			this.renderNode(content[i]);
 		}
 		this.partContent.appendChild(this.nodeContainer);
 	}
 	private addNode(index: number)
 	{
-		const content = this.quest.chapters.chapters[this.index][index].content;
-		this.renderNode(this.select.value, index, content.length, true);
+		let node: ChapterPartNode;
+		switch (this.select.value) {
+			case "speech": node = Editor_Node_speech.createNode(); break;
+			case "question": node = Editor_Node_question.createNode(); break;
+			case "effect": node = Editor_Node_effect.createNode(); break;
+			case "change": node = Editor_Node_change.createNode(); break;
+			case "splitter": node = Editor_Node_splitter.createNode(); break;
+			default: throw new Error(`Unexpected value: ${this.select.value}`);
+		}
+		this.quest.chapters.chapters[this.index][index].content.push(node);
+		this.renderNode(node);
 	}
 	private removeLast(index: number)
 	{
 		if (this.nodeContainer.lastChild) this.nodeContainer.removeChild(this.nodeContainer.lastChild);
 		this.quest.chapters.chapters[this.index][index].content.pop();
 	}
-	private renderNode(type: string, index: number, i: number, createNode: boolean)
+	private renderNode(node: ChapterPartNode)
 	{
-		switch (type) {
-			case "speech": new Editor_Node_speech(this.quest, [this.index, index, i], this.save, createNode).render(this.nodeContainer); break;
-			case "question": new Editor_Node_question(this.quest, [this.index, index, i], this.save, createNode).render(this.nodeContainer); break;
-			case "effect": new Editor_Node_effect(this.quest, [this.index, index, i], this.save, createNode).render(this.nodeContainer); break;
-			case "change": new Editor_Node_change(this.quest, [this.index, index, i], this.save, createNode).render(this.nodeContainer); break;
-			case "splitter": new Editor_Node_splitter(this.quest, [this.index, index, i], this.save, createNode).render(this.nodeContainer); break;
+		switch (node.type) {
+			case "speech": new Editor_Node_speech(this.quest, node, this.save).render(this.nodeContainer); break;
+			case "question": new Editor_Node_question(this.quest, node, this.save).render(this.nodeContainer); break;
+			case "effect": new Editor_Node_effect(this.quest, node, this.save).render(this.nodeContainer); break;
+			case "change": new Editor_Node_change(this.quest, node, this.save).render(this.nodeContainer); break;
+			case "splitter": new Editor_Node_splitter(this.quest, node, this.save).render(this.nodeContainer); break;
 			default: throw new Error(`Unexpected value: ${this.select.value}`);
 		}
 	}

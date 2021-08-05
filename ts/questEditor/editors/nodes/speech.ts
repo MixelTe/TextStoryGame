@@ -5,20 +5,10 @@ import { Editor_Options } from "../../options.js";
 
 export class Editor_Node_speech
 {
-	constructor(private quest: QuestFull, private indexes: [number, number, number], private save: () => void, createNode = false)
-	{
-		if (createNode)
-		{
-			const node = this.createNode();
-			this.quest.chapters.chapters[indexes[0]][indexes[1]].content.push(node);
-		}
-	}
+	constructor(private quest: QuestFull, private node: ChapterContent_speech, private save: () => void) { }
 	public render(body: HTMLElement)
 	{
-		const node = this.quest.chapters.chapters[this.indexes[0]][this.indexes[1]].content[this.indexes[2]];
-		if (node.type != "speech")
-			throw new Error('Editor_Node_speech: node.type != "speech"');
-		const deletedChar = node.character != "" && node.character != "author" && this.quest.characters.find(ch => ch.id == node.character) == undefined;
+		const deletedChar = this.node.character != "" && this.node.character != "author" && this.quest.characters.find(ch => ch.id == this.node.character) == undefined;
 		const emotionsContainer = Div("pg2-line-small");
 		const text1 = Span();
 		const text2 = Span();
@@ -46,7 +36,7 @@ export class Editor_Node_speech
 								select.removeChild(select.firstChild);
 							if (select.value != "")
 							{
-								node.character = select.value;
+								this.node.character = select.value;
 								text1.innerText = select.selectedOptions[0].innerText + ": ";
 								this.save();
 							}
@@ -63,7 +53,7 @@ export class Editor_Node_speech
 						}
 						else
 						{
-							select.value = node.character;
+							select.value = this.node.character;
 							text1.innerText = select.selectedOptions[0].innerText + ": ";
 						}
 						if (select.value == "author") emotionsContainer.style.display = "none";
@@ -73,8 +63,8 @@ export class Editor_Node_speech
 			emotionsContainer,
 			Div("pg2-line-small", [
 				TextAreaPlus("Текст/речь", [])(
-					inp => { node.text = inp.value; this.save(); text2.innerText = node.text},
-					inp => { inp.value = node.text; text2.innerText = node.text })(),
+					inp => { this.node.text = inp.value; this.save(); text2.innerText = this.node.text},
+					inp => { inp.value = this.node.text; text2.innerText = this.node.text })(),
 			]),
 		])
 		let collapsed = false;
@@ -98,12 +88,12 @@ export class Editor_Node_speech
 				Option("Злость", "angry"),
 				Option("Счастье", "happy"),
 			],
-				select => { node.characterImg = <any>select.value; this.save(); },
-				select => { select.value = node.characterImg; },
+				select => { this.node.characterImg = <any>select.value; this.save(); },
+				select => { select.value = this.node.characterImg; },
 			));
 		}
 	}
-	private createNode()
+	public static createNode()
 	{
 		const node = <ChapterContent_speech>{
 			type: "speech",

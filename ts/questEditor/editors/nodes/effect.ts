@@ -4,19 +4,9 @@ import { InputPlus, QuestFull } from "../../functions.js";
 
 export class Editor_Node_effect
 {
-	constructor(private quest: QuestFull, private indexes: [number, number, number], private save: () => void, createNode = false)
-	{
-		if (createNode)
-		{
-			const node = this.createNode();
-			this.quest.chapters.chapters[indexes[0]][indexes[1]].content.push(node);
-		}
-	}
+	constructor(private quest: QuestFull, private node: ChapterContent_effect, private save: () => void) { }
 	public render(body: HTMLElement)
 	{
-		const node = this.quest.chapters.chapters[this.indexes[0]][this.indexes[1]].content[this.indexes[2]];
-		if (node.type != "effect")
-			throw new Error('Editor_Node_effect: node.type != "effect"');
 		const text1 = Span();
 		const text2 = Span();
 		const content = Div([], [
@@ -27,8 +17,8 @@ export class Editor_Node_effect
 					Option("Засветление экрана", "whiteScreen"),
 					Option("Тряска экрана", "shake"),
 				],
-					select => { node.effectName = <any>select.value; this.save(); text1.innerText = select.selectedOptions[0].innerText + ": " },
-					select => { select.value = node.effectName; text1.innerText = select.selectedOptions[0].innerText + ": " },
+					select => { this.node.effectName = <any>select.value; this.save(); text1.innerText = select.selectedOptions[0].innerText + ": " },
+					select => { select.value = this.node.effectName; text1.innerText = select.selectedOptions[0].innerText + ": " },
 				)
 			]),
 			Div("pg2-line-small", [
@@ -37,11 +27,11 @@ export class Editor_Node_effect
 					inp =>
 					{
 						if (isNaN(inp.valueAsNumber)) inp.valueAsNumber = 250;
-						node.duraction = inp.valueAsNumber;
+						this.node.duraction = inp.valueAsNumber;
 						this.save();
 						text2.innerText = inp.value;
 					},
-					inp => { inp.valueAsNumber = node.duraction; text2.innerText = inp.value + "мс"; })(),
+					inp => { inp.valueAsNumber = this.node.duraction; text2.innerText = inp.value + "мс"; })(),
 			]),
 		]);
 		let collapsed = false;
@@ -57,7 +47,7 @@ export class Editor_Node_effect
 		]);
 		body.appendChild(block);
 	}
-	private createNode()
+	public static createNode()
 	{
 		const node = <ChapterContent_effect>{
 			type: "effect",

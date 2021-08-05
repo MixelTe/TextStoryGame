@@ -25,7 +25,8 @@
 // - - - - happy.png
 // - - - - normal.png
 // - - - - sad.png
-export type ChapterPartContent = (ChapterContent_speech | ChapterContent_question | ChapterContent_effect | ChapterContent_change | ChapterContent_splitter)[];
+export type ChapterPartNode = ChapterContent_speech | ChapterContent_question | ChapterContent_effect | ChapterContent_change | ChapterContent_splitter
+export type ChapterPartContent = ChapterPartNode[];
 export interface Quest
 {
 	name: string;
