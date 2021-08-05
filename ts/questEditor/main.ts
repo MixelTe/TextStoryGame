@@ -11,7 +11,7 @@ function render()
 	document.body.appendChild(Div("body", [
 		Div(["header", "pg1"], [
 			// Button([], "Назад"),
-			Div([], [], "Выберете квест")
+			Div([], [], "Выберите квест")
 		]),
 		Div("list", renderQuests()),
 		Div("add-item", [

@@ -32,6 +32,11 @@ button {
 	position: sticky;
 	top: 0px;
 }
+@media (min-width: 700px) {
+	.header {
+		border-radius: 0px 0px 0.8em 0.8em;
+	}
+}
 .ta-center {
 	text-align: center;
 }
