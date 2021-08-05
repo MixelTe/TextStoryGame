@@ -84,3 +84,9 @@ button {
 select option {
 	color: black;
 }
+
+textarea {
+	min-height: 1.7em;
+	height: 1.7em;
+	resize: vertical;
+}
