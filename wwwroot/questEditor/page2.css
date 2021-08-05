@@ -137,6 +137,7 @@ textarea.pg2 {
 	height: 1.2rem;
 	width: 1.2rem;
 	line-height: 1rem;
+	user-select: none;
 }
 .pg2-block-small.pg2-collapsible > div:nth-child(2) {
 	display: none;
