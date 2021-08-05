@@ -38,6 +38,12 @@ button {
 .ta-end {
 	text-align: end;
 }
+.color-error {
+	color: tomato;
+}
+.margin-right {
+	margin-right: 1em;
+}
 
 .list {
 	padding: 1rem 1.5rem;
@@ -71,4 +77,7 @@ button {
 .form {
 	margin: 0;
 	padding: 0;
+}
+select option {
+	color: black;
 }

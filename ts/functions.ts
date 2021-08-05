@@ -32,6 +32,55 @@ export function TextArea(placeholder = "", classes: string | string[] = [])
 	});
 	return textarea;
 }
+export function Select(classes?: string[] | string, children?: HTMLElement[], onChange?: (select: HTMLSelectElement) => void, onCreate?: (select: HTMLSelectElement) => void)
+{
+	const select = initEl("select", classes, children, undefined);
+	if (onChange)
+	{
+		select.addEventListener("change", () => onChange(select));
+	}
+	if (onCreate) onCreate(select);
+	return select;
+}
+export function SelectPlus(createOptions: (addOption: (innerText?: string, value?: string, classes?: string[] | string) => HTMLOptionElement) => void,
+	onChange?: (select: HTMLSelectElement) => void, onCreate?: (select: HTMLSelectElement) => void, classes?: string[] | string)
+{
+	const select = initEl("select", classes, undefined, undefined);
+	createOptions((innerText?: string, value?: string, classes?: string[] | string) =>
+	{
+		const option = Option(innerText, value, classes)
+		select.appendChild(option);
+		return option;
+	});
+	if (onChange)
+	{
+		select.addEventListener("change", () => onChange(select));
+	}
+	if (onCreate) onCreate(select);
+	return select;
+}
+export function SelectArray<T>(array: T[], getParam: (el: T) => {innerText: string, value: string, classes?: string[] | string},
+	onChange?: (select: HTMLSelectElement) => void, onCreate?: (select: HTMLSelectElement) => void, classes?: string[] | string)
+{
+	const select = initEl("select", classes, undefined, undefined);
+	for (let i = 0; i < array.length; i++) {
+		const el = getParam(array[i]);
+		select.appendChild(Option(el.innerText, el.value, el.classes));
+	}
+	if (onChange)
+	{
+		select.addEventListener("change", () => onChange(select));
+	}
+	if (onCreate) onCreate(select);
+	return select;
+}
+export function Option(innerText?: string, value?: string, classes?: string[] | string)
+{
+	const option = initEl("option", classes, undefined, undefined);
+	if (value) option.value = value;
+	if (innerText) option.innerText = innerText;
+	return option;
+}
 function initEl<K extends keyof HTMLElementTagNameMap>(tagName: K, classes: string[] | string | undefined, children: HTMLElement[] | undefined, innerText: string | undefined)
 {
 	const el = document.createElement(tagName);

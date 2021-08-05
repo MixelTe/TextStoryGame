@@ -31,12 +31,15 @@ textarea.pg2 {
 .pg2-line {
 	margin: 1rem 0rem;
 }
+.pg2-line-small {
+	margin: 0.4rem 0rem;
+}
 .pg2-inputDiv {
 	display: flex;
 	justify-content: space-between;
 }
 .pg2-inputDiv div {
-	display: inline;
+	display: inline-flex;
 }
 .pg2-inputDiv svg {
 	width: 1.15rem;
@@ -80,6 +83,12 @@ textarea.pg2 {
 	margin: 1rem 0rem;
 	border: 2px solid lime;
 	border-radius: 1em;
+}
+.pg2-block-small {
+	padding: 0.5rem;
+	margin: 0.4rem 0rem;
+	border: 0.12em solid lime;
+	border-radius: 0.5em;
 }
 .pg2-line select {
 	margin-right: 1rem;
