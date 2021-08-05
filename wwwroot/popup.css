@@ -24,6 +24,7 @@
 	min-width: 15em;
     min-height: 8em;
 	max-height: 100vh;
+	box-shadow: 0.5em 1em 1em -1em black;
 }
 
 .popup-header {

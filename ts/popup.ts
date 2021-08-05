@@ -12,9 +12,9 @@ export class Popup
 	public get cancelText(): string { return this.cancelBtnEl.innerText }
 	public set okText(v: string) { this.okBtnEl.innerText = v; }
 	public get okText(): string { return this.okBtnEl.innerText }
-	public set okBtn(v: boolean) { this.okBtnEl.style.display = v ? "none" : ""; }
+	public set okBtn(v: boolean) { this.okBtnEl.style.display = v ? "" : "none"; }
 	public get okBtn(): boolean { return this.okBtnEl.style.display != "none" }
-	public set cancelBtn(v: boolean) { this.cancelBtnEl.style.display = v ? "none" : ""; }
+	public set cancelBtn(v: boolean) { this.cancelBtnEl.style.display = v ? "" : "none"; }
 	public get cancelBtn(): boolean { return this.cancelBtnEl.style.display != "none" }
 
 	private onClose: ((confirmed: boolean, popup: Popup) => void)[] = [];
