@@ -147,7 +147,7 @@ export async function contextMenu(title: string, items: contextMenuItem[])
 }
 function contextMenu_create(items: contextMenuItem[], popup: Popup, resolve: (value: string | null) => void)
 {
-	const menu = initEl("ul", "contextMenu", undefined, undefined);
+	const menu = initEl("ul", "popup-contextMenu", undefined, undefined);
 	let firstOption: HTMLButtonElement | null = null;
 	for (let i = 0; i < items.length; i++) {
 		const item = items[i];
@@ -167,11 +167,11 @@ function contextMenu_item(item: contextMenuItem, popup: Popup, resolve: (value: 
 	line.appendChild(text);
 	if (item.subItems != undefined)
 	{
-		line.appendChild(Div("contextMenu-arrow"));
+		line.appendChild(Div("popup-contextMenu-arrow"));
 		el.appendChild(contextMenu_create(item.subItems, popup, resolve).menu);
 		line.addEventListener("click", () =>
 		{
-			el.classList.toggle("contextMenu-open");
+			el.classList.toggle("popup-contextMenu-open");
 		});
 	}
 	else if (item.id != undefined)

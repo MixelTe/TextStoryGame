@@ -50,6 +50,7 @@
 	width: 1.7em;
 	height: 1.7em;
 	outline: none;
+	font-size: inherit;
 }
 .popup-close:hover,
 .popup-close:focus {
@@ -110,27 +111,27 @@
 	transform: scaleX(1);
 }
 
-.contextMenu {
+.popup-contextMenu {
 	list-style: none;
     padding-left: 0.8rem;
 }
-.contextMenu ul {
+.popup-contextMenu ul {
 	display: none;
 }
-.contextMenu li {
+.popup-contextMenu li {
 	padding-right: 0;
 	cursor: pointer;
 }
-.contextMenu li + li {
+.popup-contextMenu li + li {
 	border-top: 0.125em solid gray;
 }
-.contextMenu li > :first-child {
+.popup-contextMenu li > :first-child {
 	padding-top: 0.2em;
 }
-.contextMenu li > :last-child {
+.popup-contextMenu li > :last-child {
 	padding-bottom: 0.2em;
 }
-.contextMenu-arrow {
+.popup-contextMenu-arrow {
 	display: inline-block;
 	width: 0.5em;
 	height: 0.5em;
@@ -139,23 +140,23 @@
 	clip-path: polygon(0% 0%, 100% 0%, 100% 100%);
 	transform: translateY(-0.05em) rotate(45deg);
 }
-.contextMenu-open > ul {
+.popup-contextMenu-open > ul {
 	display: block;
 }
-.contextMenu button {
+.popup-contextMenu button {
 	background-color: transparent;
 	border: none;
 	outline: none;
 	font-size: inherit;
 }
-.contextMenu-open > button .contextMenu-arrow {
+.popup-contextMenu-open > button .popup-contextMenu-arrow {
 	transform: translateY(-0.15em) rotate(135deg);
 }
-.contextMenu li > button {
+.popup-contextMenu li > button {
 	position: relative;
 	display: block;
 }
-.contextMenu li > button::after {
+.popup-contextMenu li > button::after {
 	content: "";
 	position: absolute;
 	display: inline-block;
@@ -168,8 +169,8 @@
 	transform: scale(0) translateY(-30%);
 	transition: transform 200ms ease-in-out;
 }
-.contextMenu li > button:hover::after,
-.contextMenu li > button:focus::after {
+.popup-contextMenu li > button:hover::after,
+.popup-contextMenu li > button:focus::after {
 	transition: transform 0ms ease-in-out;
 	transform: scaleX(1);
 }
