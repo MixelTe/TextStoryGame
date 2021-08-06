@@ -36,9 +36,13 @@ export class Popup
 			Div("popup-content", [this.content]),
 			Div("popup-footer", [ this.cancelBtnEl, this.okBtnEl ]),
 		]));
+		this.body.addEventListener("click", e =>
+		{
+			if (e.target == this.body) this.close(false);
+		});
 		document.body.appendChild(this.body);
 	}
-	private close(confirmed: boolean)
+	public close(confirmed: boolean)
 	{
 		document.body.removeChild(this.body);
 		this.fireEvent(confirmed ? "ok" : "cancel");
@@ -118,4 +122,65 @@ function initEl<K extends keyof HTMLElementTagNameMap>(tagName: K, classes: stri
 	if (children) children.forEach(ch => el.appendChild(ch));
 
 	return el;
+}
+
+interface contextMenuItem
+{
+	text: string;
+	id?: string;
+	subItems?: contextMenuItem[];
+}
+export async function contextMenu(title: string, items: contextMenuItem[])
+{
+	return new Promise<string | null>((resolve) =>
+	{
+		const popup = new Popup();
+		popup.title = title;
+		popup.cancelBtn = false;
+		popup.okBtn = false;
+		const { menu, firstOption } = contextMenu_create(items, popup, resolve);
+		popup.content.appendChild(menu);
+		popup.addListener("cancel", () => resolve(null));
+		popup.open();
+		firstOption?.focus();
+	});
+}
+function contextMenu_create(items: contextMenuItem[], popup: Popup, resolve: (value: string | null) => void)
+{
+	const menu = initEl("ul", "contextMenu", undefined, undefined);
+	let firstOption: HTMLButtonElement | null = null;
+	for (let i = 0; i < items.length; i++) {
+		const item = items[i];
+		const { el, line } = contextMenu_item(item, popup, resolve);
+		if (i == 0) firstOption = line;
+		menu.appendChild(el);
+	}
+	return { menu, firstOption };
+}
+function contextMenu_item(item: contextMenuItem, popup: Popup, resolve: (value: string | null) => void)
+{
+	const el = document.createElement("li");
+	const line = document.createElement("button");
+	el.appendChild(line);
+	const text = document.createElement("span");
+	text.innerText = item.text;
+	line.appendChild(text);
+	if (item.subItems != undefined)
+	{
+		line.appendChild(Div("contextMenu-arrow"));
+		el.appendChild(contextMenu_create(item.subItems, popup, resolve).menu);
+		line.addEventListener("click", () =>
+		{
+			el.classList.toggle("contextMenu-open");
+		});
+	}
+	else if (item.id != undefined)
+	{
+		el.addEventListener("click", () =>
+		{
+			popup.close(true);
+			resolve(item.id ?? null);
+		});
+	}
+	return { el, line };
 }

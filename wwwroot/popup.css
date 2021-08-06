@@ -109,3 +109,67 @@
 .popup-footer button:focus::after {
 	transform: scaleX(1);
 }
+
+.contextMenu {
+	list-style: none;
+    padding-left: 0.8rem;
+}
+.contextMenu ul {
+	display: none;
+}
+.contextMenu li {
+	padding-right: 0;
+	cursor: pointer;
+}
+.contextMenu li + li {
+	border-top: 0.125em solid gray;
+}
+.contextMenu li > :first-child {
+	padding-top: 0.2em;
+}
+.contextMenu li > :last-child {
+	padding-bottom: 0.2em;
+}
+.contextMenu-arrow {
+	display: inline-block;
+	width: 0.5em;
+	height: 0.5em;
+	margin-left: 0.4em;
+	background-color: currentColor;
+	clip-path: polygon(0% 0%, 100% 0%, 100% 100%);
+	transform: translateY(-0.05em) rotate(45deg);
+}
+.contextMenu-open > ul {
+	display: block;
+}
+.contextMenu button {
+	background-color: transparent;
+	border: none;
+	outline: none;
+	font-size: inherit;
+}
+.contextMenu-open > button .contextMenu-arrow {
+	transform: translateY(-0.15em) rotate(135deg);
+}
+.contextMenu li > button {
+	position: relative;
+	display: block;
+}
+.contextMenu li > button::after {
+	content: "";
+	position: absolute;
+	display: inline-block;
+	left: -0.6em;
+	top: 50%;
+	width: 0.4em;
+	height: 0.4em;
+	background-color: lightgreen;
+	border-radius: 50%;
+	transform: scale(0) translateY(-30%);
+	transition: transform 200ms ease-in-out;
+}
+.contextMenu li > button:hover::after,
+.contextMenu li > button:focus::after {
+	transition: transform 0ms ease-in-out;
+	transform: scaleX(1);
+}

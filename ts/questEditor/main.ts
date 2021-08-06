@@ -1,4 +1,5 @@
 import { Button, confirm_Popup, Div, Input } from "../functions.js";
+import { contextMenu } from "../popup.js";
 import { Editor } from "./editor.js";
 import { addQuest, Form, getQuests, removeQuest } from "./functions.js";
 
@@ -26,12 +27,20 @@ function renderQuests()
 	const rendered = [];
 	for (let i = 0; i < quests.length; i++) {
 		const quest = quests[i];
-		const button = Button([], "Удалить", async () =>
+		const button = Button([], "...", async () =>
 		{
-			if (await confirm_Popup(`квест ${quest.name}?`))
+			const r = await contextMenu(quest.name, [
+				{ text: "Отправить", id: "send" },
+				{ text: "Удалить", id: "delete" },
+			]);
+			if (r == null) return;
+			if (r == "delete")
 			{
-				removeQuest(quest.key);
-				input = render();
+				if (await confirm_Popup(`квест ${quest.name}?`))
+				{
+						removeQuest(quest.key);
+						input = render();
+				}
 			}
 		});
 		const div = Div([], [
