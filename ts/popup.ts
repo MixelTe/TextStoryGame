@@ -16,6 +16,7 @@ export class Popup
 	public get okBtn(): boolean { return this.okBtnEl.style.display != "none" }
 	public set cancelBtn(v: boolean) { this.cancelBtnEl.style.display = v ? "" : "none"; }
 	public get cancelBtn(): boolean { return this.cancelBtnEl.style.display != "none" }
+	public closeOnBackClick = true;
 
 	private onClose: ((confirmed: boolean, popup: Popup) => void)[] = [];
 	private onOk: ((popup: Popup) => void)[] = [];
@@ -38,7 +39,7 @@ export class Popup
 		]));
 		this.body.addEventListener("click", e =>
 		{
-			if (e.target == this.body) this.close(false);
+			if (this.closeOnBackClick && e.target == this.body) this.close(false);
 		});
 		document.body.appendChild(this.body);
 	}
