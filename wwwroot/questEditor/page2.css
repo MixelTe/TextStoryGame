@@ -53,12 +53,20 @@ textarea.pg2 {
 .pg2-inputDiv div {
 	display: inline-flex;
 }
+.pg2-inputDiv button {
+	background-color: transparent;
+	border: none;
+	outline: none;
+	font-size: inherit;
+	cursor: pointer;
+	padding: 0;
+	margin: 0;
+	margin-left: 0.5rem;
+}
 .pg2-inputDiv svg {
 	width: 1.15rem;
-	margin-left: 0.5rem;
-	cursor: pointer;
 }
-.pg2-inputDiv svg:first-child {
+.pg2-inputDiv button:first-child {
 	display: none;
 }
 .pg2-inputDiv input,
@@ -79,15 +87,19 @@ textarea.pg2 {
 .pg2-inputDiv textarea:disabled {
 	resize: none;
 }
-.pg2-inputDiv textarea:disabled ~ div svg:first-child ,
-.pg2-inputDiv input:disabled ~ div svg:first-child {
+.pg2-inputDiv textarea:disabled ~ div button:first-child ,
+.pg2-inputDiv input:disabled ~ div button:first-child {
 	display: inline;
 }
-.pg2-inputDiv input:disabled ~ div svg:nth-child(2),
-.pg2-inputDiv input:disabled ~ div svg:nth-child(3),
-.pg2-inputDiv textarea:disabled ~ div svg:nth-child(2),
-.pg2-inputDiv textarea:disabled ~ div svg:nth-child(3) {
+.pg2-inputDiv input:disabled ~ div button:nth-child(2),
+.pg2-inputDiv input:disabled ~ div button:nth-child(3),
+.pg2-inputDiv textarea:disabled ~ div button:nth-child(2),
+.pg2-inputDiv textarea:disabled ~ div button:nth-child(3) {
 	display: none;
+}
+.pg2-inputDiv button:focus svg,
+.pg2-inputDiv button:hover svg {
+	filter: drop-shadow(0.15em 0.15em 0.1em blue);
 }
 
 .pg2-block {
@@ -127,7 +139,7 @@ textarea.pg2 {
 .pg2-block-small.pg2-collapsible {
 	position: relative;
 }
-.pg2-block-small.pg2-collapsible button {
+.pg2-block-small.pg2-collapsible > button {
 	position: absolute;
 	left: -0.1rem;
 	top: -0.1rem;

@@ -122,10 +122,16 @@ export function TextAreaPlus(placeholder = "", classes: string | string[] = [])
 type InPlus = HTMLInputElement | HTMLTextAreaElement;
 function toPlus<T extends InPlus>(input: T)
 {
+	const toButton = (el: SVGSVGElement) =>
+	{
+		const button = document.createElement("button");
+		button.appendChild(el);
+		return button;
+	}
 	const div_svg = document.createElement("div");
-	const pencil = SVG.pencil();
-	const close = SVG.close();
-	const save = SVG.save();
+	const pencil = toButton(SVG.pencil());
+	const close = toButton(SVG.close());
+	const save = toButton(SVG.save());
 	div_svg.appendChild(pencil);
 	div_svg.appendChild(close);
 	div_svg.appendChild(save);
