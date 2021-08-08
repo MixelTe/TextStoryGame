@@ -1,11 +1,7 @@
-import { Button, confirm_Popup, Div, Option, Select } from "../../functions.js";
+import { Button, confirm_Popup, Div, Select } from "../../functions.js";
 import { ChapterPart, ChapterPartNode } from "../../questStructure.js";
 import { InputPlus, QuestFull } from "../functions.js";
-import { Editor_Node_change } from "./nodes/change.js";
-import { Editor_Node_effect } from "./nodes/effect.js";
-import { Editor_Node_question } from "./nodes/question.js";
-import { Editor_Node_speech } from "./nodes/speech.js";
-import { Editor_Node_splitter } from "./nodes/splitter.js";
+import { createNode, createNodeTypeSelect, renderNode } from "./nodeTools.js";
 
 export class Editor_Chapter
 {
@@ -43,13 +39,7 @@ export class Editor_Chapter
 	private renderPart(index: number)
 	{
 		this.renderNodes(index);
-		this.select = Select([], [
-			Option("Текст/речь", "speech"),
-			Option("Вопрос", "question"),
-			Option("Эффект", "effect"),
-			Option("Именение", "change"),
-			Option("Разделитель", "splitter"),
-		]);
+		this.select = createNodeTypeSelect();
 		this.partContent.appendChild(Div("pg2-line-wrap", [
 			this.select,
 			Button("margin-right", "Добавить элемент", this.addNode.bind(this, index)),
@@ -68,15 +58,7 @@ export class Editor_Chapter
 	}
 	private addNode(index: number)
 	{
-		let node: ChapterPartNode;
-		switch (this.select.value) {
-			case "speech": node = Editor_Node_speech.createNode(); break;
-			case "question": node = Editor_Node_question.createNode(); break;
-			case "effect": node = Editor_Node_effect.createNode(); break;
-			case "change": node = Editor_Node_change.createNode(); break;
-			case "splitter": node = Editor_Node_splitter.createNode(); break;
-			default: throw new Error(`Unexpected value: ${this.select.value}`);
-		}
+		const node = createNode(this.select.value);
 		this.quest.chapters.chapters[this.index][index].content.push(node);
 		this.renderNode(node, false);
 	}
@@ -88,14 +70,8 @@ export class Editor_Chapter
 	}
 	private renderNode(node: ChapterPartNode, collapsed = true)
 	{
-		switch (node.type) {
-			case "speech": new Editor_Node_speech(this.quest, node, this.save).render(this.nodeContainer, collapsed); break;
-			case "question": new Editor_Node_question(this.quest, node, this.save).render(this.nodeContainer, collapsed); break;
-			case "effect": new Editor_Node_effect(this.quest, node, this.save).render(this.nodeContainer, collapsed); break;
-			case "change": new Editor_Node_change(this.quest, node, this.save).render(this.nodeContainer, collapsed); break;
-			case "splitter": new Editor_Node_splitter(this.quest, node, this.save).render(this.nodeContainer, collapsed); break;
-			default: throw new Error(`Unexpected value: ${this.select.value}`);
-		}
+		const el = renderNode(node, this.quest, this.save, collapsed);
+		this.nodeContainer.appendChild(el);
 	}
 
 	private createIfNotExist()

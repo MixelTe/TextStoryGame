@@ -1,11 +1,12 @@
-import { Button, Div, Option, Select, Span } from "../../../functions.js";
+import { Div, Option, Select, Span } from "../../../functions.js";
 import { ChapterContent_effect } from "../../../questStructure.js";
 import { InputPlus, QuestFull } from "../../functions.js";
+import { nodeContainer } from "./node.js";
 
 export class Editor_Node_effect
 {
 	constructor(private quest: QuestFull, private node: ChapterContent_effect, private save: () => void) { }
-	public render(body: HTMLElement, collapsed = true)
+	public render(collapsed = true)
 	{
 		const text1 = Span();
 		const text2 = Span();
@@ -34,18 +35,7 @@ export class Editor_Node_effect
 					inp => { inp.valueAsNumber = this.node.duraction; text2.innerText = inp.value + "мс"; })(),
 			]),
 		]);
-		const block = Div(["pg2-block-small", "pg2-collapsible"], [
-			Button("pg2-block-collapse", "-", btn =>
-			{
-				collapsed = !collapsed;
-				btn.innerText = collapsed ? "+" : "-";
-				block.classList.toggle("pg2-collapsed", collapsed);
-			}),
-			Div("pg2-block-header", [text1, text2]),
-			content,
-		]);
-		block.classList.toggle("pg2-collapsed", collapsed);
-		body.appendChild(block);
+		return nodeContainer(content, [text1, text2], collapsed);
 	}
 	public static createNode()
 	{

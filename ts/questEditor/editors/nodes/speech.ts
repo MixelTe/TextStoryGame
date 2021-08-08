@@ -1,12 +1,13 @@
-import { Button, Div, Option, Select, SelectPlus, Span } from "../../../functions.js";
+import { Div, Option, Select, SelectPlus, Span } from "../../../functions.js";
 import { ChapterContent_speech } from "../../../questStructure.js";
-import { InputPlus, QuestFull, TextAreaPlus } from "../../functions.js";
+import { QuestFull, TextAreaPlus } from "../../functions.js";
 import { Editor_Options } from "../../options.js";
+import { nodeContainer } from "./node.js";
 
 export class Editor_Node_speech
 {
 	constructor(private quest: QuestFull, private node: ChapterContent_speech, private save: () => void) { }
-	public render(body: HTMLElement, collapsed = true)
+	public render(collapsed = true)
 	{
 		const deletedChar = this.node.character != "" && this.node.character != "author" && this.quest.characters.find(ch => ch.id == this.node.character) == undefined;
 		const emotionsContainer = Div("pg2-line-small");
@@ -67,18 +68,6 @@ export class Editor_Node_speech
 					inp => { inp.value = this.node.text; text2.innerText = this.node.text })(),
 			]),
 		])
-		const block = Div(["pg2-block-small", "pg2-collapsible"], [
-			Button("pg2-block-collapse", "-", btn =>
-			{
-				collapsed = !collapsed;
-				btn.innerText = collapsed ? "+" : "-";
-				block.classList.toggle("pg2-collapsed", collapsed);
-			}),
-			Div("pg2-block-header", [text1, text2]),
-			content,
-		]);
-		block.classList.toggle("pg2-collapsed", collapsed);
-		body.appendChild(block);
 		if (Editor_Options.EnableEmotionSelect)
 		{
 			emotionsContainer.appendChild(Span("margin-right", [], "Эмоция:"));
@@ -92,6 +81,7 @@ export class Editor_Node_speech
 				select => { select.value = this.node.characterImg; },
 			));
 		}
+		return nodeContainer(content, [text1, text2], collapsed);
 	}
 	public static createNode()
 	{

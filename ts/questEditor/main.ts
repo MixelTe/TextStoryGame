@@ -27,7 +27,7 @@ function renderQuests()
 	const rendered = [];
 	for (let i = 0; i < quests.length; i++) {
 		const quest = quests[i];
-		const button = Button([], "...", async () =>
+		const button = Button([], "···", async () =>
 		{
 			const r = await contextMenu(quest.name, [
 				{ text: "Отправить", id: "send" },
