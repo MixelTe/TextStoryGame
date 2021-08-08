@@ -11,7 +11,7 @@ export class Editor_Chapter
 	private partId = "0";
 	private partIndex = 0;
 	public openNewPartEditor = (partId: string) => "0";
-	constructor(private quest: QuestFull, public index: number, public save: () => void) { }
+	constructor(private quest: QuestFull, private index: number, public save: () => void) { }
 	public render(body: HTMLElement, partId = "0", callback = () => {})
 	{
 		this.partContent = Div("pg2-line");
@@ -131,5 +131,13 @@ export class Editor_Chapter
 		const i = content.indexOf(node.node);
 		if (i >= 0) content.splice(i, 1);
 		this.save();
+	}
+	public hasPartContent(partId: string | undefined)
+	{
+		if (partId == undefined) return false;
+		const chapter = this.quest.chapters.chapters[this.index];
+		const part = chapter.find(ch => ch.id == partId);
+		if (part == undefined) return false;
+		return part.content.length != 0;
 	}
 }

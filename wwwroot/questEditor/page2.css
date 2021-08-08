@@ -124,15 +124,16 @@ textarea.pg2 {
 .pg2-itemline button {
 	margin-left: auto;
 }
-.pg2-checkboxDiv * {
+.pg2-checkboxDiv input:not(:disabled),
+.pg2-checkboxDiv input:not(:disabled) ~ label {
 	cursor: pointer;
 }
-.pg2-checkboxDiv input:hover + label,
-.pg2-checkboxDiv label:hover {
+.pg2-checkboxDiv input:not(:disabled):hover + label,
+.pg2-checkboxDiv input:not(:disabled) ~ label:hover {
 	text-shadow: 0px 0px 0.3em rgba(0, 0, 255, 0.3);
 }
-.pg2-checkboxDiv input:hover,
-.pg2-checkboxDiv label:hover ~ input {
+.pg2-checkboxDiv input:not(:disabled):hover,
+.pg2-checkboxDiv label:hover ~ input:not(:disabled) {
 	box-shadow: 0px 0px 0.3em rgba(0, 0, 255, 0.3);
 }
 
