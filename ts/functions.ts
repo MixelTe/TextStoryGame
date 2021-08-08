@@ -119,6 +119,7 @@ export async function confirm_Popup(text: string, prefix = "Вы уверенн�
 	const popup = new Popup();
 	popup.title = "Удаление";
 	popup.content.innerText = prefix + text;
+	popup.focusOn = "cancel";
 	return popup.openAsync();
 }
 

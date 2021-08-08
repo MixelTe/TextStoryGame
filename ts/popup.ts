@@ -3,6 +3,7 @@ interface PopupEvenListener {
 	"ok": (popup: Popup) => void;
 	"cancel": (popup: Popup) => void;
 }
+type FocusEls = "ok" | "cancel" | "close" | "none";
 export class Popup
 {
 	public content = Div();
@@ -16,7 +17,10 @@ export class Popup
 	public get okBtn(): boolean { return this.okBtnEl.style.display != "none" }
 	public set cancelBtn(v: boolean) { this.cancelBtnEl.style.display = v ? "" : "none"; }
 	public get cancelBtn(): boolean { return this.cancelBtnEl.style.display != "none" }
+	public set focusOn(v: FocusEls) { this.focusEl = v; this.setFocus(); };
+	public get focusOn() { return this.focusEl; };
 	public closeOnBackClick = true;
+	public closeEscape = true;
 
 	private onClose: ((confirmed: boolean, popup: Popup) => void)[] = [];
 	private onOk: ((popup: Popup) => void)[] = [];
@@ -25,14 +29,17 @@ export class Popup
 	private titleEl = Div("popup-title");
 	private cancelBtnEl = Button([], "Отмена", this.close.bind(this, false));
 	private okBtnEl = Button([], "ОК", this.close.bind(this, true));
+	private closeBtnEl = Button("popup-close", "x", this.close.bind(this, false));
+	private focusEl: FocusEls = "ok";
 	private resolve: ((value: boolean) => void) | null = null;
+	private onKeyUp: (e: KeyboardEvent) => void = () => {};
 	protected openPopup()
 	{
 		this.body = Div("popup");
 		this.body.appendChild(Div("popup-block", [
 			Div("popup-header", [
 				this.titleEl,
-				Button("popup-close", "x", this.close.bind(this, false))
+				this.closeBtnEl,
 			]),
 			Div("popup-content", [this.content]),
 			Div("popup-footer", [ this.cancelBtnEl, this.okBtnEl ]),
@@ -41,11 +48,18 @@ export class Popup
 		{
 			if (this.closeOnBackClick && e.target == this.body) this.close(false);
 		});
+		this.onKeyUp = (e: KeyboardEvent) =>
+		{
+			if (e.code == "Escape") this.close(false);
+		}
+		window.addEventListener("keyup", this.onKeyUp);
 		document.body.appendChild(this.body);
+		this.setFocus();
 	}
 	public close(confirmed: boolean)
 	{
 		document.body.removeChild(this.body);
+		window.removeEventListener("keyup", this.onKeyUp);
 		this.fireEvent(confirmed ? "ok" : "cancel");
 		this.fireEvent("close", confirmed);
 		if (this.resolve) this.resolve(confirmed);
@@ -57,6 +71,14 @@ export class Popup
 			case "ok": this.onOk.forEach(f => f(this)); break;
 			case "cancel": this.onCancel.forEach(f => f(this)); break;
 			default: throw new Error(`Listener can be: "close", "ok" or "cancel". Input: ${type}`);
+		}
+	}
+	private setFocus()
+	{
+		switch (this.focusEl) {
+			case "cancel": this.cancelBtnEl.focus(); break;
+			case "close": this.closeBtnEl.focus(); break;
+			case "ok": this.okBtnEl.focus(); break;
 		}
 	}
 
