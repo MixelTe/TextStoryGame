@@ -122,9 +122,6 @@
 	padding-right: 0;
 	cursor: pointer;
 }
-.popup-contextMenu li + li {
-	border-top: 0.125em solid gray;
-}
 .popup-contextMenu li > :first-child {
 	padding-top: 0.2em;
 }
@@ -155,6 +152,8 @@
 .popup-contextMenu li > button {
 	position: relative;
 	display: block;
+	text-align: left;
+	width: 100%;
 }
 .popup-contextMenu li > button::after {
 	content: "";
@@ -166,11 +165,12 @@
 	height: 0.4em;
 	background-color: lightgreen;
 	border-radius: 50%;
-	transform: scale(0) translateY(-30%);
-	transition: transform 200ms ease-in-out;
+	transform: scale(0.8) translateY(-30%);
+	transition: transform, 200ms ease-in-out;
 }
 .popup-contextMenu li > button:hover::after,
 .popup-contextMenu li > button:focus::after {
+	background-color: lightblue;
 	transition: transform 0ms ease-in-out;
-	transform: scaleX(1);
+	transform: scale(1.2) translateY(-30%);
 }
