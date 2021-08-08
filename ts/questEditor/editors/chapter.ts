@@ -63,7 +63,7 @@ export class Editor_Chapter
 		this.nodeContainer = Div("pg2-line");
 		for (let i = 0; i < content.length; i++)
 		{
-			this.renderNode(content[i]);
+			this.renderNode(content[i], i != content.length - 1);
 		}
 		this.partContent.appendChild(this.nodeContainer);
 	}
