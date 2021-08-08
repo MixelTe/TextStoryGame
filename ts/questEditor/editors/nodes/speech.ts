@@ -2,11 +2,12 @@ import { Div, Option, Select, SelectPlus, Span } from "../../../functions.js";
 import { ChapterContent_speech } from "../../../questStructure.js";
 import { QuestFull, TextAreaPlus } from "../../functions.js";
 import { Editor_Options } from "../../options.js";
-import { nodeContainer } from "./node.js";
+import { Editor_Chapter } from "../chapter.js";
+import { Editor_Node } from "./node.js";
 
-export class Editor_Node_speech
+export class Editor_Node_speech extends Editor_Node
 {
-	constructor(private quest: QuestFull, private node: ChapterContent_speech, private save: () => void) { }
+	constructor(quest: QuestFull, public node: ChapterContent_speech, chapter: Editor_Chapter) { super(quest, chapter); }
 	public render(collapsed = true)
 	{
 		const deletedChar = this.node.character != "" && this.node.character != "author" && this.quest.characters.find(ch => ch.id == this.node.character) == undefined;
@@ -39,7 +40,7 @@ export class Editor_Node_speech
 							{
 								this.node.character = select.value;
 								text1.innerText = select.selectedOptions[0].innerText + ": ";
-								this.save();
+								this.chapter.save();
 							}
 						}
 						if (select.value == "author") emotionsContainer.style.display = "none";
@@ -64,7 +65,7 @@ export class Editor_Node_speech
 			emotionsContainer,
 			Div("pg2-line-small", [
 				TextAreaPlus("Текст/речь", [])(
-					inp => { this.node.text = inp.value; this.save(); text2.innerText = this.node.text},
+					inp => { this.node.text = inp.value; this.chapter.save(); text2.innerText = this.node.text},
 					inp => { inp.value = this.node.text; text2.innerText = this.node.text })(),
 			]),
 		])
@@ -77,11 +78,11 @@ export class Editor_Node_speech
 				Option("Злость", "angry"),
 				Option("Счастье", "happy"),
 			],
-				select => { this.node.characterImg = <any>select.value; this.save(); },
+				select => { this.node.characterImg = <any>select.value; this.chapter.save(); },
 				select => { select.value = this.node.characterImg; },
 			));
 		}
-		return nodeContainer(content, [text1, text2], collapsed);
+		return this.create(content, [text1, text2], collapsed);
 	}
 	public static createNode()
 	{

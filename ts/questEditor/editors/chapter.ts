@@ -1,18 +1,20 @@
 import { Button, confirm_Popup, Div, Select } from "../../functions.js";
 import { ChapterPart, ChapterPartNode } from "../../questStructure.js";
 import { InputPlus, QuestFull } from "../functions.js";
-import { createNode, createNodeTypeSelect, renderNode } from "./nodeTools.js";
+import { createNode, createNodeTypeSelect, Editor_Nodes, renderNode } from "./nodeTools.js";
 
 export class Editor_Chapter
 {
 	private partContent = Div("pg2-line");
 	private nodeContainer = Div("pg2-line");
 	private select = Select();
-	constructor(private quest: QuestFull, private index: number, private save: () => void) { }
+	private partIndex = 0;
+	constructor(private quest: QuestFull, private index: number, public save: () => void) { }
 	public render(body: HTMLElement, partIndex = 0, callback = () => {})
 	{
 		this.partContent = Div("pg2-line");
 		body.innerHTML = "";
+		this.partIndex = partIndex;
 		if (partIndex == 0)
 		{
 			body.appendChild(Div([], [
@@ -34,21 +36,20 @@ export class Editor_Chapter
 			]));
 		}
 		this.createIfNotExist();
-		this.renderPart(partIndex);
+		this.renderPart();
 	}
-	private renderPart(index: number)
+	private renderPart()
 	{
-		this.renderNodes(index);
+		this.renderNodes();
 		this.select = createNodeTypeSelect();
 		this.partContent.appendChild(Div("pg2-line-wrap", [
 			this.select,
-			Button("margin-right", "Добавить элемент", this.addNode.bind(this, index)),
-			Button([], "Удалить последний", this.removeLast.bind(this, index)),
+			Button("margin-right", "Добавить элемент", this.addNode.bind(this)),
 		]))
 	}
-	private renderNodes(index: number)
+	private renderNodes()
 	{
-		const content = this.quest.chapters.chapters[this.index][index].content;
+		const content = this.quest.chapters.chapters[this.index][this.partIndex].content;
 		this.nodeContainer = Div("pg2-line");
 		for (let i = 0; i < content.length; i++)
 		{
@@ -56,21 +57,21 @@ export class Editor_Chapter
 		}
 		this.partContent.appendChild(this.nodeContainer);
 	}
-	private addNode(index: number)
+	private addNode()
 	{
 		const node = createNode(this.select.value);
-		this.quest.chapters.chapters[this.index][index].content.push(node);
+		this.quest.chapters.chapters[this.index][this.partIndex].content.push(node);
 		this.renderNode(node, false);
 	}
-	private async removeLast(index: number)
+	private async removeLast()
 	{
 		if (!await confirm_Popup(`последний элемент?`)) return;
 		if (this.nodeContainer.lastChild) this.nodeContainer.removeChild(this.nodeContainer.lastChild);
-		this.quest.chapters.chapters[this.index][index].content.pop();
+		this.quest.chapters.chapters[this.index][this.partIndex].content.pop();
 	}
 	private renderNode(node: ChapterPartNode, collapsed = true)
 	{
-		const el = renderNode(node, this.quest, this.save, collapsed);
+		const el = renderNode(node, this.quest, this, collapsed);
 		this.nodeContainer.appendChild(el);
 	}
 
@@ -90,5 +91,24 @@ export class Editor_Chapter
 			content: [],
 		};
 		return part;
+	}
+
+	public addBefore(node: ChapterPartNode, ref: HTMLElement)
+	{
+		const el = renderNode(node, this.quest, this, false);
+		this.nodeContainer.insertBefore(el, ref);
+	}
+	public addAfter(node: ChapterPartNode, ref: HTMLElement)
+	{
+		const el = renderNode(node, this.quest, this, false);
+		this.nodeContainer.insertBefore(el, ref.nextSibling);
+	}
+	public deleteNode(node: Editor_Nodes)
+	{
+		this.nodeContainer.removeChild(node.nodeBody);
+		const content = this.quest.chapters.chapters[this.index][this.partIndex].content;
+		const i = content.indexOf(node.node);
+		if (i >= 0) content.splice(i, 1);
+		this.save();
 	}
 }

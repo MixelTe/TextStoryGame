@@ -1,11 +1,12 @@
 import { Div, Option, Select, Span } from "../../../functions.js";
 import { ChapterContent_effect } from "../../../questStructure.js";
 import { InputPlus, QuestFull } from "../../functions.js";
-import { nodeContainer } from "./node.js";
+import { Editor_Chapter } from "../chapter.js";
+import { Editor_Node } from "./node.js";
 
-export class Editor_Node_effect
+export class Editor_Node_effect extends Editor_Node
 {
-	constructor(private quest: QuestFull, private node: ChapterContent_effect, private save: () => void) { }
+	constructor(quest: QuestFull, public node: ChapterContent_effect, chapter: Editor_Chapter) { super(quest, chapter); }
 	public render(collapsed = true)
 	{
 		const text1 = Span();
@@ -18,7 +19,7 @@ export class Editor_Node_effect
 					Option("Засветление экрана", "whiteScreen"),
 					Option("Тряска экрана", "shake"),
 				],
-					select => { this.node.effectName = <any>select.value; this.save(); text1.innerText = select.selectedOptions[0].innerText + ": " },
+					select => { this.node.effectName = <any>select.value; this.chapter.save(); text1.innerText = select.selectedOptions[0].innerText + ": " },
 					select => { select.value = this.node.effectName; text1.innerText = select.selectedOptions[0].innerText + ": " },
 				)
 			]),
@@ -29,13 +30,13 @@ export class Editor_Node_effect
 					{
 						if (isNaN(inp.valueAsNumber)) inp.valueAsNumber = 250;
 						this.node.duraction = inp.valueAsNumber;
-						this.save();
+						this.chapter.save();
 						text2.innerText = inp.value;
 					},
 					inp => { inp.valueAsNumber = this.node.duraction; text2.innerText = inp.value + "мс"; })(),
 			]),
 		]);
-		return nodeContainer(content, [text1, text2], collapsed);
+		return this.create(content, [text1, text2], collapsed);
 	}
 	public static createNode()
 	{
