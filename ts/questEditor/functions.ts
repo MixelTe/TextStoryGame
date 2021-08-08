@@ -173,7 +173,7 @@ function toPlus<T extends InPlus>(input: T)
 	return get;
 }
 
-export function CheckBox(classes: string[] | string = [], text = "")
+export function CheckBox(classes: string[] | string = [], text = "", inline = false)
 {
 	const name = "checkbox" + Math.random().toString().slice(2);
 	const checkBox = document.createElement("input");
@@ -188,6 +188,7 @@ export function CheckBox(classes: string[] | string = [], text = "")
 
 	const div = document.createElement("div");
 	div.classList.add("pg2-checkboxDiv");
+	if (inline) div.classList.add("inline");
 	div.appendChild(checkBox);
 	div.appendChild(label);
 

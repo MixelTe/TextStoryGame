@@ -1,6 +1,7 @@
 import { Button, confirm_Popup, Div } from "../../functions.js";
 import { Characteristic } from "../../questStructure.js";
 import { CheckBox, InputPlus, QuestFull, TextAreaPlus } from "../functions.js";
+import { createSelectItem } from "./nodeTools.js";
 
 export class Editor_Player
 {
@@ -12,7 +13,7 @@ export class Editor_Player
 	{
 		this.container_items = Div();
 		this.container_charac = Div();
-		this.selected_item = this.createSelectItem();
+		this.selected_item = createSelectItem(this.quest);
 		body.innerHTML = "";
 		body.appendChild(Div([], [
 			Div("pg2-line", [
@@ -46,21 +47,6 @@ export class Editor_Player
 			if (item) this.createItem(item.name, itemId);
 			else this.quest.player.items.splice(i, 1);
 		}
-	}
-	private createSelectItem()
-	{
-		const select = document.createElement("select");
-		const option = document.createElement("option");
-		option.value = "";
-		option.innerText = "Выберите предмет";
-		select.appendChild(option);
-		this.quest.items.forEach(item => {
-			const option = document.createElement("option");
-			option.value = item.id;
-			option.innerText = item.name;
-			select.appendChild(option);
-		});
-		return select;
 	}
 	private addItem()
 	{

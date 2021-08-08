@@ -50,6 +50,9 @@ button {
 .margin-right {
 	margin-right: 1em;
 }
+.margin-left {
+	margin-left: 1em;
+}
 
 .list {
 	padding: 1rem 1.5rem;
@@ -95,4 +98,10 @@ textarea {
 	min-height: 1.7em;
 	height: 1.7em;
 	resize: vertical;
+}
+.nowrpap {
+	white-space: nowrap;
+}
+.inline {
+	display: inline;
 }

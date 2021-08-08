@@ -118,6 +118,10 @@ textarea.pg2 {
 .pg2-line select {
 	margin-right: 1rem;
 }
+.pg2-line-small select {
+	margin-right: 1rem;
+	margin-bottom: 0.5rem;
+}
 .pg2-itemline {
 	display: flex;
 }
@@ -198,4 +202,19 @@ textarea.pg2 {
 .pg2-block .pg2-btn-delete:focus,
 .pg2-block .pg2-btn-delete:hover {
 	color: tomato;
+}
+
+.pg2-inline-remove {
+	background-color: tomato;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    line-height: 1em;
+    width: 1em;
+    font-weight: 900;
+    margin-right: 0.2em;
+	outline: none;
+}
+.pg2-inline-remove:focus {
+	box-shadow: 0.05em 0.05em 0.2em blue;
 }

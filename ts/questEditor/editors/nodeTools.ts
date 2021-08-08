@@ -42,3 +42,39 @@ export function renderNode(node: ChapterPartNode, quest: QuestFull, chapter: Edi
 		default: throw new Error(`Unexpected node type: ${type}`);
 	}
 }
+export function createSelectItem(quest: QuestFull)
+{
+	const select = document.createElement("select");
+	const option = document.createElement("option");
+	option.value = "";
+	option.innerText = "Выберите предмет";
+	select.appendChild(option);
+	quest.items.forEach(item => {
+		const option = document.createElement("option");
+		option.value = item.id;
+		option.innerText = item.name;
+		select.appendChild(option);
+	});
+	return select;
+}
+export function createSelectCharacteristic(quest: QuestFull)
+{
+	const select = document.createElement("select");
+	const option = document.createElement("option");
+	option.value = "";
+	option.innerText = "Выберите характеристику";
+	select.appendChild(option);
+	quest.player.characteristics.forEach(ch => {
+		const option = document.createElement("option");
+		option.value = ch.id;
+		option.innerText = ch.name;
+		select.appendChild(option);
+	});
+	quest.characters.forEach(ch => {
+		const option = document.createElement("option");
+		option.value = ch.id;
+		option.innerText = `Ур. дружбы с ${ch.name}`;
+		select.appendChild(option);
+	});
+	return select;
+}

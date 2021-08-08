@@ -2,6 +2,7 @@ import { Button, Div, Span } from "../../../functions.js";
 import { ChapterContent_splitter } from "../../../questStructure.js";
 import { CheckBox, QuestFull } from "../../functions.js";
 import { Editor_Chapter } from "../chapter.js";
+import { Editor_condition } from "./condition.js";
 import { Editor_Node } from "./node.js";
 
 export class Editor_Node_splitter extends Editor_Node
@@ -28,6 +29,11 @@ export class Editor_Node_splitter extends Editor_Node
 		const content = Div([], [
 			Div("pg2-line-small", [
 				Span("margin-right", [], "Условие:"),
+				Button([], "Редактировать", async () =>
+				{
+					await new Editor_condition(this.quest, this.node.conditions).open();
+					this.chapter.save();
+				}),
 			]),
 			Div("pg2-line-small", [
 				CheckBox([], "Действия если условие верно")(
