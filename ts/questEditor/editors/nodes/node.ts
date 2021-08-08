@@ -13,7 +13,7 @@ export class Editor_Node
 	{
 		const header = Div("pg2-block-header", headerTexts);
 		const block = Div(["pg2-block-small", "pg2-collapsible"], [
-			Button("pg2-block-collapse", "-", btn =>
+			Button("pg2-block-collapse", collapsed ? "+" : "-", btn =>
 			{
 				collapsed = !collapsed;
 				btn.innerText = collapsed ? "+" : "-";
