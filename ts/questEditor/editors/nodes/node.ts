@@ -57,7 +57,7 @@ export class Editor_Node
 		}
 		else if (r == "del_this")
 		{
-			if (!await confirm_Popup(`элемент "${nodeName}"?`)) return;
+			if (!await confirm_Popup(`элемент "${nodeName}", и ВСЁ его содержимое?`)) return;
 			this.chapter.deleteNode(<any>this);
 		}
 	}
