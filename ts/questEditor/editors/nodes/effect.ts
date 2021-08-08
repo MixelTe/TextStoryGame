@@ -5,7 +5,7 @@ import { InputPlus, QuestFull } from "../../functions.js";
 export class Editor_Node_effect
 {
 	constructor(private quest: QuestFull, private node: ChapterContent_effect, private save: () => void) { }
-	public render(body: HTMLElement)
+	public render(body: HTMLElement, collapsed = true)
 	{
 		const text1 = Span();
 		const text2 = Span();
@@ -34,7 +34,6 @@ export class Editor_Node_effect
 					inp => { inp.valueAsNumber = this.node.duraction; text2.innerText = inp.value + "мс"; })(),
 			]),
 		]);
-		let collapsed = false;
 		const block = Div(["pg2-block-small", "pg2-collapsible"], [
 			Button("pg2-block-collapse", "-", btn =>
 			{
@@ -45,6 +44,7 @@ export class Editor_Node_effect
 			Div("pg2-block-header", [text1, text2]),
 			content,
 		]);
+		block.classList.toggle("pg2-collapsed", collapsed);
 		body.appendChild(block);
 	}
 	public static createNode()

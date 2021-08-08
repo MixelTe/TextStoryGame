@@ -4,7 +4,7 @@ import { QuestFull } from "../../functions.js";
 export class Editor_Node_splitter
 {
 	constructor(private quest: QuestFull, private node: ChapterContent_splitter, private save: () => void) { }
-	public render(body: HTMLElement)
+	public render(body: HTMLElement, collapsed = true)
 	{
 
 	}

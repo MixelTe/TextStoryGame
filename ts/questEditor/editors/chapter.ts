@@ -78,7 +78,7 @@ export class Editor_Chapter
 			default: throw new Error(`Unexpected value: ${this.select.value}`);
 		}
 		this.quest.chapters.chapters[this.index][index].content.push(node);
-		this.renderNode(node);
+		this.renderNode(node, false);
 	}
 	private async removeLast(index: number)
 	{
@@ -86,14 +86,14 @@ export class Editor_Chapter
 		if (this.nodeContainer.lastChild) this.nodeContainer.removeChild(this.nodeContainer.lastChild);
 		this.quest.chapters.chapters[this.index][index].content.pop();
 	}
-	private renderNode(node: ChapterPartNode)
+	private renderNode(node: ChapterPartNode, collapsed = true)
 	{
 		switch (node.type) {
-			case "speech": new Editor_Node_speech(this.quest, node, this.save).render(this.nodeContainer); break;
-			case "question": new Editor_Node_question(this.quest, node, this.save).render(this.nodeContainer); break;
-			case "effect": new Editor_Node_effect(this.quest, node, this.save).render(this.nodeContainer); break;
-			case "change": new Editor_Node_change(this.quest, node, this.save).render(this.nodeContainer); break;
-			case "splitter": new Editor_Node_splitter(this.quest, node, this.save).render(this.nodeContainer); break;
+			case "speech": new Editor_Node_speech(this.quest, node, this.save).render(this.nodeContainer, collapsed); break;
+			case "question": new Editor_Node_question(this.quest, node, this.save).render(this.nodeContainer, collapsed); break;
+			case "effect": new Editor_Node_effect(this.quest, node, this.save).render(this.nodeContainer, collapsed); break;
+			case "change": new Editor_Node_change(this.quest, node, this.save).render(this.nodeContainer, collapsed); break;
+			case "splitter": new Editor_Node_splitter(this.quest, node, this.save).render(this.nodeContainer, collapsed); break;
 			default: throw new Error(`Unexpected value: ${this.select.value}`);
 		}
 	}

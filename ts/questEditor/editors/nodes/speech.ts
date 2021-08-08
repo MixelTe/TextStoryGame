@@ -6,7 +6,7 @@ import { Editor_Options } from "../../options.js";
 export class Editor_Node_speech
 {
 	constructor(private quest: QuestFull, private node: ChapterContent_speech, private save: () => void) { }
-	public render(body: HTMLElement)
+	public render(body: HTMLElement, collapsed = true)
 	{
 		const deletedChar = this.node.character != "" && this.node.character != "author" && this.quest.characters.find(ch => ch.id == this.node.character) == undefined;
 		const emotionsContainer = Div("pg2-line-small");
@@ -67,7 +67,6 @@ export class Editor_Node_speech
 					inp => { inp.value = this.node.text; text2.innerText = this.node.text })(),
 			]),
 		])
-		let collapsed = false;
 		const block = Div(["pg2-block-small", "pg2-collapsible"], [
 			Button("pg2-block-collapse", "-", btn =>
 			{
@@ -78,6 +77,7 @@ export class Editor_Node_speech
 			Div("pg2-block-header", [text1, text2]),
 			content,
 		]);
+		block.classList.toggle("pg2-collapsed", collapsed);
 		body.appendChild(block);
 		if (Editor_Options.EnableEmotionSelect)
 		{

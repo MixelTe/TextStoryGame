@@ -4,7 +4,7 @@ import { QuestFull } from "../../functions.js";
 export class Editor_Node_change
 {
 	constructor(private quest: QuestFull, private node: ChapterContent_change, private save: () => void) { }
-	public render(body: HTMLElement)
+	public render(body: HTMLElement, collapsed = true)
 	{
 	}
 	public static createNode()
