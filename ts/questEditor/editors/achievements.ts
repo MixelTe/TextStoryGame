@@ -69,7 +69,7 @@ class Editor_Achievement
 					inp => inp.value = this.achievement.description)(),
 			]),
 			Div(["pg2-line", "ta-end"], [
-				Button([], "Удалить", this.deleteThis.bind(this, body)),
+				Button("pg2-btn-delete", "X", this.deleteThis.bind(this, body)),
 			]),
 		]);
 		body.appendChild(this.div);

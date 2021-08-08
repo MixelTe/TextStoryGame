@@ -25,7 +25,7 @@ export class Editor_Chapters
 		for (let i = 0; i < chapters.length; i++)
 		{
 			const chapter = chapters[i];
-			const button = Button([], "Удалить", async () =>
+			const button = Button("pg2-btn-delete", "X", async () =>
 			{
 				if (await this.removeChapter(i))
 				{

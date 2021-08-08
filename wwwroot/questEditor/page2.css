@@ -95,6 +95,7 @@ textarea.pg2 {
 	margin: 1rem 0rem;
 	border: 2px solid lime;
 	border-radius: 1em;
+	position: relative;
 }
 .pg2-block-small {
 	padding: 0.5rem;
@@ -151,4 +152,24 @@ textarea.pg2 {
 }
 .pg2-block-small.pg2-collapsed > div:nth-child(3) {
 	display: none;
+}
+
+.pg2-btn-delete {
+	font-size: 0.8em;
+}
+.pg2-block .pg2-btn-delete {
+	position: absolute;
+    right: 0;
+    bottom: 0;
+    border: none;
+    background-color: lime;
+    border-radius: 1em 0em;
+    width: 1.5rem;
+    height: 1.5rem;
+	user-select: none;
+	outline: none;
+}
+.pg2-block .pg2-btn-delete:focus,
+.pg2-block .pg2-btn-delete:hover {
+	color: tomato;
 }
