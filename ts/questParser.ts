@@ -196,8 +196,6 @@ function checkContent_splitter(content: ChapterContent_splitter)
 	}
 	if (typeof content.conditions != "object") error(`conditions must be object`);
 	checkCondition(content.conditions, "conditions", error);
-	checkContent(content.contentIfTrue);
-	checkContent(content.contentIfFalse);
 }
 
 function checkActions(content: Action[])
@@ -211,10 +209,6 @@ function checkActions(content: Action[])
 		if (typeof el.text != "string") error(`text must be string`);
 		if (typeof el.conditions == "object") checkCondition(el.conditions, "conditions", error);
 		if (typeof el.showConditions == "object") checkCondition(el.showConditions, "showConditions", error);
-		if (typeof el.content == "object")
-		{
-			checkContent(el.content);
-		}
 	});
 }
 function checkCondition(cond: Condition, n: string, error: (text: string) => void)

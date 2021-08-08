@@ -344,13 +344,9 @@ function checkContent_splitter(content: ChapterContent_splitter)
 	checkVar(content.conditions, "conditions", "object", false);
 	if (typeof content.conditions == "object") checkCondition(content.conditions, "Условие");
 	addText("Если условие верно:");
-	marginLeft += 2;
-	checkContent(content.contentIfTrue);
-	marginLeft -= 2;
+	addText(`Перейти к части: ${content.partIfTrue}`, false, false, ["text-goTo"]);
 	addText("Если условие ложно:");
-	marginLeft += 2;
-	checkContent(content.contentIfFalse);
-	marginLeft -= 2;
+	addText(`Перейти к части: ${content.partIfFalse}`, false, false, ["text-goTo"]);
 }
 
 function checkActions(content: Action[])
@@ -362,12 +358,9 @@ function checkActions(content: Action[])
 		checkVar(el.text, "text", "string");
 		if (typeof el.conditions == "object") checkCondition(el.conditions, "conditions");
 		if (typeof el.showConditions == "object") checkCondition(el.showConditions, "showConditions");
-		if (typeof el.content == "object")
+		if (typeof el.partId == "string")
 		{
-			addText("События при выборе этого действия:")
-			marginLeft += 2;
-			checkContent(el.content);
-			marginLeft -= 2;
+			addText(`Перейти к части: ${el.partId}`, false, false, ["text-goTo"]);
 		}
 	};
 }

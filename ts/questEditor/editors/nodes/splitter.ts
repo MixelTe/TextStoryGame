@@ -17,14 +17,14 @@ export class Editor_Node_splitter extends Editor_Node
 				Span("margin-right", [], "Если условие верно:"),
 				Button([], "Редактировать", () =>
 				{
-					this.node.partIfTrue = this.chapter.openNewPartEditor(this.node.partIfTrue);
+					this.node.partIfTrue = this.chapter.openNewPartEditor(this.node.partIfTrue || "");
 				}),
 			]),
 			Div("pg2-line-small", [
 				Span("margin-right", [], "Если условие ложно:"),
 				Button([], "Редактировать", () =>
 				{
-					this.node.partIfFalse = this.chapter.openNewPartEditor(this.node.partIfFalse);
+					this.node.partIfFalse = this.chapter.openNewPartEditor(this.node.partIfFalse || "");
 				}),
 			]),
 		]);
@@ -41,9 +41,7 @@ export class Editor_Node_splitter extends Editor_Node
 				itemsNot: [],
 				partsDone: [],
 				partsNotDone: [],
-			},
-			partIfTrue: "",
-			partIfFalse: "",
+			}
 		};
 		return node;
 	}

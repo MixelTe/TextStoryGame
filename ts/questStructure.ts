@@ -124,8 +124,8 @@ export interface ChapterContent_splitter
 {
 	type: "splitter";
 	conditions: Condition;
-	partIfTrue: string;
-	partIfFalse: string;
+	partIfTrue?: string;
+	partIfFalse?: string;
 }
 
 export interface Action
@@ -133,7 +133,7 @@ export interface Action
 	text: string;
 	conditions?: Condition;
 	showConditions?: Condition;
-	partId: string;
+	partId?: string;
 }
 
 export interface Condition
