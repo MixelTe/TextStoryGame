@@ -194,13 +194,13 @@ by - изменить значение на.
 {
 	"type": "splitter",
 	"conditions": {},
-	"contentIfTrue": [],
-	"contentIfFalse": []
+	"partIfTrue": [],
+	"partIfFalse": []
 }
 ```
 conditions - условия для развлетвления, описание объекта ниже.
 
-contentIfTrue, contentIfFalse - такие же поля как и в самом начале part.json, сюда можно написать несколько реплик, эффектов или даже вопросов, которые будут показаны при выборе этого варианта действия.
+partIfTrue, partIfFalse - id части, которая будет показана при выборе этого варианта действия.
 
 Вопрос с вариантами ответа:
 ``` json
@@ -218,16 +218,16 @@ contentIfTrue, contentIfFalse - такие же поля как и в самом
 	"text": "Действие",
 	"conditions": {},
 	"showConditions": {},
-	"content": []
+	"partId": []
 }
 ```
 conditions - условие для выбора этого варианта
 
 showConditions - условие для показа этого варианта игроку
 
-content - такое же поле как и в самом начале part.json, сюда можно написать несколько реплик, эффектов или даже вопросов, которые будут показаны при выборе этого варианта действия.
+partId - id части, которая будет показана при выборе этого варианта действия.
 
-content, conditions и showConditions - необязательно указывать
+partId, conditions и showConditions - необязательно указывать
 
 ### Содержимое conditions и showConditions:
 ``` json

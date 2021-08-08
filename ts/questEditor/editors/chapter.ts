@@ -8,14 +8,17 @@ export class Editor_Chapter
 	private partContent = Div("pg2-line");
 	private nodeContainer = Div("pg2-line");
 	private select = Select();
+	private partId = "0";
 	private partIndex = 0;
-	constructor(private quest: QuestFull, private index: number, public save: () => void) { }
-	public render(body: HTMLElement, partIndex = 0, callback = () => {})
+	public openNewPartEditor = (partId: string) => "0";
+	constructor(private quest: QuestFull, public index: number, public save: () => void) { }
+	public render(body: HTMLElement, partId = "0", callback = () => {})
 	{
 		this.partContent = Div("pg2-line");
 		body.innerHTML = "";
-		this.partIndex = partIndex;
-		if (partIndex == 0)
+		this.partId = partId;
+		this.partIndex = this.getIndex(this.partId);
+		if (this.partId == "0")
 		{
 			body.appendChild(Div([], [
 				Div("pg2-line", [
@@ -35,8 +38,15 @@ export class Editor_Chapter
 				this.partContent,
 			]));
 		}
-		this.createIfNotExist();
+		this.openNewPartEditor = (newPartId: string) =>
+		{
+			return new Editor_Chapter(this.quest, this.index, this.save).render(body, newPartId, () =>
+			{
+				this.render(body, partId, callback);
+			});
+		}
 		this.renderPart();
+		return this.quest.chapters.chapters[this.index][this.partIndex].id;
 	}
 	private renderPart()
 	{
@@ -75,19 +85,30 @@ export class Editor_Chapter
 		this.nodeContainer.appendChild(el);
 	}
 
-	private createIfNotExist()
+	private getIndex(id: string)
 	{
 		const chapter = this.quest.chapters.chapters[this.index];
-		if (chapter.length == 0)
+		const i = chapter.findIndex(ch => ch.id == id);
+		if (i < 0)
 		{
-			chapter.push(this.createPart());
+			const part = this.createPart(this.createNewPartId());
+			chapter.push(part);
+			return chapter.length - 1;
 		}
+		return i;
 	}
-	private createPart()
+	private createNewPartId()
+	{
+		const chapter = this.quest.chapters.chapters[this.index];
+		let num = parseInt(chapter[chapter.length - 1].id);
+		if (isNaN(num)) num = Date.now();
+		return `${num + 1}`;
+	}
+	private createPart(id: string)
 	{
 		const part = <ChapterPart>{
 			backImg: "",
-			id: "0",
+			id,
 			content: [],
 		};
 		return part;
