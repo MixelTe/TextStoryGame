@@ -2,12 +2,14 @@ import { Button, confirm_Popup, Div } from "../../../functions.js";
 import { contextMenu, Popup } from "../../../popup.js";
 import { ChapterPartNode } from "../../../questStructure.js";
 import { QuestFull } from "../../functions.js";
+import { Editor_Options } from "../../options.js";
 import { Editor_Chapter } from "../chapter.js";
 import { createNode, createNodeTypeSelect } from "../nodeTools.js";
 
 export class Editor_Node
 {
 	public nodeBody = Div();
+	protected node: unknown;
 	constructor(protected quest: QuestFull, protected chapter: Editor_Chapter) { }
 	protected create(content: HTMLDivElement, headerTexts: HTMLElement[], collapsed: boolean)
 	{
@@ -34,13 +36,16 @@ export class Editor_Node
 	{
 		let nodeNameShort = nodeName.slice(0, 50);
 		if (nodeName.length > 50) nodeNameShort += "...";
-		const r = await contextMenu(nodeNameShort, [
+		const menu = [
 			{ text: "Добавить элемент", subItems: [
 					{ text: "до", id: "add_before" },
 					{ text: "после", id: "add_after" },
-			]},
+				]
+			},
 			{ text: "Удалить этот элемент", id: "del_this" },
-		]);
+		];
+		if (Editor_Options.PrintNodeOption) menu.push({ text: "Print node", id: "print_node" });
+		const r = await contextMenu(nodeNameShort, menu);
 		if (r == "add_before")
 		{
 			this.addNodePopup(`Добавить до "${nodeNameShort}"`, node =>
@@ -59,6 +64,10 @@ export class Editor_Node
 		{
 			if (!await confirm_Popup(`элемент "${nodeName}", и ВСЁ его содержимое?`)) return;
 			this.chapter.deleteNode(<any>this);
+		}
+		else if (r == "print_node")
+		{
+			console.log(this.node);
 		}
 	}
 	private async addNodePopup(title: string, add: (node: ChapterPartNode) => void)

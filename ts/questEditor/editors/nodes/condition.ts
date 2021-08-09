@@ -2,7 +2,7 @@ import { Button, Div, Input, Span } from "../../../functions.js";
 import { Popup } from "../../../popup.js";
 import { Condition } from "../../../questStructure.js";
 import { CheckBox, QuestFull } from "../../functions.js";
-import { createSelectCharacteristic, createSelectItem } from "../nodeTools.js";
+import { createItems, createSelectCharacteristic, itemAdder } from "../nodeTools.js";
 
 export class Editor_condition
 {
@@ -13,15 +13,15 @@ export class Editor_condition
 	constructor(private quest: QuestFull, private condition: Condition) { }
 	private render(body: HTMLDivElement)
 	{
-		const itemContainer = this.createItems(this.condition.items);
+		const itemContainer = createItems(this.quest, this.condition.items);
 		const items = Div([], [
 			itemContainer,
-			this.itemAdder(itemContainer, this.condition.items),
+			itemAdder(this.quest, itemContainer, this.condition.items),
 		]);
-		const itemNotContainer = this.createItems(this.condition.itemsNot);
+		const itemNotContainer = createItems(this.quest, this.condition.itemsNot);
 		const itemsNot = Div([], [
 			itemNotContainer,
-			this.itemAdder(itemNotContainer, this.condition.itemsNot),
+			itemAdder(this.quest, itemNotContainer, this.condition.itemsNot),
 		]);
 		const characContainer = this.createCharacs();
 		const charac = Div([], [
@@ -95,54 +95,6 @@ export class Editor_condition
 				}
 			}
 		}
-	}
-
-	private createItems(items: string[])
-	{
-		const container = Div("pg2-line-small", []);
-		for (let i = 0; i < items.length; i++) {
-			this.createItem(i, items, container);
-			if (i < items.length - 1)
-			{
-				container.appendChild(Span([], [], ", "));
-			}
-		}
-		return container;
-	}
-	private createItem(i: number, items: string[], container: HTMLDivElement)
-	{
-		const item = items[i];
-		const itemName = this.quest.items.find(el => el.id == item);
-		const style = itemName == undefined ? ["color-error"] : [];
-		const el = Span("nowrpap", [
-			Button("pg2-inline-remove", "-", () =>
-			{
-				const i = items.indexOf(item);
-				if (i >= 0) items.splice(i, 1);
-				if (el.previousSibling) container.removeChild(el.previousSibling);
-				else if (el.nextSibling) container.removeChild(el.nextSibling);
-				container.removeChild(el);
-			}),
-			Span(style, [], itemName?.name ?? "Удалённый предмет"),
-		]);
-		container.appendChild(el);
-	}
-	private itemAdder(container: HTMLDivElement, items: string[])
-	{
-		const select = createSelectItem(this.quest)
-		const line = Div("pg2-line-small", [
-			select,
-			Button([], "Добавить предмет", () =>
-			{
-				if (typeof select.value == "string" && select.value != "")
-				{
-					if (items.length > 0) container.appendChild(Span([], [], ", "));
-					items.push(select.value);
-					this.createItem(items.length - 1, items, container);
-				}
-			}),
-		]);
-		return line;
 	}
 
 	private createCharacs()

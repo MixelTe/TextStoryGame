@@ -1,7 +1,7 @@
 import { Button, confirm_Popup, Div } from "../../functions.js";
 import { Characteristic } from "../../questStructure.js";
 import { CheckBox, InputPlus, QuestFull, TextAreaPlus } from "../functions.js";
-import { createSelectItem } from "./nodeTools.js";
+import { createSelectEl } from "./nodeTools.js";
 
 export class Editor_Player
 {
@@ -13,7 +13,7 @@ export class Editor_Player
 	{
 		this.container_items = Div();
 		this.container_charac = Div();
-		this.selected_item = createSelectItem(this.quest);
+		this.selected_item = createSelectEl("Выберите предмет", this.quest.items);
 		body.innerHTML = "";
 		body.appendChild(Div([], [
 			Div("pg2-line", [

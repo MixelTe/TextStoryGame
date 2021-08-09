@@ -1,4 +1,4 @@
-import { Option, Select } from "../../functions.js";
+import { Button, Div, Option, Select, Span } from "../../functions.js";
 import { ChapterPartNode } from "../../questStructure.js";
 import { QuestFull } from "../functions.js";
 import { Editor_Chapter } from "./chapter.js";
@@ -42,17 +42,17 @@ export function renderNode(node: ChapterPartNode, quest: QuestFull, chapter: Edi
 		default: throw new Error(`Unexpected node type: ${type}`);
 	}
 }
-export function createSelectItem(quest: QuestFull)
+export function createSelectEl(name: string, els: { id: string, name: string }[])
 {
 	const select = document.createElement("select");
 	const option = document.createElement("option");
 	option.value = "";
-	option.innerText = "Выберите предмет";
+	option.innerText = name;
 	select.appendChild(option);
-	quest.items.forEach(item => {
+	els.forEach(el => {
 		const option = document.createElement("option");
-		option.value = item.id;
-		option.innerText = item.name;
+		option.value = el.id;
+		option.innerText = el.name;
 		select.appendChild(option);
 	});
 	return select;
@@ -77,4 +77,73 @@ export function createSelectCharacteristic(quest: QuestFull)
 		select.appendChild(option);
 	});
 	return select;
+}
+
+export function createItems(quest: QuestFull, items: string[], onChange: () => void = () => {})
+{
+	return createInlineList(quest.items, items, onChange);
+}
+export function itemAdder(quest: QuestFull, container: HTMLDivElement, items: string[], onChange: () => void = () => {}, resetSelect = false, onAdd: (v: string) => boolean = () => true)
+{
+	return elAdder(quest.items, container, items, "предмет", onChange, resetSelect, onAdd);
+}
+export function createAchievements(quest: QuestFull, achievements: string[], onChange: () => void = () => {})
+{
+	return createInlineList(quest.achievements, achievements, onChange);
+}
+export function achievementsAdder(quest: QuestFull, container: HTMLDivElement, achievements: string[], onChange: () => void = () => {}, resetSelect = false, onAdd: (v: string) => boolean = () => true)
+{
+	return elAdder(quest.achievements, container, achievements, "достижение", onChange, resetSelect, onAdd);
+}
+
+function createInlineList(base: { id: string, name: string }[], ids: string[], onChange: () => void = () => { })
+{
+	const container = Div("pg2-line-small", []);
+	for (let i = 0; i < ids.length; i++) {
+		createEl(base, i, ids, container, onChange);
+		if (i < ids.length - 1)
+		{
+			container.appendChild(Span([], [], ", "));
+		}
+	}
+	return container;
+}
+function createEl(base: { id: string, name: string }[], i: number, ids: string[], container: HTMLDivElement, onChange: () => void = () => {})
+{
+	const item = ids[i];
+	const itemName = base.find(el => el.id == item);
+	const style = itemName == undefined ? ["color-error"] : [];
+	const el = Span("nowrpap", [
+		Button("pg2-inline-remove", "-", () =>
+		{
+			const i = ids.indexOf(item);
+			if (i >= 0) ids.splice(i, 1);
+			if (el.previousSibling) container.removeChild(el.previousSibling);
+			else if (el.nextSibling) container.removeChild(el.nextSibling);
+			container.removeChild(el);
+			onChange();
+		}),
+		Span(style, [], itemName?.name ?? "Удалённый предмет"),
+	]);
+	container.appendChild(el);
+}
+function elAdder(base: { id: string, name: string }[], container: HTMLDivElement, items: string[], name: string, onChange: () => void = () => {}, resetSelect = false, onAdd: (v: string) => boolean = () => true)
+{
+	const select = createSelectEl("Выберите " + name, base);
+	const line = Div("pg2-line-small", [
+		select,
+		Button([], "Добавить " + name, () =>
+		{
+			if (typeof select.value == "string" && select.value != "")
+			{
+				if (!onAdd(select.value)) return;
+				if (items.length > 0) container.appendChild(Span([], [], ", "));
+				items.push(select.value);
+				createEl(base, items.length - 1, items, container);
+				onChange();
+				if (resetSelect) select.value = "";
+			}
+		}),
+	]);
+	return line;
 }
