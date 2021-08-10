@@ -3,6 +3,7 @@ import * as SVG from "./svg.js"
 
 const PREFIX = "questEditor.";
 const KEY = "quests";
+const KEYNAME = "username";
 const P = (key: string) => PREFIX + key;
 
 export function addQuest(quest: QuestItem)
@@ -87,6 +88,15 @@ function createEmptyQuest()
 	}
 	return quest;
 }
+export function getName()
+{
+	return localStorage.getItem(P(KEYNAME)) || "";
+}
+export function setName(name: string)
+{
+	return localStorage.setItem(P(KEYNAME), name);
+}
+
 
 export function InputPlus(classes?: string[] | string, type?: string, placeholder?: string)
 {

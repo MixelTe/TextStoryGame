@@ -1,7 +1,8 @@
 import { Button, confirm_Popup, Div, Input } from "../functions.js";
 import { contextMenu } from "../popup.js";
 import { Editor } from "./editor.js";
-import { addQuest, Form, getQuests, removeQuest } from "./functions.js";
+import { addQuest, Form, getQuest, getQuests, removeQuest } from "./functions.js";
+import { Sender } from "./sender.js";
 
 let input = render();
 
@@ -49,6 +50,10 @@ function renderQuests()
 						}
 					}
 				}
+			}
+			else if (r == "send")
+			{
+				new Sender().open(getQuest(quest.key));
 			}
 		});
 		const div = Div([], [
