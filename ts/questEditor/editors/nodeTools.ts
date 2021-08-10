@@ -130,7 +130,7 @@ function createEl(base: { id: string, name: string }[], i: number, ids: string[]
 function elAdder(base: { id: string, name: string }[], container: HTMLDivElement, items: string[], name: string, onChange: () => void = () => {}, resetSelect = false, onAdd: (v: string) => boolean = () => true)
 {
 	const select = createSelectEl("Выберите " + name, base);
-	const line = Div("pg2-line-small", [
+	const line = Div("pg2-line-small-wrap", [
 		select,
 		Button([], "Добавить " + name, () =>
 		{

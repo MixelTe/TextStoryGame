@@ -1,8 +1,9 @@
-import { Div, Option, Select, SelectPlus, Span } from "../../../functions.js";
-import { ChapterContent_question } from "../../../questStructure.js";
-import { QuestFull, TextAreaPlus } from "../../functions.js";
+import { Button, Div, Option, Select, SelectPlus, Span } from "../../../functions.js";
+import { Action, ChapterContent_question, Condition } from "../../../questStructure.js";
+import { CheckBox, QuestFull, TextAreaPlus } from "../../functions.js";
 import { Editor_Options } from "../../options.js";
 import { Editor_Chapter } from "../chapter.js";
+import { Editor_condition } from "./condition.js";
 import { Editor_Node } from "./node.js";
 
 export class Editor_Node_question extends Editor_Node
@@ -12,6 +13,7 @@ export class Editor_Node_question extends Editor_Node
 	{
 		const deletedChar = this.node.character != "" && this.node.character != "author" && this.quest.characters.find(ch => ch.id == this.node.character) == undefined;
 		const emotionsContainer = Div("pg2-line-small");
+		const actionsContainer = Div("pg2-line-small");
 		const text1 = Span();
 		const text2 = Span();
 		const content = Div([], [
@@ -39,7 +41,7 @@ export class Editor_Node_question extends Editor_Node
 							if (select.value != "")
 							{
 								this.node.character = select.value;
-								text1.innerText = select.selectedOptions[0].innerText + ": ";
+								text1.innerText = "?: " + select.selectedOptions[0].innerText + ": ";
 								this.chapter.save();
 							}
 						}
@@ -56,7 +58,7 @@ export class Editor_Node_question extends Editor_Node
 						else
 						{
 							select.value = this.node.character;
-							text1.innerText = select.selectedOptions[0].innerText + ": ";
+							text1.innerText = "?: " + select.selectedOptions[0].innerText + ": ";
 						}
 						if (select.value == "author") emotionsContainer.style.display = "none";
 					}
@@ -65,10 +67,23 @@ export class Editor_Node_question extends Editor_Node
 			emotionsContainer,
 			Div("pg2-line-small", [
 				TextAreaPlus("Текст/речь", [])(
-					inp => { this.node.text = inp.value; this.chapter.save(); text2.innerText = this.node.text},
+					inp => { this.node.text = inp.value; this.chapter.save(); text2.innerText = this.node.text },
 					inp => { inp.value = this.node.text; text2.innerText = this.node.text })(),
 			]),
-		])
+			Div("pg2-line-small", [
+				Span([], [], "Варианты ответов/действий:"),
+			]),
+			actionsContainer,
+			Div("pg2-line-small", [
+				Button([], "Добавить", () =>
+				{
+					const action = this.createAction();
+					this.node.actions.push(action);
+					this.addAction(action, actionsContainer, false);
+				}),
+			]),
+		]);
+		this.createActions(actionsContainer);
 		if (Editor_Options.EnableEmotionSelect)
 		{
 			emotionsContainer.appendChild(Span("margin-right", [], "Эмоция:"));
@@ -84,6 +99,120 @@ export class Editor_Node_question extends Editor_Node
 		}
 		return this.create(content, [text1, text2], collapsed);
 	}
+	private createActions(actionsContainer: HTMLDivElement)
+	{
+		for (let i = 0; i < this.node.actions.length; i++) {
+			this.addAction(this.node.actions[i], actionsContainer);
+		}
+	}
+	private addAction(action: Action, actionsContainer: HTMLDivElement, collapsed = true)
+	{
+		const header = Div("pg2-block-header");
+		const condEl = Div("pg2-line-small", [
+			Button([], "Редактировать", async () =>
+			{
+				if (!action.conditions) action.conditions = Editor_condition.createNode();
+				await new Editor_condition(this.quest, action.conditions).open();
+				this.chapter.save();
+			}),
+		]);
+		let cond: Condition | undefined = undefined;
+		const condShowEl = Div("pg2-line-small", [
+			Button([], "Редактировать", async () =>
+			{
+				if (!action.showConditions) action.showConditions = Editor_condition.createNode();
+				await new Editor_condition(this.quest, action.showConditions).open();
+				this.chapter.save();
+			}),
+		]);
+		let condShow: Condition | undefined = undefined;
+		const partEl = Div("pg2-line-small", [
+			Button([], "Редактировать", () =>
+			{
+				action.partId = this.chapter.openNewPartEditor(action.partId || "");
+			}),
+		]);
+		const partNotEmpty = this.chapter.hasPartContent(action.partId);
+		partEl.style.display = partNotEmpty ? "" : "none";
+		const content = Div([], [
+			Div("pg2-line-small", [
+				TextAreaPlus("Ответ/действие", [])(
+					inp => { action.text = inp.value; this.chapter.save(); header.innerText = action.text },
+					inp => { inp.value = action.text; header.innerText = action.text })(),
+			]),
+			Div("pg2-line-small", [
+				CheckBox([], "Можно выбрать только при условии")(
+					inp =>
+					{
+						condEl.style.display = inp.checked ? "" : "none";
+						[cond, action.conditions] = [action.conditions, cond];
+						this.chapter.save();
+					},
+					inp =>
+					{
+						inp.checked = action.conditions != undefined;
+						condEl.style.display = inp.checked ? "" : "none";
+						if (!inp.checked) [cond, action.conditions] = [action.conditions, cond];
+					})(),
+			]),
+			condEl,
+			Div("pg2-line-small", [
+				CheckBox([], "Будет показано только при условии")(
+					inp =>
+					{
+						condShowEl.style.display = inp.checked ? "" : "none";
+						[condShow, action.showConditions] = [action.showConditions, condShow];
+						this.chapter.save();
+					},
+					inp =>
+					{
+						inp.checked = action.showConditions != undefined;
+						condShowEl.style.display = inp.checked ? "" : "none";
+						if (!inp.checked) [condShow, action.showConditions] = [action.showConditions, condShow];
+					})(),
+			]),
+			condShowEl,
+			Div("pg2-line-small", [
+				CheckBox([], "Действия при выборе этого варианта")(
+					inp =>
+					{
+						partEl.style.display = inp.checked ? "" : "none";
+					},
+					inp =>
+					{
+						inp.checked = partNotEmpty;
+						if (partNotEmpty) inp.disabled = true;
+					})(),
+			]),
+			partEl,
+		]);
+		const block = Div(["pg2-block-small", "pg2-collapsible"], [
+			Button("pg2-block-collapse", collapsed ? "+" : "-", btn =>
+			{
+				collapsed = !collapsed;
+				btn.innerText = collapsed ? "+" : "-";
+				block.classList.toggle("pg2-collapsed", collapsed);
+			}),
+			Button("pg2-block-contextmenu", "x", () =>
+			{
+				const i = this.node.actions.indexOf(action);
+				if (i >= 0) this.node.actions.splice(i, 1);
+				actionsContainer.removeChild(block);
+			}),
+			header,
+			content,
+		]);
+		block.classList.toggle("pg2-collapsed", collapsed);
+		actionsContainer.appendChild(block);
+	}
+	private createAction()
+	{
+		const action = <Action>{
+			text: "",
+		};
+		return action;
+	}
+
 	public static createNode()
 	{
 		const node = <ChapterContent_question>{

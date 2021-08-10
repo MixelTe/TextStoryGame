@@ -46,6 +46,12 @@ textarea.pg2 {
 .pg2-line-wrap * {
 	margin-top: 0.5rem;
 }
+.pg2-line-small-wrap {
+	margin: 0.4rem 0rem;
+}
+.pg2-line-small-wrap * {
+	margin-top: 0.5rem;
+}
 .pg2-inputDiv {
 	display: flex;
 	justify-content: space-between;
@@ -115,12 +121,10 @@ textarea.pg2 {
 	border: 0.12em solid lime;
 	border-radius: 0.5em;
 }
-.pg2-line select {
+.pg2-line select,
+.pg2-line-small select,
+.pg2-line-small-wrap select {
 	margin-right: 1rem;
-}
-.pg2-line-small select {
-	margin-right: 1rem;
-	margin-bottom: 0.5rem;
 }
 .pg2-itemline {
 	display: flex;

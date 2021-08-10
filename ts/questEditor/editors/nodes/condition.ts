@@ -209,4 +209,15 @@ export class Editor_condition
 			this.popup.open();
 		});
 	}
+	public static createNode()
+	{
+		const node = <Condition>{
+			characteristics: [],
+			items: [],
+			itemsNot: [],
+			partsDone: [],
+			partsNotDone: [],
+		};
+		return node;
+	}
 }

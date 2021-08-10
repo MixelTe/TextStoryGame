@@ -69,13 +69,7 @@ export class Editor_Node_splitter extends Editor_Node
 	{
 		const node = <ChapterContent_splitter>{
 			type: "splitter",
-			conditions: {
-				characteristics: [],
-				items: [],
-				itemsNot: [],
-				partsDone: [],
-				partsNotDone: [],
-			}
+			conditions: Editor_condition.createNode(),
 		};
 		return node;
 	}
