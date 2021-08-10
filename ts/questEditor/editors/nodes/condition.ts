@@ -108,21 +108,23 @@ export class Editor_condition
 	}
 	private createCharac(i: number, collapsed = true)
 	{
-		const header = Div("pg2-block-header");
+		const text1 = Span();
+		const text2 = Span();
+		const text3 = Span();
 		const ch = this.condition.characteristics[i];
 		const select = createSelectCharacteristic(this.quest);
 		select.value = ch.id;
 		select.addEventListener("change", () =>
 		{
 			ch.id = select.value;
-			header.innerText = select.selectedOptions[0].innerText;
+			text2.innerText = select.selectedOptions[0].innerText;
 		});
 		const lessInput = Input("margin-left", "number");
 		lessInput.valueAsNumber = ch.lessThen || 0;
-		lessInput.addEventListener("input", () => ch.lessThen = lessInput.valueAsNumber);
+		lessInput.addEventListener("input", () => { ch.lessThen = lessInput.valueAsNumber; text3.innerText = ` < ${ch.lessThen}`});
 		const moreInput = Input("margin-left", "number");
 		moreInput.valueAsNumber = ch.moreThen || 0;
-		moreInput.addEventListener("input", () => ch.moreThen = moreInput.valueAsNumber);
+		moreInput.addEventListener("input", () => { ch.moreThen = moreInput.valueAsNumber; text1.innerText = `${ch.moreThen} <`});
 		const content = Div([], [
 			Div("pg2-line-small", [
 				select,
@@ -133,11 +135,13 @@ export class Editor_condition
 					{
 						lessInput.style.display = inp.checked ? "" : "none";
 						ch.lessThen = inp.checked ? lessInput.valueAsNumber : NaN
+						text3.innerText = inp.checked ? ` < ${ch.lessThen}` : "";
 					},
 					inp =>
 					{
 						inp.checked = ch.lessThen != undefined;
 						lessInput.style.display = inp.checked ? "" : "none";
+						text3.innerText = inp.checked ? ` < ${ch.lessThen}` : "";
 					}
 				)(),
 				lessInput,
@@ -148,17 +152,19 @@ export class Editor_condition
 					{
 						moreInput.style.display = inp.checked ? "" : "none";
 						ch.moreThen = inp.checked ? moreInput.valueAsNumber : NaN
+						text1.innerText = inp.checked ? `${ch.moreThen} < ` : "";
 					},
 					inp =>
 					{
 						inp.checked = ch.moreThen != undefined;
 						moreInput.style.display = inp.checked ? "" : "none";
+						text1.innerText = inp.checked ? `${ch.moreThen} < ` : "";
 					}
 				)(),
 				moreInput,
 			]),
 		]);
-		header.innerText = select.selectedOptions[0].innerText;
+		text2.innerText = select.selectedOptions[0].innerText;
 		const block = Div(["pg2-block-small", "pg2-collapsible"], [
 			Button("pg2-block-collapse", collapsed ? "+" : "-", btn =>
 			{
@@ -172,7 +178,7 @@ export class Editor_condition
 				if (i >= 0) this.condition.characteristics.splice(i, 1);
 				block.parentElement?.removeChild(block);
 			}),
-			header,
+			Div("pg2-block-header", [text1, text2, text3]),
 			content,
 		]);
 		block.classList.toggle("pg2-collapsed", collapsed);
