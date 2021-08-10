@@ -63,6 +63,9 @@ export class Editor_Chapters
 	private async removeChapter(index: number)
 	{
 		if (!await confirm_Popup(`главу ${this.quest.chapters.chaptersList[index].name}?`)) return false;
+		if (!await confirm_Popup(`главу ${this.quest.chapters.chaptersList[index].name}? И ВСЁ её содержимое!`, true)) return false;
+		if (!await confirm_Popup(`главу ${this.quest.chapters.chaptersList[index].name}? И ВСЁ её содержимое! Безвозвратно!`)) return false;
+		if (!await confirm_Popup(`главу ${this.quest.chapters.chaptersList[index].name}? И ВСЁ её содержимое! Безвозвратно! Насовсем!`, true)) return false;
 		this.quest.chapters.chaptersList.splice(index, 1);
 		this.quest.chapters.chapters.splice(index, 1);
 		this.save();
