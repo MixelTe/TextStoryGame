@@ -19,6 +19,8 @@ export class Popup
 	public get cancelBtn(): boolean { return this.cancelBtnEl.style.display != "none" }
 	public set focusOn(v: FocusEls) { this.focusEl = v; this.setFocus(); };
 	public get focusOn() { return this.focusEl; };
+	public set reverse(v: boolean) { this.footer.classList.toggle("popup-footer-reverse", v); }
+	public get reverse(): boolean { return this.footer.classList.contains("popup-footer-reverse"); }
 	public closeOnBackClick = true;
 	public closeEscape = true;
 
@@ -30,6 +32,7 @@ export class Popup
 	private cancelBtnEl = Button([], "Отмена", this.close.bind(this, false));
 	private okBtnEl = Button([], "ОК", this.close.bind(this, true));
 	private closeBtnEl = Button("popup-close", "x", this.close.bind(this, false));
+	private footer = Div("popup-footer", [this.cancelBtnEl, this.okBtnEl]);
 	private focusEl: FocusEls = "ok";
 	private resolve: ((value: boolean) => void) | null = null;
 	private onKeyUp: (e: KeyboardEvent) => void = () => {};
@@ -42,7 +45,7 @@ export class Popup
 				this.closeBtnEl,
 			]),
 			Div("popup-content", [this.content]),
-			Div("popup-footer", [ this.cancelBtnEl, this.okBtnEl ]),
+			this.footer,
 		]));
 		this.body.addEventListener("click", e =>
 		{

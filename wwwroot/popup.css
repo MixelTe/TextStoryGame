@@ -86,6 +86,9 @@
 	background-color: var(--popup-border);
 	margin: 1em -1px -0.2em -1px;
 }
+.popup-footer-reverse {
+	flex-direction: row-reverse;
+}
 .popup-footer button {
 	position: relative;
 	border: none;

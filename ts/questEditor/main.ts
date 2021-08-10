@@ -33,13 +33,21 @@ function renderQuests()
 				{ text: "Отправить", id: "send" },
 				{ text: "Удалить", id: "delete" },
 			]);
-			if (r == null) return;
 			if (r == "delete")
 			{
 				if (await confirm_Popup(`квест ${quest.name}?`))
 				{
-						removeQuest(quest.key);
-						input = render();
+					if (await confirm_Popup(`квест ${quest.name}? Вы не сможете восстановить квест!`, true))
+					{
+						if (await confirm_Popup(`квест ${quest.name}? Вы потеряете ВСЁ содержимое!`))
+						{
+							if (await confirm_Popup(`квест ${quest.name}? Вы точно уверенны?`, true))
+							{
+								removeQuest(quest.key);
+								input = render();
+							}
+						}
+					}
 				}
 			}
 		});

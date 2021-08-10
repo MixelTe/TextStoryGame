@@ -114,12 +114,13 @@ export function copyText(text: string)
 	document.execCommand('copy');
 	document.body.removeChild(el);
 }
-export async function confirm_Popup(text: string, prefix = "Вы уверенны, что хотите удалить ")
+export async function confirm_Popup(text: string, reverse = false, prefix = "Вы уверенны, что хотите удалить ")
 {
 	const popup = new Popup();
 	popup.title = "Удаление";
 	popup.content.innerText = prefix + text;
 	popup.focusOn = "cancel";
+	popup.reverse = reverse;
 	return popup.openAsync();
 }
 
