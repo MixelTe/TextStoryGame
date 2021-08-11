@@ -73,12 +73,6 @@ export class Editor_Chapter
 		this.quest.chapters.chapters[this.index][this.partIndex].content.push(node);
 		this.renderNode(node, false);
 	}
-	private async removeLast()
-	{
-		if (!await confirm_Popup(`последний элемент?`)) return;
-		if (this.nodeContainer.lastChild) this.nodeContainer.removeChild(this.nodeContainer.lastChild);
-		this.quest.chapters.chapters[this.index][this.partIndex].content.pop();
-	}
 	private renderNode(node: ChapterPartNode, collapsed = true)
 	{
 		const el = renderNode(node, this.quest, this, collapsed);
@@ -100,6 +94,7 @@ export class Editor_Chapter
 	private createNewPartId()
 	{
 		const chapter = this.quest.chapters.chapters[this.index];
+		if (chapter.length == 0) return "0";
 		let num = parseInt(chapter[chapter.length - 1].id);
 		if (isNaN(num)) num = Date.now();
 		return `${num + 1}`;
