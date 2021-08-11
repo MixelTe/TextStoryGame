@@ -1,4 +1,4 @@
-import { Button, confirm_Popup, Div, Select } from "../../functions.js";
+import { Button, Div, Select } from "../../functions.js";
 import { InputPlus } from "../functions.js";
 import { createNode, createNodeTypeSelect, renderNode } from "./nodeTools.js";
 export class Editor_Chapter {
@@ -63,13 +63,6 @@ export class Editor_Chapter {
         this.quest.chapters.chapters[this.index][this.partIndex].content.push(node);
         this.renderNode(node, false);
     }
-    async removeLast() {
-        if (!await confirm_Popup(`последний элемент?`))
-            return;
-        if (this.nodeContainer.lastChild)
-            this.nodeContainer.removeChild(this.nodeContainer.lastChild);
-        this.quest.chapters.chapters[this.index][this.partIndex].content.pop();
-    }
     renderNode(node, collapsed = true) {
         const el = renderNode(node, this.quest, this, collapsed);
         this.nodeContainer.appendChild(el);
@@ -86,6 +79,8 @@ export class Editor_Chapter {
     }
     createNewPartId() {
         const chapter = this.quest.chapters.chapters[this.index];
+        if (chapter.length == 0)
+            return "0";
         let num = parseInt(chapter[chapter.length - 1].id);
         if (isNaN(num))
             num = Date.now();
