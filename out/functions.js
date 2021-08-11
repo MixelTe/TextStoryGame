@@ -1,3 +1,4 @@
+import { Popup } from "./popup.js";
 export function Div(classes, children, innerText) {
     return initEl("div", classes, children, innerText);
 }
@@ -31,6 +32,50 @@ export function TextArea(placeholder = "", classes = []) {
     });
     return textarea;
 }
+export function Select(classes, children, onChange, onCreate) {
+    const select = initEl("select", classes, children, undefined);
+    if (onChange) {
+        select.addEventListener("change", () => onChange(select));
+    }
+    if (onCreate)
+        onCreate(select);
+    return select;
+}
+export function SelectPlus(createOptions, onChange, onCreate, classes) {
+    const select = initEl("select", classes, undefined, undefined);
+    createOptions((innerText, value, classes) => {
+        const option = Option(innerText, value, classes);
+        select.appendChild(option);
+        return option;
+    });
+    if (onChange) {
+        select.addEventListener("change", () => onChange(select));
+    }
+    if (onCreate)
+        onCreate(select);
+    return select;
+}
+export function SelectArray(array, getParam, onChange, onCreate, classes) {
+    const select = initEl("select", classes, undefined, undefined);
+    for (let i = 0; i < array.length; i++) {
+        const el = getParam(array[i]);
+        select.appendChild(Option(el.innerText, el.value, el.classes));
+    }
+    if (onChange) {
+        select.addEventListener("change", () => onChange(select));
+    }
+    if (onCreate)
+        onCreate(select);
+    return select;
+}
+export function Option(innerText, value, classes) {
+    const option = initEl("option", classes, undefined, undefined);
+    if (value)
+        option.value = value;
+    if (innerText)
+        option.innerText = innerText;
+    return option;
+}
 function initEl(tagName, classes, children, innerText) {
     const el = document.createElement(tagName);
     if (classes) {
@@ -59,6 +104,14 @@ export function copyText(text) {
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
+}
+export async function confirm_Popup(text, reverse = false, prefix = "Вы уверенны, что хотите удалить ") {
+    const popup = new Popup();
+    popup.title = "Удаление";
+    popup.content.innerText = prefix + text;
+    popup.focusOn = "cancel";
+    popup.reverse = reverse;
+    return popup.openAsync();
 }
 window.reloadCSS = () => {
     const links = document.querySelectorAll("link[rel=stylesheet]");

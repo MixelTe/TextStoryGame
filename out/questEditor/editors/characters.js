@@ -1,4 +1,4 @@
-import { Button, Div } from "../../functions.js";
+import { Button, confirm_Popup, Div } from "../../functions.js";
 import { InputPlus, TextAreaPlus } from "../functions.js";
 export class Editor_Characters {
     constructor(characters, save) {
@@ -36,15 +36,16 @@ export class Editor_Characters {
             name: "",
             description: "",
             friendLevel: 0,
+            hasImg: false,
         };
     }
     nextId() {
         if (this.characters.length <= 0)
-            return "0";
-        const num = parseInt(this.characters[this.characters.length - 1].id);
+            return "cr0";
+        const num = parseInt(this.characters[this.characters.length - 1].id.slice(2));
         if (isNaN(num))
-            return Date.now().toString();
-        return `${num + 1}`;
+            return "cr" + Date.now().toString();
+        return `cr${num + 1}`;
     }
 }
 class Editor_Character {
@@ -68,12 +69,14 @@ class Editor_Character {
                 InputPlus("pg2", "number", "Уровень дружбы с персонажем")(inp => { this.character.friendLevel = inp.valueAsNumber; this.save(); }, inp => inp.valueAsNumber = this.character.friendLevel)(),
             ]),
             Div(["pg2-line", "ta-end"], [
-                Button([], "Удалить", this.deleteThis.bind(this, body)),
+                Button("pg2-btn-delete", "X", this.deleteThis.bind(this, body)),
             ]),
         ]);
         body.appendChild(this.div);
     }
-    deleteThis(body) {
+    async deleteThis(body) {
+        if (!await confirm_Popup(`персонажа ${this.character.name}?`))
+            return;
         const i = this.characters.indexOf(this.character);
         if (i >= 0)
             this.characters.splice(i, 1);

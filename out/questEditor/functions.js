@@ -1,9 +1,13 @@
 import * as SVG from "./svg.js";
 const PREFIX = "questEditor.";
 const KEY = "quests";
+const KEYNAME = "username";
 const P = (key) => PREFIX + key;
 export function addQuest(quest) {
     const quests = getQuests();
+    while (quests.find(el => el.key == quest.key)) {
+        quest.key = `${Math.random()}`.slice(2);
+    }
     quests.push(quest);
     localStorage.setItem(P(KEY), JSON.stringify(quests));
 }
@@ -13,7 +17,7 @@ export function removeQuest(key) {
     const quest = localStorage.getItem(P(key));
     if (quest) {
         localStorage.removeItem(P(key));
-        localStorage.setItem(P("deleted." + key), quest);
+        // localStorage.setItem(P("deleted." + key), quest);
     }
     localStorage.setItem(P(KEY), JSON.stringify(quests));
 }
@@ -53,6 +57,7 @@ function createEmptyQuest() {
         quest: {
             name: "",
             description: "",
+            hasImg: false,
         },
         characters: [],
         items: [],
@@ -67,6 +72,12 @@ function createEmptyQuest() {
         },
     };
     return quest;
+}
+export function getName() {
+    return localStorage.getItem(P(KEYNAME)) || "";
+}
+export function setName(name) {
+    return localStorage.setItem(P(KEYNAME), name);
 }
 export function InputPlus(classes, type, placeholder) {
     const input = document.createElement("input");
@@ -101,10 +112,15 @@ export function TextAreaPlus(placeholder = "", classes = []) {
     return toPlus(textarea);
 }
 function toPlus(input) {
+    const toButton = (el) => {
+        const button = document.createElement("button");
+        button.appendChild(el);
+        return button;
+    };
     const div_svg = document.createElement("div");
-    const pencil = SVG.pencil();
-    const close = SVG.close();
-    const save = SVG.save();
+    const pencil = toButton(SVG.pencil());
+    const close = toButton(SVG.close());
+    const save = toButton(SVG.save());
     div_svg.appendChild(pencil);
     div_svg.appendChild(close);
     div_svg.appendChild(save);
@@ -113,6 +129,7 @@ function toPlus(input) {
     pencil.addEventListener("click", () => {
         input.disabled = false;
         value = input.value;
+        input.focus();
     });
     close.addEventListener("click", () => {
         input.disabled = true;
@@ -137,7 +154,7 @@ function toPlus(input) {
     };
     return get;
 }
-export function CheckBox(classes = [], text = "") {
+export function CheckBox(classes = [], text = "", inline = false) {
     const name = "checkbox" + Math.random().toString().slice(2);
     const checkBox = document.createElement("input");
     if (typeof classes == "string")
@@ -151,6 +168,8 @@ export function CheckBox(classes = [], text = "") {
     label.htmlFor = name;
     const div = document.createElement("div");
     div.classList.add("pg2-checkboxDiv");
+    if (inline)
+        div.classList.add("inline");
     div.appendChild(checkBox);
     div.appendChild(label);
     let onChange = (checkBox) => { };
@@ -165,4 +184,15 @@ export function CheckBox(classes = [], text = "") {
     };
     const hmtl = () => div;
     return get;
+}
+export function Form(input, button, onSubmit) {
+    const form = document.createElement("form");
+    form.classList.add("form");
+    form.appendChild(input);
+    form.appendChild(button);
+    form.addEventListener("submit", e => {
+        e.preventDefault();
+        onSubmit(input, button);
+    });
+    return form;
 }

@@ -1,6 +1,8 @@
-import { Button, Div, Input } from "../functions.js";
+import { Button, confirm_Popup, Div, Input } from "../functions.js";
+import { contextMenu } from "../popup.js";
 import { Editor } from "./editor.js";
-import { addQuest, getQuests, removeQuest } from "./functions.js";
+import { addQuest, Form, getQuest, getQuests, removeQuest } from "./functions.js";
+import { Sender } from "./sender.js";
 let input = render();
 function render() {
     const input = Input([], "text", "Название квеста");
@@ -8,12 +10,11 @@ function render() {
     document.body.appendChild(Div("body", [
         Div(["header", "pg1"], [
             // Button([], "Назад"),
-            Div([], [], "Выберете квест")
+            Div([], [], "Выберите квест")
         ]),
-        Div("pg1-quest-list", renderQuests()),
-        Div("pg1-quest-add", [
-            input,
-            Button([], "Добавить квест", createQuest),
+        Div("list", renderQuests()),
+        Div("add-item", [
+            Form(input, Button([], "Добавить квест"), createQuest),
         ]),
     ]));
     return input;
@@ -23,9 +24,26 @@ function renderQuests() {
     const rendered = [];
     for (let i = 0; i < quests.length; i++) {
         const quest = quests[i];
-        const button = Button([], "Удалить", () => {
-            removeQuest(quest.key);
-            input = render();
+        const button = Button([], "···", async () => {
+            const r = await contextMenu(quest.name, [
+                { text: "Отправить", id: "send" },
+                { text: "Удалить", id: "delete" },
+            ]);
+            if (r == "delete") {
+                if (await confirm_Popup(`квест ${quest.name}?`)) {
+                    if (await confirm_Popup(`квест ${quest.name}? Вы не сможете восстановить квест!`, true)) {
+                        if (await confirm_Popup(`квест ${quest.name}? Вы потеряете ВСЁ содержимое!`)) {
+                            if (await confirm_Popup(`квест ${quest.name}? Вы точно уверенны?`, true)) {
+                                removeQuest(quest.key);
+                                input = render();
+                            }
+                        }
+                    }
+                }
+            }
+            else if (r == "send") {
+                new Sender().open(getQuest(quest.key));
+            }
         });
         const div = Div([], [
             Div([], [], quest.name),

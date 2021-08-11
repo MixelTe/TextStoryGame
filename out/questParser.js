@@ -4,6 +4,8 @@ export function parseQuest(content) {
         throw new Error('quest.name must be string');
     if (typeof quest.description != "string")
         quest.description = "";
+    if (typeof quest.hasImg != "boolean")
+        quest.hasImg = false;
     return quest;
 }
 export function parseCharacters(content) {
@@ -17,6 +19,8 @@ export function parseCharacters(content) {
             ch.description = "";
         if (typeof ch.friendLevel != "number")
             throw new Error(`characters[${i}].name must be number`);
+        if (typeof ch.hasImg != "boolean")
+            ch.hasImg = false;
     });
     return characters;
 }
@@ -29,6 +33,8 @@ export function parseItems(content) {
             throw new Error(`items[${i}].name must be string`);
         if (typeof item.description != "string")
             item.description = "";
+        if (typeof item.hasImg != "boolean")
+            item.hasImg = false;
     });
     return items;
 }
@@ -100,7 +106,7 @@ export function parseChapterPart(content) {
 }
 function checkContent(content) {
     content.forEach(el => {
-        const errorText = `part.content[].type must be "speech", "question", "change" or "effect"`;
+        const errorText = `part.content[].type must be "speech", "question", "effect", "change" or "splitter"`;
         if (typeof el.type != "string")
             throw new Error(errorText);
         switch (el.type) {
@@ -115,6 +121,9 @@ function checkContent(content) {
                 break;
             case "change":
                 checkContent_change(el);
+                break;
+            case "splitter":
+                checkContent_splitter(el);
                 break;
             default: throw new Error(errorText);
         }
@@ -192,71 +201,76 @@ function checkContent_change(content) {
         });
     }
 }
+function checkContent_splitter(content) {
+    const error = (text) => {
+        throw new Error(`part.content[].${text}`);
+    };
+    if (typeof content.conditions != "object")
+        error(`conditions must be object`);
+    checkCondition(content.conditions, "conditions", error);
+}
 function checkActions(content) {
     const error = (text) => {
         throw new Error(`part.content[].actions[].${text}`);
-    };
-    const checkCondition = (cond, n) => {
-        if (typeof cond.partsDone == "object") {
-            cond.partsDone.forEach((el, j) => {
-                if (typeof el != "string")
-                    error(`${n}.partsDone[${j}] must be string`);
-            });
-        }
-        else {
-            cond.partsDone = [];
-        }
-        if (typeof cond.partsNotDone == "object") {
-            cond.partsDone.forEach((el, j) => {
-                if (typeof el != "string")
-                    error(`${n}.partsNotDone[${j}] must be string`);
-            });
-        }
-        else {
-            cond.partsNotDone = [];
-        }
-        if (typeof cond.characteristics == "object") {
-            cond.characteristics.forEach((el, j) => {
-                if (typeof el != "object")
-                    error(`${n}.characteristics[${j}] must be object`);
-                if (typeof el.id != "string")
-                    error(`${n}.characteristics[${j}].id must be string`);
-                if (typeof el.lessThen != "number" && typeof el.moreThen != "number") {
-                    error(`${n}.characteristics[${j}].lessThen or .moreThen must be number`);
-                }
-            });
-        }
-        else {
-            cond.characteristics = [];
-        }
-        if (typeof cond.items == "object") {
-            cond.items.forEach((el, j) => {
-                if (typeof el != "string")
-                    error(`${n}.items[${j}] must be string`);
-            });
-        }
-        else {
-            cond.items = [];
-        }
-        if (typeof cond.itemsNot == "object") {
-            cond.itemsNot.forEach((el, j) => {
-                if (typeof el != "string")
-                    error(`${n}.itemsNot[${j}] must be string`);
-            });
-        }
-        else {
-            cond.itemsNot = [];
-        }
     };
     content.forEach(el => {
         if (typeof el.text != "string")
             error(`text must be string`);
         if (typeof el.conditions == "object")
-            checkCondition(el.conditions, "conditions");
+            checkCondition(el.conditions, "conditions", error);
         if (typeof el.showConditions == "object")
-            checkCondition(el.showConditions, "showConditions");
-        if (typeof el.content == "object") {
-            checkContent(el.content);
-        }
+            checkCondition(el.showConditions, "showConditions", error);
     });
+}
+function checkCondition(cond, n, error) {
+    if (typeof cond.partsDone == "object") {
+        cond.partsDone.forEach((el, j) => {
+            if (typeof el != "string")
+                error(`${n}.partsDone[${j}] must be string`);
+        });
+    }
+    else {
+        cond.partsDone = [];
+    }
+    if (typeof cond.partsNotDone == "object") {
+        cond.partsDone.forEach((el, j) => {
+            if (typeof el != "string")
+                error(`${n}.partsNotDone[${j}] must be string`);
+        });
+    }
+    else {
+        cond.partsNotDone = [];
+    }
+    if (typeof cond.characteristics == "object") {
+        cond.characteristics.forEach((el, j) => {
+            if (typeof el != "object")
+                error(`${n}.characteristics[${j}] must be object`);
+            if (typeof el.id != "string")
+                error(`${n}.characteristics[${j}].id must be string`);
+            if (typeof el.lessThen != "number" && typeof el.moreThen != "number") {
+                error(`${n}.characteristics[${j}].lessThen or .moreThen must be number`);
+            }
+        });
+    }
+    else {
+        cond.characteristics = [];
+    }
+    if (typeof cond.items == "object") {
+        cond.items.forEach((el, j) => {
+            if (typeof el != "string")
+                error(`${n}.items[${j}] must be string`);
+        });
+    }
+    else {
+        cond.items = [];
+    }
+    if (typeof cond.itemsNot == "object") {
+        cond.itemsNot.forEach((el, j) => {
+            if (typeof el != "string")
+                error(`${n}.itemsNot[${j}] must be string`);
+        });
+    }
+    else {
+        cond.itemsNot = [];
+    }
 }

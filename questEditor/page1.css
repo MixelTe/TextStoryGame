@@ -1,31 +1,3 @@
 .header.pg1 {
 	justify-content: center;
 }
-.pg1-quest-list {
-	padding: 1rem 1.5rem;
-}
-.pg1-quest-list > div {
-	display: flex;
-	padding: 1rem 1.5rem;
-	margin: 1rem 0rem;
-	border: 1px solid gray;
-	border-radius: 0.2em;
-	transition: background-color 250ms;
-	cursor: pointer;
-}
-.pg1-quest-list > div > div {
-	display: flex;
-    align-items: center;
-}
-.pg1-quest-list button {
-	margin-left: auto;
-}
-.pg1-quest-list > div:hover {
-	background-color: rgba(0, 0, 0, 0.2);
-}
-.pg1-quest-add {
-	padding: 1rem 1.5rem;
-}
-.pg1-quest-add input {
-	margin-right: 1rem;
-}

@@ -1,4 +1,4 @@
-import { Button, Div } from "../../functions.js";
+import { Button, confirm_Popup, Div } from "../../functions.js";
 import { InputPlus, TextAreaPlus } from "../functions.js";
 export class Editor_Items {
     constructor(items, save) {
@@ -36,6 +36,7 @@ export class Editor_Items {
             name: "",
             description: "",
             friendLevel: 0,
+            hasImg: false,
         };
     }
     nextId() {
@@ -48,29 +49,31 @@ export class Editor_Items {
     }
 }
 class Editor_Item {
-    constructor(characters, character, save) {
+    constructor(characters, item, save) {
         this.characters = characters;
-        this.character = character;
+        this.item = item;
         this.save = save;
         this.div = Div();
     }
     render(body) {
         this.div = Div("pg2-block", [
             Div("pg2-line", [
-                InputPlus(["pg2", "ta-center"], "text", "Имя предмета")(inp => { this.character.name = inp.value; this.save(); }, inp => inp.value = this.character.name)(),
+                InputPlus(["pg2", "ta-center"], "text", "Название предмета")(inp => { this.item.name = inp.value; this.save(); }, inp => inp.value = this.item.name)(),
             ]),
             Div("pg2-line", [
                 Div([], [], "Описание предмета:"),
-                TextAreaPlus("Описание предмета", "pg2")(inp => { this.character.description = inp.value; this.save(); }, inp => inp.value = this.character.description)(),
+                TextAreaPlus("Описание предмета", "pg2")(inp => { this.item.description = inp.value; this.save(); }, inp => inp.value = this.item.description)(),
             ]),
             Div(["pg2-line", "ta-end"], [
-                Button([], "Удалить", this.deleteThis.bind(this, body)),
+                Button("pg2-btn-delete", "X", this.deleteThis.bind(this, body)),
             ]),
         ]);
         body.appendChild(this.div);
     }
-    deleteThis(body) {
-        const i = this.characters.indexOf(this.character);
+    async deleteThis(body) {
+        if (!await confirm_Popup(`предмет ${this.item.name}?`))
+            return;
+        const i = this.characters.indexOf(this.item);
         if (i >= 0)
             this.characters.splice(i, 1);
         body.removeChild(this.div);

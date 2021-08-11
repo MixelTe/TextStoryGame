@@ -1,5 +1,6 @@
-import { Button, Div } from "../../functions.js";
+import { Button, confirm_Popup, Div } from "../../functions.js";
 import { CheckBox, InputPlus, TextAreaPlus } from "../functions.js";
+import { createSelectEl } from "./nodeTools.js";
 export class Editor_Player {
     constructor(quest, save) {
         this.quest = quest;
@@ -11,7 +12,7 @@ export class Editor_Player {
     render(body) {
         this.container_items = Div();
         this.container_charac = Div();
-        this.selected_item = this.createSelectItem();
+        this.selected_item = createSelectEl("Выберите предмет", this.quest.items);
         body.innerHTML = "";
         body.appendChild(Div([], [
             Div("pg2-line", [
@@ -46,20 +47,6 @@ export class Editor_Player {
             else
                 this.quest.player.items.splice(i, 1);
         }
-    }
-    createSelectItem() {
-        const select = document.createElement("select");
-        const option = document.createElement("option");
-        option.value = "";
-        option.innerText = "Выберите предмет";
-        select.appendChild(option);
-        this.quest.items.forEach(item => {
-            const option = document.createElement("option");
-            option.value = item.id;
-            option.innerText = item.name;
-            select.appendChild(option);
-        });
-        return select;
     }
     addItem() {
         if (typeof this.selected_item.value != "string" || this.selected_item.value == "")
@@ -107,11 +94,11 @@ export class Editor_Player {
     }
     nextId() {
         if (this.quest.player.characteristics.length <= 0)
-            return "0";
-        const num = parseInt(this.quest.player.characteristics[this.quest.player.characteristics.length - 1].id);
+            return "cc0";
+        const num = parseInt(this.quest.player.characteristics[this.quest.player.characteristics.length - 1].id.slice(2));
         if (isNaN(num))
-            return Date.now().toString();
-        return `${num + 1}`;
+            return "cc" + Date.now().toString();
+        return `cc${num + 1}`;
     }
 }
 class Editor_Charac {
@@ -161,12 +148,14 @@ class Editor_Charac {
             ]),
             part,
             Div(["pg2-line", "ta-end"], [
-                Button([], "Удалить", this.deleteThis.bind(this, body)),
+                Button("pg2-btn-delete", "X", this.deleteThis.bind(this, body)),
             ]),
         ]);
         body.appendChild(this.div);
     }
-    deleteThis(body) {
+    async deleteThis(body) {
+        if (!await confirm_Popup(`предмет ${this.charac.name}?`))
+            return;
         const i = this.charas.indexOf(this.charac);
         if (i >= 0)
             this.charas.splice(i, 1);

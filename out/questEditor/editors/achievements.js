@@ -1,4 +1,4 @@
-import { Button, Div } from "../../functions.js";
+import { Button, confirm_Popup, Div } from "../../functions.js";
 import { InputPlus, TextAreaPlus } from "../functions.js";
 export class Editor_Achievements {
     constructor(achievements, save) {
@@ -63,12 +63,14 @@ class Editor_Achievement {
                 TextAreaPlus("Описание достижения", "pg2")(inp => { this.achievement.description = inp.value; this.save(); }, inp => inp.value = this.achievement.description)(),
             ]),
             Div(["pg2-line", "ta-end"], [
-                Button([], "Удалить", this.deleteThis.bind(this, body)),
+                Button("pg2-btn-delete", "X", this.deleteThis.bind(this, body)),
             ]),
         ]);
         body.appendChild(this.div);
     }
-    deleteThis(body) {
+    async deleteThis(body) {
+        if (!await confirm_Popup(`предмет ${this.achievement.name}?`))
+            return;
         const i = this.achievements.indexOf(this.achievement);
         if (i >= 0)
             this.achievements.splice(i, 1);
