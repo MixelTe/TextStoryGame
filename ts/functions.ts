@@ -114,6 +114,19 @@ export function copyText(text: string)
 	document.execCommand('copy');
 	document.body.removeChild(el);
 }
+export function downloadFile(filename: string, text: string)
+{
+	var el = document.createElement('a');
+	el.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+	el.setAttribute('download', filename);
+
+	el.style.display = 'none';
+	document.body.appendChild(el);
+
+	el.click();
+
+	document.body.removeChild(el);
+}
 export async function confirm_Popup(text: string, reverse = false, prefix = "Вы уверенны, что хотите удалить ")
 {
 	const popup = new Popup();
